@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<ImageView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:scaleType="centerCrop"
+		android:src="@drawable/background_chat" />
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="4dp">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:orientation="vertical"
+				android:padding="4dp">
+
+				<ImageView
+					android:layout_width="match_parent"
+					android:layout_height="128dp"
+					android:contentDescription="@string/des_ic_launcher"
+					app:srcCompat="@mipmap/ic_launcher_round" />
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="2dp"
+					android:gravity="center"
+					android:text="@string/app_name"
+					android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+				<ImageView
+					android:layout_width="match_parent"
+					android:layout_height="48dp"
+					android:contentDescription="@string/des_ic_fanavard"
+					app:srcCompat="@drawable/ic_fanavard" />
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center"
+					android:text="@string/app_description"
+					android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+			</LinearLayout>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:background="#3333" />
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:orientation="vertical"
+				android:padding="4dp">
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="2dp"
+					android:gravity="center"
+					android:text="@string/title_about_developer"
+					android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+					android:textColor="@color/colorAccent" />
+
+				<de.hdodenhof.circleimageview.CircleImageView
+					android:id="@+id/developer_avatar_view"
+					android:layout_width="128dp"
+					android:layout_height="128dp"
+					android:src="@drawable/ic_avatar"
+					app:civ_border_color="@color/colorAccent"
+					app:civ_border_overlay="true"
+					app:civ_border_width="2dp"
+					app:civ_circle_background_color="@color/cardview_dark_background"
+					app:civ_fill_color="@color/cardview_light_background" />
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="4dp"
+					android:gravity="center"
+					android:text="@string/developer_title"
+					android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+					android:textColor="@color/colorPrimary"
+					android:textStyle="bold" />
+
+				<TextView
+					android:id="@+id/developer_desc"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="2dp"
+					android:gravity="start"
+					android:textAppearance="@style/TextAppearance.AppCompat.Large"
+					android:textColor="@color/colorPrimaryDark" />
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center">
+
+					<ImageView
+						android:id="@+id/social_instagram_action"
+						android:layout_width="48dp"
+						android:layout_height="48dp"
+						android:layout_margin="8dp"
+						android:src="@drawable/ic_social_instagram" />
+
+					<ImageView
+						android:id="@+id/social_twitter_action"
+						android:layout_width="48dp"
+						android:layout_height="48dp"
+						android:layout_margin="8dp"
+						android:src="@drawable/ic_social_twitter" />
+
+					<ImageView
+						android:id="@+id/social_telegram_action"
+						android:layout_width="48dp"
+						android:layout_height="48dp"
+						android:layout_margin="8dp"
+						android:src="@drawable/ic_social_telegram" />
+				</LinearLayout>
+			</LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+</FrameLayout>

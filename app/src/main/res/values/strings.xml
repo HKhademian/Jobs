@@ -1,0 +1,35 @@
+<resources>
+	<string name="app_name">Jobs</string>
+	<string name="leak_canary_display_activity_label">Jobs Leaks</string>
+
+	<!-- Strings related to login -->
+	<string name="prompt_phone">Phone</string>
+	<string name="prompt_password">Password</string>
+
+	<string name="error_invalid_phone">This phone number is invalid</string>
+	<string name="error_invalid_password">This password is too short</string>
+	<string name="error_incorrect_password">This password is incorrect</string>
+	<string name="error_field_required">This field is required</string>
+
+	<string name="title_about">About US</string>
+	<string name="title_dashboard">Dashboard</string>
+	<string name="title_notifications">Notifications</string>
+	<string name="title_chat_list">Chats</string>
+	<string name="title_chat_detail">Chat Detail</string>
+
+	<string name="des_ic_fanavard">Fanavard Contest Icon</string>
+	<string name="des_ic_launcher">Application Icon</string>
+
+	<string name="message_register">if you don\'t have account,  <a href="#">Register</a></string>
+	<string name="message_login">if you have account,  <a href="#">Login</a></string>
+	<string name="action_register">Register</string>
+	<string name="action_login">Login</string>
+	<string name="title_register">Register a new account</string>
+	<string name="title_login">Login to account</string>
+	<string name="chat_message">Your message …</string>
+	<string name="action_send">Send</string>
+	<string name="app_description">This app made for Fanavard App Developer contest,  any way Enjoy it ☻ !</string>
+	<string name="title_about_developer">About developer:</string>
+	<string name="developer_title">Hossain Khademian</string>
+
+</resources>

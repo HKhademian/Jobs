@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">جابز</string>
+	<string name="prompt_phone">موبایل</string>
+	<string name="prompt_password">کلمه عبور</string>
+	<string name="error_invalid_phone">فرمت شماره تماس صحیح نیست</string>
+	<string name="error_invalid_password">فرمت کلمه عبور صحیح نیست</string>
+	<string name="error_incorrect_password">کلمه عبور صحیح نیست</string>
+	<string name="error_field_required">این قسمت مورد نیاز است</string>
+	<string name="title_about">خانه</string>
+	<string name="title_dashboard">داشبورد</string>
+	<string name="title_notifications">هشدار ها</string>
+	<string name="des_ic_fanavard">آیکون مسابقه فناورد</string>
+	<string name="des_ic_launcher">آیکون برنامه</string>
+	<string name="message_register">اگه حساب کاربری ندارید،  <a href="#">ثبت نام کنید</a></string>
+	<string name="message_login">اگر حساب کاربری دارید،  <a href="#">وارد شوید</a></string>
+	<string name="action_register">ثبت نام</string>
+	<string name="action_login">ورود به حساب</string>
+	<string name="title_register">ثبت نام حساب کاربری جدید</string>
+	<string name="title_login">ورود به حساب کاربری</string>
+	<string name="action_send">ارسال</string>
+	<string name="chat_message">پیام شما …</string>
+</resources>

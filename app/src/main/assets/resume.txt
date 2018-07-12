@@ -1,0 +1,24 @@
+A forward-thinking developer offering more than five years of experience building, integrating, testing, and supporting Android applications for mobile and tablet devices on the Android platform.
+<br/>
+<br/>
+<b>Highlights</b>
+<br/>
+Created 10+ fully functional applications for Android devices
+<br/>
+Known for writing efficient, maintainable and reusable code
+<br/>
+Some of them are top installed apps in some countries
+<br/>
+Proficient in design, data structures, problem-solving, and debugging
+<br/>
+Expert in the interaction between various devices and versions of Android
+<br/>
+Worked with architects, engineers, and product management to deliver user-friendly and visually appealing mobile games for the Android platform.
+<br/>
+<br/>
+
+<b>Operating Systems:</b> Windows, Linux, Unix
+<br/>
+<b>Tools and Technologies:</b> Android SDK, Android Studio, VS Code, Linux servers
+<br/>
+<b>Languages:</b> Kotlin, Java, JavaScript, Python, PHP
