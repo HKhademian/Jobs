@@ -42,7 +42,7 @@ internal class ChatEntity(
     @Query("SELECT * FROM `Chat` WHERE `id` = :id ORDER BY `time`")
     fun getById(id: ID): LiveData<List<ChatEntity>>
 
-    @Query("SELECT * FROM `Chat` WHERE `senderId` = :requestId OR `receiverId` = :requestId ORDER BY `time`")
+    @Query("SELECT * FROM `Chat` WHERE `senderId` = :userId OR `receiverId` = :userId ORDER BY `time`")
     fun listByContact(userId: ID): LiveData<List<ChatEntity>>
 
     @Query("SELECT DISTINCT `senderId` AND `receiverId` FROM `Chat` ORDER BY `time`")
