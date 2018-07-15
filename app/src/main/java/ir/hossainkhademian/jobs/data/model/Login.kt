@@ -1,0 +1,42 @@
+package ir.hossainkhademian.jobs.data.model
+
+import com.squareup.moshi.Json
+
+val EmptyLogin = LoginData(id = emptyID)
+
+val Login.isGuest get() = refreshToken.isEmpty()
+val Login.isLoggedIn get() = refreshToken.isNotEmpty()
+val Login.isFresh get() = accessToken.isNotEmpty()
+
+interface Login : User {
+  override val id: ID
+  override val title: String
+  override val role: UserRole
+  val phone: String
+  val refreshToken: String
+  val accessToken: String
+}
+
+class LoginData(
+  id: ID = generateID,
+  title: String = "",
+  lastSeen: Long = System.currentTimeMillis(),
+  roleStr: String = UserRole.User.key,
+  @Json(name = "phone") override val phone: String = "",
+  @Json(name = "accessToken") override val accessToken: String = "",
+  @Json(name = "refreshToken") override val refreshToken: String = ""
+) : UserData(id, title, lastSeen, roleStr), Login {
+  override val role get() = UserRole.from(roleStr)
+}
+
+fun Login.toData() = when (this) {
+  is LoginData -> this
+  else -> LoginData(
+    id = id,
+    title = title,
+    phone = phone,
+    roleStr = role.key,
+    accessToken = accessToken,
+    refreshToken = refreshToken
+  )
+}

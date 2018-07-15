@@ -1,87 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical"
-	tools:context=".screen.chat.ChatDetailFragment">
+<android.support.constraint.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context=".screen.chat.detail.ChatDetailActivity">
 
-	<ImageView
-		android:id="@+id/background_image"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:scaleType="centerCrop"
-		android:src="@drawable/background_chat" />
+  <!--<include layout="@layout/view_detail_background"/>-->
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:orientation="vertical">
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/recyclerView"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    tools:visibility="invisible"
+    app:layout_constraintBottom_toTopOf="@id/chat_bar"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_chainStyle="packed"/>
 
-		<android.support.v7.widget.RecyclerView
-			android:id="@+id/recyclerView"
-			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_weight="1"
-			app:layout_constraintBottom_toTopOf="@+id/chat_bar"
-			app:layout_constraintTop_toTopOf="parent" />
+  <android.support.v7.widget.CardView
+    android:id="@+id/chat_bar"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginEnd="2dp"
+    android:layout_marginTop="0dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toStartOf="@id/sendAction"
+    app:layout_constraintTop_toBottomOf="@id/recyclerView"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="6dp">
 
-		<android.support.v7.widget.CardView
-			android:id="@+id/chat_bar"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginBottom="8dp"
-			android:layout_marginLeft="8dp"
-			android:layout_marginRight="8dp"
-			android:layout_marginTop="0dp"
-			app:cardCornerRadius="24dp"
-			app:cardElevation="6dp"
-			app:layout_constraintBottom_toBottomOf="parent">
+    <LinearLayout
+      android:id="@+id/chat_form"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="horizontal">
 
-			<LinearLayout
-				android:id="@+id/chat_form"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:orientation="horizontal">
+      <ImageView
+        android:id="@+id/emojiAction"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
+        android:paddingRight="2dp"
+        android:paddingEnd="2dp"
+        app:srcCompat="@drawable/ic_action_emoji"
+        android:tint="@color/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:contentDescription="@string/action_emoji"/>
 
-				<EditText
-					android:id="@+id/message_field"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_marginLeft="4dp"
-					android:layout_marginStart="4dp"
-					android:layout_weight="1"
-					android:autoLink="none"
-					android:hint="@string/chat_message"
-					android:imeActionId="6"
-					android:imeActionLabel="@string/action_send"
-					android:imeOptions="actionSend"
-					android:inputType="textMultiLine"
-					android:nextFocusRight="@id/send_button" />
+      <EditText
+        android:id="@+id/message_field"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:autoLink="none"
+        android:maxLines="4"
+        android:hint="@string/chat_message"
+        android:imeActionId="6"
+        android:imeActionLabel="@string/action_send"
+        android:imeOptions="actionSend"
+        android:inputType="textMultiLine"
+        android:nextFocusRight="@id/mediaAction"/>
+
+      <ImageView
+        android:id="@+id/mediaAction"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="12dp"
+        android:paddingEnd="12dp"
+        android:paddingLeft="2dp"
+        android:paddingStart="2dp"
+        app:srcCompat="@drawable/ic_action_media"
+        android:tint="@color/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:contentDescription="@string/action_media"/>
+    </LinearLayout>
+
+    <FrameLayout
+      android:id="@+id/wait_form"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/colorPrimaryDark"
+      android:visibility="gone">
+
+      <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+    </FrameLayout>
+  </android.support.v7.widget.CardView>
+
+  <ImageButton
+    android:id="@+id/sendAction"
+    android:layout_width="42dp"
+    android:layout_height="42dp"
+    android:layout_marginBottom="2dp"
+    android:layout_marginStart="2dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="4dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginTop="0dp"
+    android:layout_gravity="top"
+    app:layout_constraintStart_toEndOf="@id/chat_bar"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="@id/chat_bar"
+    android:padding="4dp"
+    app:srcCompat="@drawable/ic_action_send"
+    android:tint="#fff"
+    android:background="@drawable/round_button"
+    android:contentDescription="@string/action_send"/>
 
 
-				<Button
-					android:id="@+id/send_button"
-					style="@style/Widget.AppCompat.Button.Borderless.Colored"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_gravity="top"
-					android:text="@string/action_send" />
-			</LinearLayout>
-
-			<FrameLayout
-				android:id="@+id/wait_form"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:background="#A333"
-				android:visibility="gone">
-
-				<ProgressBar
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_gravity="center" />
-			</FrameLayout>
-		</android.support.v7.widget.CardView>
-	</LinearLayout>
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>

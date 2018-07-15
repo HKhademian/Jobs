@@ -16,6 +16,8 @@
 	<string name="title_notifications">Notifications</string>
 	<string name="title_chat_list">Chats</string>
 	<string name="title_chat_detail">Chat Detail</string>
+  <string name="title_request_list">Request</string>
+  <string name="title_request_detail">Request Detail</string>
 
 	<string name="des_ic_fanavard">Fanavard Contest Icon</string>
 	<string name="des_ic_launcher">Application Icon</string>
@@ -31,5 +33,10 @@
 	<string name="app_description">This app made for Fanavard App Developer contest,  any way Enjoy it ☻ !</string>
 	<string name="title_about_developer">About developer:</string>
 	<string name="developer_title">Hossain Khademian</string>
+  <string name="title_loading">Loading data from server</string>
+  <string name="subtitle_loading">please wait ...</string>
+  <string name="des_background">Background</string>
+  <string name="action_media">Attach media</string>
+  <string name="action_emoji">Send emoji</string>
 
 </resources>
