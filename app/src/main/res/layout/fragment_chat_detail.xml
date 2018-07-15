@@ -8,8 +8,6 @@
   android:orientation="vertical"
   tools:context=".screen.chat.detail.ChatDetailActivity">
 
-  <!--<include layout="@layout/view_detail_background"/>-->
-
   <android.support.v7.widget.RecyclerView
     android:id="@+id/recyclerView"
     android:layout_width="match_parent"

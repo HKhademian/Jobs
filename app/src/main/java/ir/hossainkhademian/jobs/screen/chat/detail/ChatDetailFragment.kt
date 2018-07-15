@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.item_chat_detail.view.*
 import android.content.ClipData
 import android.content.Context
 import ir.hossainkhademian.jobs.data.model.EmptyChat
+import ir.hossainkhademian.util.Texts.getRelativeTime
 import ir.hossainkhademian.util.Texts.isEmoji
 import net.danlew.android.joda.DateUtils
 import org.joda.time.DateTime
@@ -180,7 +181,7 @@ class ChatDetailFragment : BaseFragment() {
 
         messageView.text = item.message
 
-        timeView.text = DateUtils.getRelativeTimeSpanString(context, DateTime(item.time)) // Date(item.time).toString()
+        timeView.text = item.time.getRelativeTime(context) // DateUtils.getRelativeTimeSpanString(context, DateTime(item.time)) // Date(item.time).toString()
       }
     }
   }

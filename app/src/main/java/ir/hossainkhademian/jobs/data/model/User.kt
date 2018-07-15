@@ -3,13 +3,13 @@ package ir.hossainkhademian.jobs.data.model
 import com.squareup.moshi.Json
 
 private fun generateAvatarUrl(userId: ID): String {
-  val i = userId.sumBy { it.toInt() } // userId.toInt() //
+  val i = userId.sumBy { it.toInt() } // requestId.toInt() //
   val index = i % 50
   val gender = if (i % 2 == 0) "women" else "men"
   return "https://randomuser.me/api/portraits/$gender/$index.jpg"
 }
 
-val EmptyUser = UserData(id = emptyID, lastSeen = 0L)
+val EmptyUser: User = UserData(id = emptyID, lastSeen = 0L)
 val User.avatarUrl: String get() = generateAvatarUrl(id)
 val User.isAdmin get() = role == UserRole.Admin
 val User.isBroker get() = role == UserRole.Broker

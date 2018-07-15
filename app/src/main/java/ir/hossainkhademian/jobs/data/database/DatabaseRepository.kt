@@ -36,9 +36,9 @@ object DatabaseRepository {
 //			db.clearAllTables()
 //			(1..(20 + (rand.nextLong() % 20))).forEach {
 //				val user = UserEntity(0, "User #$it")
-//				val userId = userDao.insert(user)
+//				val requestId = userDao.insert(user)
 //				(1..(0 + (rand.nextLong() % 15))).forEach {
-//					chatDao.insert(ChatEntity(0, userId, rand.nextBoolean(), "Message Body #${rand.nextInt()}", rand.nextLong()))
+//					chatDao.insert(ChatEntity(0, requestId, rand.nextBoolean(), "Message Body #${rand.nextInt()}", rand.nextLong()))
 //				}
 //			}
 //		}
@@ -66,8 +66,8 @@ object DatabaseRepository {
 //    }
 //  }
 
-//  fun getChatsByContact(userId: ID): LiveData<List<Chat>> {
-//    return chatDao.listByContact(userId) as LiveData<List<Chat>>
+//  fun getChatsByContact(requestId: ID): LiveData<List<Chat>> {
+//    return chatDao.listByContact(requestId) as LiveData<List<Chat>>
 //  }
 //
 //  fun getUserChats(): LiveData<List<UserWithChats>> {

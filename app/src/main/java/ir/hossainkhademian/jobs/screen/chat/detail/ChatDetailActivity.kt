@@ -23,12 +23,12 @@ class ChatDetailActivity : AppCompatActivity() {
       val userId = intent.getStringExtra(ChatDetailFragment.ARG_USER_ID) ?: emptyID
       val title = intent.getStringExtra(ChatDetailFragment.ARG_USER_TITLE) ?: ""
 
-      //Picasso.get().list(generateAvatarUrl(userId)).placeholder(R.drawable.ic_avatar).into(avatar_view)
+      //Picasso.get().list(generateAvatarUrl(requestId)).placeholder(R.drawable.ic_avatar).into(avatar_view)
 
       val fragment = ChatDetailFragment().apply {
         arguments = intent.extras/* bundle(
-          ChatDetailFragment.ARG_USER_ID to userId,
-          ChatDetailFragment.ARG_USER_TITLE to title
+          RequestDetailFragment.ARG_REQUEST_ID to requestId,
+          RequestDetailFragment.ARG_REQUEST_TITLE to title
         )*/
       }
 

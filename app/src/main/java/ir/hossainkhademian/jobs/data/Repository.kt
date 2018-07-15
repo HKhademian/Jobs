@@ -79,8 +79,8 @@ object Repository {
         //chats
         //  .sortedByDescending { it.time } // sort before filter is a bit slower
         //  .distinctUserId(AccountManager.id)
-        //  .map { userId ->
-        //    users.getById(userId) to chats.filterByContactId(userId).count()
+        //  .map { requestId ->
+        //    users.getById(requestId) to chats.filterByContactId(requestId).count()
         //  }
       }!!
 }

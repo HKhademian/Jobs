@@ -3,7 +3,7 @@ package ir.hossainkhademian.jobs.data.model
 import com.squareup.moshi.Json
 import ir.hossainkhademian.jobs.data.DataManager
 
-val EmptyRequest = RequestData(id = emptyID, time = 0L)
+val EmptyRequest: Request = RequestData(id = emptyID, time = 0L)
 
 
 interface Request : IdModel {
@@ -23,16 +23,18 @@ interface Request : IdModel {
 
 val Request.isWorker get() = type == RequestType.WORKER
 val Request.isCompany get() = type == RequestType.COMPANY
-val Request.title get() = when(type) {
+val Request.title
+  get() = when (type) {
 //  RequestType.WORKER-> "`${user.title}` seeks Job for `${job.title}`"
 //  RequestType.COMPANY-> "`${user.title}` seeks Worker for `${job.title}`"
-  RequestType.WORKER->  "`${job.title}` is here from `${user.title}`"
-  RequestType.COMPANY-> "`${job.title}` is need from `${user.title}`"
-}
-val Request.subtitle get() = when(type) {
-  RequestType.WORKER-> "has ${skills.joinToString(" , ") { "`${it.title}`" }} skills"
-  RequestType.COMPANY-> "needs ${skills.joinToString(" , ") { "`${it.title}`" }} skills"
-}
+    RequestType.WORKER -> "`${job.title}` is here from `${user.title}`"
+    RequestType.COMPANY -> "`${job.title}` is need from `${user.title}`"
+  }
+val Request.subtitle
+  get() = when (type) {
+    RequestType.WORKER -> "has ${skills.joinToString(" , ") { "`${it.title}`" }} skills"
+    RequestType.COMPANY -> "needs ${skills.joinToString(" , ") { "`${it.title}`" }} skills"
+  }
 val Request.avatarUrl get() = job.avatarUrl
 
 enum class RequestType(val key: String) {
@@ -49,12 +51,12 @@ enum class RequestType(val key: String) {
 
 class RequestData(
   @Json(name = "id") override val id: ID = generateID,
-  @Json(name = "userId") override val userId: ID = emptyID,
+  @Json(name = "requestId") override val userId: ID = emptyID,
   @Json(name = "type") val typeStr: String = "",
   @Json(name = "detail") override val detail: String = "",
   @Json(name = "time") override val time: Long = System.currentTimeMillis(),
   @Json(name = "jobId") override val jobId: ID = emptyID,
-   @Json(name = "skillIds") override val skillIds: List<ID> = emptyList()
+  @Json(name = "skillIds") override val skillIds: List<ID> = emptyList()
 ) : Request {
   override val type: RequestType get() = RequestType.from(typeStr)
 }

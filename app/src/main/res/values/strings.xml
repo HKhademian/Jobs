@@ -38,5 +38,15 @@
   <string name="des_background">Background</string>
   <string name="action_media">Attach media</string>
   <string name="action_emoji">Send emoji</string>
+  <string name="field_request_type">Request type:</string>
+  <string name="action_cancel">Cancel</string>
+  <string name="action_back">Back</string>
+  <string name="action_edit">Edit</string>
+  <string name="field_request_job">Job:</string>
+  <string name="field_request_skills">Skills:</string>
+  <string name="field_request_user">User:</string>
+  <string name="field_request_detail">Detail:</string>
+  <string name="field_request_brokers">Brokers:</string>
+  <string name="field_request_matches">Matches:</string>
 
 </resources>

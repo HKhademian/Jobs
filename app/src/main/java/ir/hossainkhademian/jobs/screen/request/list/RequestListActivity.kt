@@ -77,10 +77,10 @@ class RequestListActivity : AppCompatActivity() {
   private fun onItemSelected(item: Request) {
 //    val user = item.first
 //    if (twoPane) {
-//      val fragment = ChatDetailFragment().apply {
+//      val fragment = RequestDetailFragment().apply {
 //        arguments = bundle(
-//          ChatDetailFragment.ARG_USER_TITLE to user.title,
-//          ChatDetailFragment.ARG_USER_ID to user.idStr
+//          RequestDetailFragment.ARG_REQUEST_TITLE to user.title,
+//          RequestDetailFragment.ARG_REQUEST_ID to user.idStr
 //        )
 //      }
 //      supportFragmentManager
@@ -88,9 +88,9 @@ class RequestListActivity : AppCompatActivity() {
 //        .replace(R.id.chat_detail_container, fragment)
 //        .commit()
 //    } else {
-//      launchActivity<ChatDetailActivity>(extras = *arrayOf(
-//        ChatDetailFragment.ARG_USER_TITLE to user.title,
-//        ChatDetailFragment.ARG_USER_ID to user.idStr
+//      launchActivity<RequestDetailActivity>(extras = *arrayOf(
+//        RequestDetailFragment.ARG_REQUEST_TITLE to user.title,
+//        RequestDetailFragment.ARG_REQUEST_ID to user.idStr
 //      ))
 //    }
   }

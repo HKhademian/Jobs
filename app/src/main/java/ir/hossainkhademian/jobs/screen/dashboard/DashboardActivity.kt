@@ -62,7 +62,8 @@ class DashboardActivity : BaseActivity() {
   }
 
   fun showAbout() =
-    setFragment(AboutFragment())
+    setFragment(TestFragment())
+    // setFragment(AboutFragment())
 
   fun showChats() =
     launchActivity<ChatListActivity>()
