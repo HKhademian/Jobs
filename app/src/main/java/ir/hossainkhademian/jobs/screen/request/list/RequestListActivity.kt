@@ -14,6 +14,8 @@ import android.widget.Toast
 import com.squareup.picasso.Picasso
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
+import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailActivity
+import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailFragment
 import ir.hossainkhademian.util.ViewModels.getViewModel
 import ir.hossainkhademian.util.context
 import ir.hossainkhademian.util.launchActivity
@@ -21,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_request_list.*
 import kotlinx.android.synthetic.main.fragment_request_list.*
 import kotlinx.android.synthetic.main.item_request_list.view.*
 import ir.hossainkhademian.util.LiveDatas.inlineObserve
+import ir.hossainkhademian.util.bundle
 
 
 class RequestListActivity : AppCompatActivity() {
@@ -75,24 +78,23 @@ class RequestListActivity : AppCompatActivity() {
   }
 
   private fun onItemSelected(item: Request) {
-//    val user = item.first
-//    if (twoPane) {
-//      val fragment = RequestDetailFragment().apply {
-//        arguments = bundle(
-//          RequestDetailFragment.ARG_REQUEST_TITLE to user.title,
-//          RequestDetailFragment.ARG_REQUEST_ID to user.idStr
-//        )
-//      }
-//      supportFragmentManager
-//        .beginTransaction()
-//        .replace(R.id.chat_detail_container, fragment)
-//        .commit()
-//    } else {
-//      launchActivity<RequestDetailActivity>(extras = *arrayOf(
-//        RequestDetailFragment.ARG_REQUEST_TITLE to user.title,
-//        RequestDetailFragment.ARG_REQUEST_ID to user.idStr
-//      ))
-//    }
+    if (twoPane) {
+      val fragment = RequestDetailFragment().apply {
+        arguments = bundle(
+          RequestDetailFragment.ARG_REQUEST_TITLE to item.title,
+          RequestDetailFragment.ARG_REQUEST_ID to item.idStr
+        )
+      }
+      supportFragmentManager
+        .beginTransaction()
+        .replace(R.id.chat_detail_container, fragment)
+        .commit()
+    } else {
+      launchActivity<RequestDetailActivity>(extras = *arrayOf(
+        RequestDetailFragment.ARG_REQUEST_TITLE to item.title,
+        RequestDetailFragment.ARG_REQUEST_ID to item.idStr
+      ))
+    }
   }
 
   private inner class Adapter
@@ -126,13 +128,15 @@ class RequestListActivity : AppCompatActivity() {
 
     init {
       view.setOnClickListener {
-        AlertDialog.Builder(view.context)
-          .setTitle("Request ${item.id}")
-          .setMessage("${item.title}\n\n${item.subtitle}")
-          .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-          .show()
+        //        AlertDialog.Builder(view.context)
+//          .setTitle("Request ${item.id}")
+//          .setMessage("${item.title}\n\n${item.subtitle}")
+//          .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+//          .show()
+//
+//        Snackbar.make(view, "NOT IMPLEMENTED YET!", Snackbar.LENGTH_SHORT).show()
 
-        Snackbar.make(view, "NOT IMPLEMENTED YET!", Snackbar.LENGTH_SHORT).show()
+        onItemSelected(item)
       }
     }
 

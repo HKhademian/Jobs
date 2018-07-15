@@ -27,7 +27,7 @@ class App : Application() {
       .loggingEnabled(true)
       .build())
 
-    initLocalManager("fa-IR")
+    initLocalManager("en-US")//("fa-IR")
     initRepository()
   }
 

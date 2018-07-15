@@ -28,7 +28,7 @@ object LocaleManager {
     }
 
   private fun fromString(locale: String): Locale {
-    val parts = locale.split("-")
+    val parts = locale.split("-", ",", " ", "_", ".", ":", "+")
     return Locale(parts[0], parts[1])
   }
 

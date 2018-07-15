@@ -15,7 +15,8 @@
     app:layout_constraintBottom_toTopOf="@+id/actionBar"
     android:orientation="vertical"
     android:padding="4dp"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:scrollbars="none">
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -57,11 +58,12 @@
         android:text="@string/field_request_skills"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
-      <FrameLayout
+      <EditText
         android:id="@+id/skillsView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"/>
+        android:layout_margin="4dp"
+        android:editable="false"/>
 
       <TextView
         android:layout_width="match_parent"
@@ -101,11 +103,12 @@
         android:text="@string/field_request_brokers"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
-      <FrameLayout
+      <EditText
         android:id="@+id/brokersView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"/>
+        android:layout_margin="4dp"
+        android:editable="false"/>
 
 
       <TextView
@@ -116,11 +119,12 @@
         android:text="@string/field_request_matches"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
-      <FrameLayout
+      <EditText
         android:id="@+id/matchesView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"/>
+        android:layout_margin="4dp"
+        android:editable="false"/>
     </LinearLayout>
   </ScrollView>
 

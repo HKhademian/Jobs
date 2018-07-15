@@ -18,7 +18,6 @@ class TestFragment : BaseFragment() {
 
     //return rootView
 
-    val rootView = inflater.inflate(R.layout.fragment_request_list, container, false)
-    return rootView
+    return inflater.inflate(R.layout.fragment_request_detail, container, false)
   }
 }

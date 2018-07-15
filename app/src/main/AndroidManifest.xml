@@ -76,6 +76,16 @@
         android:name="android.support.PARENT_ACTIVITY"
         android:value="ir.hossainkhademian.jobs.screen.dashboard.DashboardActivity"/>
     </activity>
+    <activity
+      android:name=".screen.request.detail.RequestDetailActivity"
+      android:label="@string/title_request_detail"
+      android:launchMode="singleInstance"
+      android:parentActivityName=".screen.request.list.RequestListActivity"
+      android:theme="@style/AppTheme.NoActionBar">
+      <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value="ir.hossainkhademian.jobs.screen.request.list.RequestListActivity"/>
+    </activity>
   </application>
 
 </manifest>
