@@ -28,3 +28,5 @@ fun Skill.toData() = when (this) {
     title = title
   )
 }
+
+fun <T : Skill> Iterable<T>.toData() = map { it.toData() }

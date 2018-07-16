@@ -40,3 +40,5 @@ fun Login.toData() = when (this) {
     refreshToken = refreshToken
   )
 }
+
+fun <T : Login> Iterable<T>.toData() = map { it.toData() }

@@ -71,6 +71,8 @@ fun Chat.toData() = when (this) {
   )
 }
 
+fun <T : Chat> Iterable<T>.toData() = map { it.toData() }
+
 fun <T : Chat> Iterable<T>.filterBySenderId(senderId: ID) =
   filter { it.senderId == senderId }
 

@@ -53,3 +53,4 @@ fun User.toData() = when (this) {
   )
 }
 
+fun <T : User> Iterable<T>.toData() = map { it.toData() }

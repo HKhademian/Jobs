@@ -14,7 +14,7 @@ object RequestMock : RequestService {
     val user = MockApiStorage.getUserByAccessToken(accessToken)
       ?: return Calls.failure(IOException("user with this token not found. please relogin"))
 
-    return Calls.response(MockApiStorage.requests.items.filterByUserId(user.id).map { it.toData() })
+    return Calls.response(MockApiStorage.requests.items.filterByUserId(user.id).toData())
   }
 
   override fun edit(accessToken: String, id: ID, typeStr: String, detail: String, jobId: ID, skillIds: List<ID>): Call<RequestData> {

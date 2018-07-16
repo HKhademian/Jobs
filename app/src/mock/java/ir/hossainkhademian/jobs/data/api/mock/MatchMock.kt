@@ -14,7 +14,7 @@ object MatchMock : MatchService {
   override fun list(accessToken: String): Call<List<MatchData>> {
     MockApiStorage.fakeWait()
 
-    return Calls.response(MockApiStorage.matches.items.map { it.toData() })
+    return Calls.response(MockApiStorage.matches.items.toData())
   }
 
   override fun addMatch(accessToken: String, workerRequestId: ID, companyRequestId: ID, note: String): Call<Unit> {

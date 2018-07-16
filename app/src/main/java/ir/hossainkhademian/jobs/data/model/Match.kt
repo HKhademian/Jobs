@@ -98,6 +98,8 @@ fun Match.toData() = when (this) {
   )
 }
 
+fun <T : Match> Iterable<T>.toData() = map { it.toData() }
+
 fun <T : Match> Iterable<T>.filterByRequest(requestType: RequestType, requestId: ID) = when (requestType) {
   RequestType.WORKER -> filterByWorkerRequestId(requestId)
   RequestType.COMPANY -> filterByCompanyRequestId(requestId)

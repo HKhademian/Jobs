@@ -2,9 +2,7 @@
 
 package ir.hossainkhademian.jobs.data.api
 
-import ir.hossainkhademian.jobs.data.model.ID
-import ir.hossainkhademian.jobs.data.model.UserData
-import ir.hossainkhademian.jobs.data.model.toData
+import ir.hossainkhademian.jobs.data.model.*
 import retrofit2.Call
 import retrofit2.mock.Calls
 import java.io.IOException
@@ -13,7 +11,7 @@ object UserMock : UserService {
   override fun get(id: ID): Call<UserData> {
     MockApiStorage.fakeWait()
 
-    val user = MockApiStorage.users.items.firstOrNull { it.id == id }
+    val user = MockApiStorage.users.items.findById(id)
       ?: return Calls.failure(IOException("no user with this id is found"))
 
     return Calls.response(user.toData())
@@ -22,7 +20,7 @@ object UserMock : UserService {
   override fun list(ids: List<ID>): Call<List<UserData>> {
     MockApiStorage.fakeWait()
 
-    val users = MockApiStorage.users.items.filter { ids.contains(it.id) }.map { it.toData() }
+    val users = MockApiStorage.users.items.filterById(ids).toData()
     if (users.isEmpty()) return Calls.failure(IOException("no user with these ids is found"))
 
     return Calls.response(users)

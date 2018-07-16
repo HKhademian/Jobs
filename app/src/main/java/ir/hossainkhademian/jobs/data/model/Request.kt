@@ -79,6 +79,8 @@ fun Request.toData() = when (this) {
   )
 }
 
+fun <T : Request> Iterable<T>.toData() = map { it.toData() }
+
 fun <T : Request> Iterable<T>.filterByUserId(userId: ID) =
   filter { it.userId == userId }
 

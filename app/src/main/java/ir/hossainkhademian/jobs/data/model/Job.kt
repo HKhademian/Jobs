@@ -22,6 +22,8 @@ class JobData(
   @Json(name = "title") override val title: String = ""
 ) : Job
 
+fun <T : Job> Iterable<T>.toData() = map { it.toData() }
+
 fun Job.toData() = when (this) {
   is JobData -> this
   else -> JobData(

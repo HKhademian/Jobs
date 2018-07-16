@@ -12,7 +12,7 @@ object SkillMock : SkillService {
   override fun list(): Call<List<SkillData>> {
     MockApiStorage.fakeWait()
 
-    return Calls.response(MockApiStorage.skills.items.map { it.toData() })
+    return Calls.response(MockApiStorage.skills.items.toData())
   }
 
   override fun addSkills(accessToken: String, title: String, des: String): Call<Unit> {

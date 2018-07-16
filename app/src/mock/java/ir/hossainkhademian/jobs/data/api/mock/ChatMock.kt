@@ -15,7 +15,7 @@ object ChatMock : ChatService {
     val user = MockApiStorage.getUserByAccessToken(accessToken)
       ?: return Calls.failure(IOException("user with this token not found. please relogin"))
 
-    return Calls.response(MockApiStorage.chats.items.filterByContactId(user.id).map { it.toData() })
+    return Calls.response(MockApiStorage.chats.items.filterByContactId(user.id).toData())
   }
 
   override fun list(accessToken: String, contactId: ID): Call<List<ChatData>> {
@@ -27,7 +27,7 @@ object ChatMock : ChatService {
     MockApiStorage.users.items.findById(contactId)
       ?: return Calls.failure(IOException("user with that contactId is not found"))
 
-    return Calls.response(MockApiStorage.chats.items.filterByUserContactId(user.id, contactId).map { it.toData() })
+    return Calls.response(MockApiStorage.chats.items.filterByUserContactId(user.id, contactId).toData())
   }
 
   override fun send(accessToken: String, contactId: ID, message: String): Call<List<ChatData>> {
@@ -64,22 +64,6 @@ object ChatMock : ChatService {
       chats += chat
       MockApiStorage.chats.update(chat)
     }
-
-//    val chance = 25
-//    if (MockApiStorage.random.nextInt(100) < chance) {
-//      val msg = "a fake messageField from `${contact.title}`" +
-//        "to respond your messageField,\n" +
-//        "with $chance% chance to send.\n" +
-//        "includes a random generated body:\n" +
-//        MockApiStorage.lorem.getWords(20, 50)
-//      val chat = ChatData(
-//        senderId = contactId,
-//        receiverId = user.id,
-//        message = msg
-//      )
-//      chats += chat
-//      MockApiStorage.update(chat)
-//    }
 
     return Calls.response(chats)
   }
