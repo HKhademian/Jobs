@@ -52,6 +52,7 @@
   <string name="field_request_skills">Request Skills</string>
   <string name="field_request_user">Requester User</string>
   <string name="field_request_detail">Request Detail</string>
+  <string name="field_request_state">Request State</string>
   <string name="field_request_brokers">Applied Brokers</string>
   <string name="field_request_matches">Prompted Matches</string>
 

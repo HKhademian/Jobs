@@ -9,6 +9,7 @@
   <color name="secondary_text">#757575</color>
   <color name="icons">#FFFFFF</color>
   <color name="divider">#BDBDBD</color>
+  <color name="back">#F0F0F0</color>
 
   <!--<color name="colorPrimary">#3F51B5</color>-->
   <!--<color name="colorPrimaryDark">#303F9F</color>-->
@@ -18,6 +19,10 @@
   <color name="colorPrimaryDark">@color/primary_dark</color>
   <color name="colorPrimaryLight">@color/primary_light</color>
   <color name="colorAccent">@color/accent</color>
+  <color name="colorPrimaryText">@color/primary_text</color>
+  <color name="colorSecondaryText">@color/secondary_text</color>
+  <color name="colorIcons">@color/icons</color>
+  <color name="colorBack">@color/back</color>
 
   <color name="color_message_card_send">#fff9c4</color>
   <color name="color_message_card_receive">#b3e5fc</color>

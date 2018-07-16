@@ -15,17 +15,26 @@ class FieldBox : CardView {
   private val childView get() = view!!.childView
 
   constructor(context: Context) : super(context) {
-    view = inflate(context, R.layout.view_field_box, this)
+    init()
   }
 
   constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
   constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-    view = inflate(context, R.layout.view_field_box, this)
+    init()
 
     val a = context.obtainStyledAttributes(attrs, R.styleable.FieldBox, defStyleAttr, defStyleAttr)
     title = a.getString(R.styleable.FieldBox_android_text) ?: ""
     action = a.getString(R.styleable.FieldBox_action) ?: ""
     a.recycle()
+  }
+
+  private fun init() {
+    view = inflate(context, R.layout.view_field_box, this)
+    title = ""
+    action = ""
+    onActionClickListener = null
+
+    radius = 8 * context.resources.displayMetrics.scaledDensity
   }
 
   override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
@@ -43,11 +52,13 @@ class FieldBox : CardView {
     get() = actionView.text.toString()
     set(value) {
       actionView.text = value
+      actionView.visibility = if (value.isEmpty()) View.GONE else View.VISIBLE // use space to not gone
     }
 
-  var onActionClickListener: View.OnClickListener = View.OnClickListener { }
+  var onActionClickListener: View.OnClickListener? = null // View.OnClickListener { }
     set(listener) {
       field = listener
       actionView.setOnClickListener(listener)
+      actionView.isEnabled = listener != null // use empty listener if you want
     }
 }
