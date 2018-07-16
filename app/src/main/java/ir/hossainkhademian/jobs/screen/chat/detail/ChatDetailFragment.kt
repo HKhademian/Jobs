@@ -1,5 +1,6 @@
 package ir.hossainkhademian.jobs.screen.chat.detail
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipboardManager
 import android.os.Build
@@ -17,7 +18,7 @@ import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.Chat
 import ir.hossainkhademian.jobs.data.model.isSended
 import ir.hossainkhademian.jobs.screen.BaseFragment
-import ir.hossainkhademian.util.LiveDatas.inlineObserve
+import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.TextWatchers.TextWatcher
 import kotlinx.android.synthetic.main.activity_chat_detail.*
 import kotlinx.android.synthetic.main.fragment_chat_detail.view.*
@@ -27,8 +28,6 @@ import android.content.Context
 import ir.hossainkhademian.jobs.data.model.EmptyChat
 import ir.hossainkhademian.util.Texts.getRelativeTime
 import ir.hossainkhademian.util.Texts.isEmoji
-import net.danlew.android.joda.DateUtils
-import org.joda.time.DateTime
 import java.util.*
 
 
@@ -74,7 +73,7 @@ class ChatDetailFragment : BaseFragment() {
     messageField.addTextChangedListener(TextWatcher {
       val message = messageField.text.toString()
       if (viewModel.messageField.value != message)
-        viewModel.messageField.postValue(message)
+        (viewModel.messageField as MutableLiveData).postValue(message)
     })
 
     sendButton.setOnClickListener {
@@ -83,28 +82,28 @@ class ChatDetailFragment : BaseFragment() {
       }
     }
 
-    viewModel.chats.inlineObserve(this) { chats ->
-      adapter.setData(chats ?: emptyList())
+    viewModel.chats.observe(this, emptyList()) { chats ->
+      adapter.setData(chats)
       adapter.notifyDataSetChanged()
       recyclerView.scrollToPosition(adapter.items.size - 1)
     }
 
-    viewModel.sendEnabled.inlineObserve(this) { isEnabled ->
+    viewModel.sendEnabled.observe(this, true) { isEnabled ->
       sendButton.isEnabled = isEnabled == true
       emojiButton.isEnabled = isEnabled != true
       mediaButton.isEnabled = isEnabled != true
     }
 
-    viewModel.messageField.inlineObserve(this) { message ->
+    viewModel.messageField.observe(this, "") { message ->
       if (messageField.text.toString() != message) {
-        messageField.setText(message ?: "")
+        messageField.setText(message)
         messageField.requestFocus()
       }
     }
 
-    viewModel.isSending.inlineObserve(this) { isSending ->
-      rootView.chat_form.visibility = if (isSending == true) View.INVISIBLE else View.VISIBLE
-      rootView.wait_form.visibility = if (isSending == true) View.VISIBLE else View.INVISIBLE
+    viewModel.isSending.observe<Boolean>(this, false) { isSending ->
+      rootView.chat_form.visibility = if (isSending) View.INVISIBLE else View.VISIBLE
+      rootView.wait_form.visibility = if (isSending) View.VISIBLE else View.INVISIBLE
     }
 
     return rootView
@@ -157,7 +156,7 @@ class ChatDetailFragment : BaseFragment() {
         }
 
         view.setOnLongClickListener {
-          viewModel.messageField.postValue(item.message)
+          (viewModel.messageField as MutableLiveData).postValue(item.message)
           true
         }
       }

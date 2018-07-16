@@ -157,6 +157,20 @@ dependencies {
 
   /* Emoji support */
   implementation 'com.vdurmont:emoji-java:4.0.0'
+
+  /* ToggleView: https://github.com/llollox/Android-Toggle-Switch */
+  // implementation 'com.llollox:androidtoggleswitch:2.0.1'
+
+  /*
+  * Skills view
+  * FlowLayout: https://github.com/nex3z/FlowLayout
+  * ChipView: https://github.com/robertlevonyan/materialChipView
+  *
+  * Tag View: https://github.com/2dxgujun/AndroidTagGroup
+  */
+  implementation 'me.gujun.android.taggroup:library:1.4@aar'
+  // implementation 'com.nex3z:flow-layout:1.2.2'
+  // implementation 'com.robertlevonyan.view:MaterialChipView:1.2.4'
 }
 
 kotlin {

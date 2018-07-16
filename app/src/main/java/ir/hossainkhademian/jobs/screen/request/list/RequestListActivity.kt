@@ -3,14 +3,12 @@ package ir.hossainkhademian.jobs.screen.request.list
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.NavUtils
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.*
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.squareup.picasso.Picasso
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
@@ -22,7 +20,7 @@ import ir.hossainkhademian.util.launchActivity
 import kotlinx.android.synthetic.main.activity_request_list.*
 import kotlinx.android.synthetic.main.fragment_request_list.*
 import kotlinx.android.synthetic.main.item_request_list.view.*
-import ir.hossainkhademian.util.LiveDatas.inlineObserve
+import ir.hossainkhademian.util.LiveDatas.observeOn
 import ir.hossainkhademian.util.bundle
 
 
@@ -71,7 +69,7 @@ class RequestListActivity : AppCompatActivity() {
 
     val adapter = Adapter(LayoutInflater.from(context), viewModel.requests.value ?: emptyList())
     recyclerView.adapter = adapter
-    viewModel.requests.inlineObserve(this) { items ->
+    viewModel.requests.observeOn(this) { items ->
       adapter.items = items ?: emptyList()
       recyclerView.scrollToPosition(adapter.items.size - 1)
     }

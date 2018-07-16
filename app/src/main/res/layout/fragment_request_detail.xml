@@ -5,141 +5,24 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:padding="4dp"
+  android:background="#f0f0f0"
   tools:context=".screen.request.detail.RequestDetailActivity">
-
-  <ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toTopOf="@+id/actionBar"
-    android:orientation="vertical"
-    android:padding="4dp"
-    android:fillViewport="true"
-    android:scrollbars="none">
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:orientation="vertical">
-
-      <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start|center_vertical"
-        android:text="@string/field_request_type"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
-
-      <Button
-        android:id="@+id/requestTypeView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"/>
-
-      <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="start|center_vertical"
-        android:text="@string/field_request_job"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
-
-      <ir.hossainkhademian.jobs.view.RequestView
-        android:id="@+id/requestView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"/>
-
-      <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="start|center_vertical"
-        android:text="@string/field_request_skills"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
-
-      <EditText
-        android:id="@+id/skillsView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:editable="false"/>
-
-      <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="start|center_vertical"
-        android:text="@string/field_request_user"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
-
-      <ir.hossainkhademian.jobs.view.UserView
-        android:id="@+id/userView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"/>
-
-      <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="start|center_vertical"
-        android:text="@string/field_request_detail"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
-
-      <EditText
-        android:id="@+id/detailView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:editable="false"/>
-
-
-      <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="start|center_vertical"
-        android:text="@string/field_request_brokers"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
-
-      <EditText
-        android:id="@+id/brokersView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:editable="false"/>
-
-
-      <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="start|center_vertical"
-        android:text="@string/field_request_matches"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
-
-      <EditText
-        android:id="@+id/matchesView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:editable="false"/>
-    </LinearLayout>
-  </ScrollView>
 
   <LinearLayout
     android:id="@+id/actionBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintBottom_toBottomOf="parent"
-    android:orientation="horizontal">
+    android:background="#fdfdfd"
+    android:orientation="horizontal"
+    android:elevation="32dp"
+    android:padding="4dp">
     <Button
       android:id="@+id/cancelAction"
       android:layout_width="0dp"
       android:layout_height="match_parent"
       android:layout_weight="1"
-      style="@style/Widget.AppCompat.Button.Colored"
+      style="@style/Widget.AppCompat.Button.Borderless.Colored"
       android:text="@string/action_cancel"/>
     <Button
       android:id="@+id/editAction"
@@ -147,7 +30,267 @@
       android:layout_height="match_parent"
       android:layout_weight="1"
       style="@style/Widget.AppCompat.Button.Colored"
-      android:backgroundTint="@color/colorPrimaryDark"
       android:text="@string/action_edit"/>
   </LinearLayout>
+
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toTopOf="@+id/actionBar"
+    android:overScrollMode="never"
+    android:orientation="vertical"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:padding="8dp"
+      android:orientation="vertical">
+
+      <ir.hossainkhademian.jobs.view.FieldBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/field_request_type"
+        app:action="Test: it's a tests">
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="4dp"
+          android:gravity="center"
+          android:orientation="horizontal">
+          <Button
+            android:id="@+id/requestTypeWorkerView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:maxWidth="128dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:text="@string/choice_request_worker"/>
+          <Button
+            android:id="@+id/requestTypeCompanyView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:maxWidth="128dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:text="@string/choice_request_company"/>
+        </LinearLayout>
+
+      </ir.hossainkhademian.jobs.view.FieldBox>
+
+      <!-- <android.support.v7.widget.CardView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         app:cardCornerRadius="8dp">
+         <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical"
+           android:padding="8dp">
+           <TextView
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginBottom="8dp"
+             android:gravity="start|center_vertical"
+             android:text="@string/field_request_type"
+             android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+           <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_margin="4dp"
+             android:gravity="center"
+             android:orientation="horizontal">
+             <Button
+               android:id="@+id/requestTypeWorkerView"
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:maxWidth="128dp"
+               style="@style/Widget.AppCompat.Button.Colored"
+               android:text="@string/choice_request_worker"/>
+             <Button
+               android:id="@+id/requestTypeCompanyView"
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:maxWidth="128dp"
+               style="@style/Widget.AppCompat.Button.Colored"
+               android:text="@string/choice_request_company"/>
+           </LinearLayout>
+         </LinearLayout>
+       </android.support.v7.widget.CardView> -->
+
+
+      <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp">
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          android:padding="8dp">
+          <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="start|center_vertical"
+            android:text="@string/field_request_job"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+          <ir.hossainkhademian.jobs.view.JobView
+            android:id="@+id/requestView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"/>
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+
+      <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp">
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          android:padding="8dp">
+          <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="start|center_vertical"
+            android:text="@string/field_request_skills"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+          <me.gujun.android.taggroup.TagGroup
+            android:id="@+id/skillsView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            style="@style/TagGroup.Large"
+          />
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+
+      <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp">
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          android:padding="8dp">
+          <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="start|center_vertical"
+            android:text="@string/field_request_user"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+          <ir.hossainkhademian.jobs.view.UserView
+            android:id="@+id/userView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"/>
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+
+      <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp">
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          android:padding="8dp">
+          <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="start|center_vertical"
+            android:text="@string/field_request_detail"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+          <EditText
+            android:id="@+id/detailView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:editable="false"/>
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+
+      <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp">
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          android:padding="8dp">
+          <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="start|center_vertical"
+            android:text="@string/field_request_brokers"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+          <EditText
+            android:id="@+id/brokersView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:editable="false"/>
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+
+      <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp">
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          android:padding="8dp">
+          <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:layout_marginBottom="8dp"
+            android:text="@string/field_request_matches"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+          <EditText
+            android:id="@+id/matchesView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:editable="false"/>
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+  </ScrollView>
 </android.support.constraint.ConstraintLayout>

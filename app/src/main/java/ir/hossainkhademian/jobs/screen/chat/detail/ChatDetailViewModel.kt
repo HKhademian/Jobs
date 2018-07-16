@@ -1,9 +1,6 @@
 package ir.hossainkhademian.jobs.screen.chat.detail
 
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.*
 import ir.hossainkhademian.jobs.App
 import ir.hossainkhademian.jobs.data.Repository
 import ir.hossainkhademian.jobs.data.model.Chat
@@ -20,9 +17,9 @@ import kotlinx.coroutines.experimental.launch
 internal class ChatDetailViewModel(val app: App, val userId: ID) : AndroidViewModel(app) {
   val chats = Repository.getChatsByContact(userId).toLiveData()
 
-  val messageField = MutableLiveData<String>().apply { postValue("") }
+  val messageField: LiveData<String> = MutableLiveData<String>().apply { postValue("") }
 
-  val isSending = MutableLiveData<Boolean>().apply { postValue(false) }
+  val isSending: LiveData<Boolean> = MutableLiveData<Boolean>().apply { postValue(false) }
 
   val sendEnabled = LiveDatas.zip(messageField, isSending)
     .map { (message, isSending) -> message.isNotBlank() && !isSending }
@@ -32,6 +29,10 @@ internal class ChatDetailViewModel(val app: App, val userId: ID) : AndroidViewMo
     val message = messageField.value ?: ""
     if (message.isBlank())
       return null
+
+    (isSending as MutableLiveData)
+    (messageField as MutableLiveData)
+
 
     isSending.postValue(true)
 

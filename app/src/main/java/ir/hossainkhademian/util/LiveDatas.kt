@@ -18,24 +18,38 @@ object LiveDatas {
     }
 
 
-  inline fun <T> LiveData<T>.inlineObserve(owner: LifecycleOwner, crossinline onChange: (T?) -> Unit) =
-    observe(owner, Observer<T> { t -> onChange(t) })
+  inline fun <T> LiveData<T?>.letObserveOn(owner: LifecycleOwner, crossinline onChange: (T) -> Unit) =
+    observe(owner, Observer { it?.let { onChange(it) } })
 
-  inline fun <T> LiveData<T>.inlineObserve(owner: LifecycleOwner, crossinline onChange: (T?, Observer<T>) -> Unit) =
-    observe(owner, object : Observer<T> {
+  inline fun <T> LiveData<T?>.letObserveOn(owner: LifecycleOwner, default: T, crossinline onChange: (T) -> Unit) =
+    observe(owner, Observer { onChange(it ?: default) })
+
+
+  inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline onChange: (T) -> Unit) =
+    observe(owner, Observer { it?.let { onChange(it) } })
+
+  inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, default: T, crossinline onChange: (T) -> Unit) =
+    observe(owner, Observer { onChange(it ?: default) })
+
+
+  inline fun <T> LiveData<T?>.observeOn(owner: LifecycleOwner, crossinline onChange: (T?) -> Unit) =
+    observe(owner, Observer { t -> onChange(t) })
+
+  inline fun <T> LiveData<T?>.withObserverObserveOn(owner: LifecycleOwner, crossinline onChange: (T?, Observer<T?>) -> Unit) =
+    observe(owner, object : Observer<T?> {
       override fun onChanged(t: T?) =
         onChange(t, this)
     })
 
 
-  fun <T> LiveData<T>.singleObserve(owner: LifecycleOwner, observer: Observer<T>) =
-    inlineObserve(owner) { t, baseObserver ->
+  fun <T> LiveData<T?>.singleObserve(owner: LifecycleOwner, observer: Observer<T?>) =
+    withObserverObserveOn(owner) { t, baseObserver ->
       observer.onChanged(t)
       removeObserver(baseObserver)
     }
 
-  inline fun <T> LiveData<T>.singleObserve(owner: LifecycleOwner, crossinline onChange: (T?) -> Unit) =
-    inlineObserve(owner) { t, baseObserver ->
+  inline fun <T> LiveData<T?>.singleObserve(owner: LifecycleOwner, crossinline onChange: (T?) -> Unit) =
+    withObserverObserveOn(owner) { t, baseObserver ->
       onChange(t)
       removeObserver(baseObserver)
     }
