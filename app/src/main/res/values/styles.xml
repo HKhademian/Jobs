@@ -27,5 +27,8 @@
   <declare-styleable name="FieldBox">
     <attr format="string" name="android:text"/>
     <attr format="string" name="action"/>
+    <attr format="string" name="action1"/>
+    <attr format="string" name="action2"/>
+    <attr format="string" name="action3"/>
   </declare-styleable>
 </resources>

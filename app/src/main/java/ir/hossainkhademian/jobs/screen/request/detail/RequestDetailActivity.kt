@@ -6,7 +6,11 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.emptyID
+import ir.hossainkhademian.jobs.data.model.idStr
+import ir.hossainkhademian.jobs.data.model.title
 import ir.hossainkhademian.jobs.screen.request.list.RequestListActivity
+import ir.hossainkhademian.util.context
+import ir.hossainkhademian.util.launchActivity
 import kotlinx.android.synthetic.main.activity_request_detail.*
 
 class RequestDetailActivity : AppCompatActivity() {
@@ -25,6 +29,18 @@ class RequestDetailActivity : AppCompatActivity() {
 
       val fragment = RequestDetailFragment().apply {
         arguments = intent.extras
+
+        onEditListener = { request ->
+          launchActivity<RequestDetailActivity>(extras = *arrayOf(
+            RequestDetailFragment.ARG_REQUEST_TITLE to request.title,
+            RequestDetailFragment.ARG_REQUEST_ID to request.idStr
+          ))
+        }
+
+        onCancelListener = { request ->
+          //finish()
+          navigateUpTo(Intent(context, RequestListActivity::class.java))
+        }
       }
 
       toolbar.title = title
@@ -38,7 +54,7 @@ class RequestDetailActivity : AppCompatActivity() {
   override fun onOptionsItemSelected(item: MenuItem) =
     when (item.itemId) {
       android.R.id.home -> {
-        navigateUpTo(Intent(this, RequestListActivity::class.java))
+        navigateUpTo(Intent(context, RequestListActivity::class.java))
         true
       }
       else -> super.onOptionsItemSelected(item)

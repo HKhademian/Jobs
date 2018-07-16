@@ -131,7 +131,8 @@
       <ir.hossainkhademian.jobs.view.FieldBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:layout_margin="8dp"
+        android:text="@string/field_request_state">
         <TextView
           android:id="@+id/stateView"
           android:layout_width="match_parent"
@@ -144,7 +145,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/field_request_brokers">
-        <TextView
+        <android.support.v7.widget.RecyclerView
           android:id="@+id/brokersView"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -155,8 +156,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@string/field_request_brokers">
-        <TextView
+        android:text="@string/field_request_matches">
+        <android.support.v7.widget.RecyclerView
           android:id="@+id/matchesView"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
