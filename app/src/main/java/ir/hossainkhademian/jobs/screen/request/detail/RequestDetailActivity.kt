@@ -8,13 +8,14 @@ import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.emptyID
 import ir.hossainkhademian.jobs.data.model.idStr
 import ir.hossainkhademian.jobs.data.model.title
+import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailFragment
+import ir.hossainkhademian.jobs.screen.chat.list.ChatListActivity
 import ir.hossainkhademian.jobs.screen.request.list.RequestListActivity
 import ir.hossainkhademian.util.context
 import ir.hossainkhademian.util.launchActivity
 import kotlinx.android.synthetic.main.activity_request_detail.*
 
 class RequestDetailActivity : AppCompatActivity() {
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_request_detail)
@@ -34,6 +35,12 @@ class RequestDetailActivity : AppCompatActivity() {
           launchActivity<RequestDetailActivity>(extras = *arrayOf(
             RequestDetailFragment.ARG_REQUEST_TITLE to request.title,
             RequestDetailFragment.ARG_REQUEST_ID to request.idStr
+          ))
+        }
+
+        onSendChatListener = { user ->
+          launchActivity<ChatListActivity>(extras = *arrayOf(
+            ChatDetailFragment.ARG_USER_ID to user.idStr
           ))
         }
 

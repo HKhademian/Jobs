@@ -2,7 +2,6 @@ package ir.hossainkhademian.jobs.screen.request.detail
 
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,8 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
 import ir.hossainkhademian.jobs.R
+import ir.hossainkhademian.jobs.data.DataManager
+import ir.hossainkhademian.jobs.data.Repository
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.screen.BaseFragment
 import ir.hossainkhademian.util.LiveDatas.letObserveOn
@@ -19,6 +19,7 @@ import ir.hossainkhademian.util.ViewModels.getViewModel
 import kotlinx.android.synthetic.main.activity_request_detail.*
 import kotlinx.android.synthetic.main.fragment_request_detail.view.*
 import kotlinx.android.synthetic.main.item_request_broker.view.*
+import kotlinx.android.synthetic.main.item_request_match.view.*
 import java.text.FieldPosition
 
 class RequestDetailFragment : BaseFragment() {
@@ -45,6 +46,7 @@ class RequestDetailFragment : BaseFragment() {
   private val matchesAdapter: MatchAdapter = MatchAdapter()
 
   var onEditListener: (Request) -> Unit = { }
+  var onSendChatListener: (User) -> Unit = { }
   var onCancelListener: (Request) -> Unit = { }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +94,8 @@ class RequestDetailFragment : BaseFragment() {
     userView.user = request.user
     detailView.text = request.detail
 
-    brokerAdapter.items = request.brokers
+    // brokerAdapter.items = request.brokers
+    brokerAdapter.items = Repository.usersList
     matchesAdapter.items = request.matches
 
     skillsView.setTags(request.skills.map { it.title })
@@ -136,7 +139,8 @@ class RequestDetailFragment : BaseFragment() {
   }
 
   private class BrokerViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-    private val avatarView = view as CircleImageView
+    private val avatarView get() = view.avatarView
+    private val titleView get() = view.titleView
 
     var item = EmptyUser
       set(value) {
@@ -145,6 +149,8 @@ class RequestDetailFragment : BaseFragment() {
       }
 
     private fun showItem(item: User) {
+      titleView.text = item.title
+
       Picasso.get().load(item.avatarUrl)
         .placeholder(R.drawable.ic_avatar)
         .error(R.drawable.ic_avatar)
