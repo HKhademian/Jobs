@@ -2,11 +2,15 @@ package ir.hossainkhademian.jobs.data.model
 
 import com.squareup.moshi.Json
 
+//private fun generateAvatarUrl(userId: ID): String {
+//  val i = userId.sumBy { it.toInt() } // requestId.toInt() //
+//  val index = i % 50
+//  val gender = if (i % 2 == 0) "women" else "men"
+//  return "https://randomuser.me/api/portraits/$gender/$index.jpg"
+//}
+
 private fun generateAvatarUrl(userId: ID): String {
-  val i = userId.sumBy { it.toInt() } // requestId.toInt() //
-  val index = i % 50
-  val gender = if (i % 2 == 0) "women" else "men"
-  return "https://randomuser.me/api/portraits/$gender/$index.jpg"
+  return "https://api.adorable.io/avatars/256/$userId.png"
 }
 
 val EmptyUser: User = UserData(id = emptyID, lastSeen = 0L)
