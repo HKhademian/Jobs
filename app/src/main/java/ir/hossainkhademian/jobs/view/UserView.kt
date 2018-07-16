@@ -13,12 +13,12 @@ import ir.hossainkhademian.util.Texts.getRelativeTime
 import kotlinx.android.synthetic.main.view_user.view.*
 
 class UserView : CardView {
-  val view: View = inflate(context, R.layout.view_user, this)
-  val avatarView = rootView.avatarView
-  val titleView = rootView.titleView
-  val subtitleView = rootView.subtitleView
-  val badgeView = rootView.badgeView
-  val lastSeenView = rootView.lastSeenView
+  private val view: View = inflate(context, R.layout.view_user, this)
+  private val avatarView get() = view.avatarView
+  private val titleView get() = view.titleView
+  private val subtitleView get() = view.subtitleView
+  private val badgeView get() = view.badgeView
+  private val lastSeenView get() = view.lastSeenView
 
   constructor(context: Context) : super(context)
   constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -32,7 +32,7 @@ class UserView : CardView {
       subtitleView.text = "ID: ${item.id}"
 
       badgeView.text = item.role.key
-      lastSeenView.text  = item.lastSeen.getRelativeTime(context)
+      lastSeenView.text = item.lastSeen.getRelativeTime(context)
       Picasso.get().load(item.avatarUrl).placeholder(R.drawable.ic_avatar).into(avatarView)
     }
 }

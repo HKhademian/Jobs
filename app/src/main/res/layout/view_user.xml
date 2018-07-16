@@ -32,7 +32,7 @@
       app:layout_constraintEnd_toStartOf="@id/badgeView"
       app:layout_constraintStart_toEndOf="@id/avatarView"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_chainStyle="packed"
+      app:layout_constraintVertical_chainStyle="spread"
       app:layout_constraintHorizontal_chainStyle="packed"
       android:gravity="start|center_vertical"
       android:maxLines="1"

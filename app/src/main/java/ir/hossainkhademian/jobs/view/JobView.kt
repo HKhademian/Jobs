@@ -6,23 +6,20 @@ import android.util.AttributeSet
 import android.view.View
 import com.squareup.picasso.Picasso
 import ir.hossainkhademian.jobs.R
-import ir.hossainkhademian.jobs.data.model.EmptyRequest
-import ir.hossainkhademian.jobs.data.model.Request
-import ir.hossainkhademian.jobs.data.model.avatarUrl
-import ir.hossainkhademian.jobs.data.model.title
-import kotlinx.android.synthetic.main.view_request.view.*
+import ir.hossainkhademian.jobs.data.model.*
+import kotlinx.android.synthetic.main.view_job.view.*
 
-class RequestView : CardView {
-  val view: View = inflate(context, R.layout.view_request, this)
-  val avatarView = rootView.avatarView
-  val titleView = rootView.titleView
-  val subtitleView = rootView.subtitleView
+class JobView : CardView {
+  private val view: View = inflate(context, R.layout.view_job, this)
+  private val avatarView get() = view.avatarView
+  private val titleView get() = view.titleView
+  private val subtitleView get() = view.subtitleView
 
   constructor(context: Context) : super(context)
   constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
   constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-  var request: Request = EmptyRequest
+  var request: Job = EmptyJob
     set(item) {
       field = item
 
