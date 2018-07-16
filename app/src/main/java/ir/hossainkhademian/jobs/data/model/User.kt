@@ -13,6 +13,7 @@ val EmptyUser: User = UserData(id = emptyID, lastSeen = 0L)
 val User.avatarUrl: String get() = generateAvatarUrl(id)
 val User.isAdmin get() = role == UserRole.Admin
 val User.isBroker get() = role == UserRole.Broker
+val User.isUser get() = role == UserRole.User
 
 interface User : IdModel {
   override val id: ID
@@ -54,3 +55,21 @@ fun User.toData() = when (this) {
 }
 
 fun <T : User> Iterable<T>.toData() = map { it.toData() }
+
+fun <T : User> Iterable<T>.filterIsBroker() =
+  filter { it.isBroker }
+
+fun <T : User> Iterable<T>.filterNotIsBroker() =
+  filterNot { it.isBroker }
+
+fun <T : User> Iterable<T>.filterIsAdmin() =
+  filter { it.isAdmin }
+
+fun <T : User> Iterable<T>.filterNotIsAdmin() =
+  filterNot { it.isAdmin }
+
+fun <T : User> Iterable<T>.filterIsUser() =
+  filter { it.isUser }
+
+fun <T : User> Iterable<T>.filterNotIsUser() =
+  filterNot { it.isUser }

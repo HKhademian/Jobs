@@ -1,5 +1,6 @@
 package ir.hossainkhademian.jobs.data.model
 
+import android.arch.lifecycle.Transformations.map
 import io.reactivex.Observable
 import java.util.*
 
@@ -22,16 +23,13 @@ interface IdModel {
   val id: ID
 }
 
-fun <T : IdModel, C : Iterable<T>> C.getById(id: ID) = first { it.id == id }
-fun <T : IdModel, C : Iterable<T>> C.findById(id: ID) = find { it.id == id }
-fun <T : IdModel, C : Iterable<T>> C.filterById(id: ID) = filter { it.id == id }
-fun <T : IdModel, C : Iterable<T>> C.filterById(ids: Collection<ID>) = filter { ids.contains(it.id) }
+fun <T : IdModel> Iterable<T>.mapId() = map { it.id }
+fun <T : IdModel> Iterable<T>.getById(id: ID) = first { it.id == id }
+fun <T : IdModel> Iterable<T>.findById(id: ID) = find { it.id == id }
+fun <T : IdModel> Iterable<T>.filterById(id: ID) = filter { it.id == id }
+fun <T : IdModel> Iterable<T>.filterById(ids: Collection<ID>) = filter { ids.contains(it.id) }
 
-//fun <T : IdModel> Observable<T>.getById(id: ID) = filter { it.id == id }
-//fun <T : IdModel> Observable<T>.findById(id: ID) = filter { it.id == id }
-//fun <T : IdModel> Observable<T>.filterById(id: ID) = filter { it.id == id }
-//fun <T : IdModel> Observable<T>.filterById(ids: Collection<ID>) = filter { ids.contains(it.id) }
-
+fun <T : IdModel, C : Iterable<T>> Observable<C>.mapId() = map { it.mapId() }
 fun <T : IdModel, C : Iterable<T>> Observable<C>.getById(id: ID) = map { it.getById(id) }
 fun <T : IdModel, C : Iterable<T>> Observable<C>.findById(id: ID) = map { it.findById(id) }
 fun <T : IdModel, C : Iterable<T>> Observable<C>.filterById(id: ID) = map { it.filterById(id) }

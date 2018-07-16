@@ -98,9 +98,11 @@ object AccountMock : AccountService {
         val request = RequestData(
           userId = userId,
           typeStr = type.key,
+          detail = details,
+          time = System.currentTimeMillis() - MockApiStorage.random.nextInt(1000 * 60 * 60 * 7),
           jobId = job.id,
           skillIds = skills.map { it.id },
-          detail = details
+          brokerIds = MockApiStorage.users.items.filterIsBroker().shuffled().take(MockApiStorage.random.nextInt(3)).mapId()
         )
         MockApiStorage.requests.update(request)
       }
