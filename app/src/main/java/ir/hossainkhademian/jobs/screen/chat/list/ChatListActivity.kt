@@ -21,7 +21,9 @@ import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailFragment
 import ir.hossainkhademian.util.ViewModels.getViewModel
 import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.context
+import ir.hossainkhademian.util.Texts.getRelativeTime
 import ir.hossainkhademian.util.launchActivity
+import kotlinx.android.synthetic.main.activity_chat_list_holder.*
 import kotlinx.android.synthetic.main.activity_chat_list.*
 import kotlinx.android.synthetic.main.fragment_chat_list.*
 import kotlinx.android.synthetic.main.item_chat_list.view.*
@@ -47,9 +49,9 @@ class ChatListActivity : AppCompatActivity() {
       return
     }
 
-    setContentView(R.layout.activity_chat_list)
+    setContentView(R.layout.activity_chat_list_holder)
 
-    twoPane = chat_detail_container != null
+    twoPane = detailContainer != null
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     toolbar.title = title
@@ -57,7 +59,7 @@ class ChatListActivity : AppCompatActivity() {
 //      Snackbar.make(view, "Not Implemented yet!", Snackbar.LENGTH_LONG)
 //        .setAction("Action", null).show()
 //    }
-    setupRecyclerView(chat_list)
+    setupRecyclerView()
 
     if (userId != emptyID)
       sendMessageTo(twoPane, userId, userTitle)
@@ -69,7 +71,7 @@ class ChatListActivity : AppCompatActivity() {
     }
 
     viewModel.selectedUserId.observe(this) { selectedUserId ->
-      adapter.selectedUserId = selectedUserId
+      adapter.selectedId = selectedUserId
     }
   }
 
@@ -82,11 +84,11 @@ class ChatListActivity : AppCompatActivity() {
       else -> super.onOptionsItemSelected(item)
     }
 
-  private fun setupRecyclerView(recyclerView: RecyclerView) {
-    recyclerView.adapter = adapter
+  private fun setupRecyclerView() {
     recyclerView.itemAnimator = DefaultItemAnimator()
     recyclerView.layoutManager = LinearLayoutManager(this).apply { orientation = LinearLayoutManager.VERTICAL }
     recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+    recyclerView.adapter = adapter
   }
 
   private fun onItemSelected(item: UserChat) {
@@ -104,7 +106,7 @@ class ChatListActivity : AppCompatActivity() {
       }
       supportFragmentManager
         .beginTransaction()
-        .replace(R.id.chat_detail_container, fragment)
+        .replace(R.id.detailContainer, fragment)
         .commit()
     } else {
       launchActivity<ChatDetailActivity>(extras = *arrayOf(
@@ -115,16 +117,16 @@ class ChatListActivity : AppCompatActivity() {
   }
 
 
-  private inner class UserChatAdapter(items: List<UserChat> = emptyList(), selectedUserId: ID = emptyID) : RecyclerView.Adapter<UserChatViewHolder>() {
+  private inner class UserChatAdapter(items: List<UserChat> = emptyList(), selectedId: ID = emptyID) : RecyclerView.Adapter<UserChatViewHolder>() {
     var items = items
       set(items) {
         field = items
         notifyDataSetChanged()
       }
 
-    var selectedUserId: ID = selectedUserId
-      set(selectedUserId) {
-        field = selectedUserId
+    var selectedId = selectedId
+      set(selectedId) {
+        field = selectedId
         notifyDataSetChanged()
       }
 
@@ -137,7 +139,7 @@ class ChatListActivity : AppCompatActivity() {
     override fun onBindViewHolder(holder: UserChatViewHolder, position: Int) {
       val item = items[position]
       holder.item = item
-      holder.selected = item.user.id == selectedUserId
+      holder.selected = item.user.id == selectedId
     }
   }
 
@@ -146,6 +148,7 @@ class ChatListActivity : AppCompatActivity() {
     private val avatarView = view.avatarView
     private val titleView = view.titleView
     private val subtitleView = view.subtitleView
+    private val lastSeenView = view.lastSeenView
     private val badgeView = view.badge_view
 
     var item: UserChat = Pair(EmptyUser, 0)
@@ -175,6 +178,7 @@ class ChatListActivity : AppCompatActivity() {
       Picasso.get().load(imageUrl).placeholder(R.drawable.ic_avatar).into(avatarView)
       titleView.text = user.title
       subtitleView.text = "user id: ${user.id}"
+      lastSeenView.text = user.lastSeen.getRelativeTime(context)
 
       badgeView.image = when (unreadCount) {
         0 -> null

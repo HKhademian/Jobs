@@ -6,9 +6,11 @@ import ir.hossainkhademian.jobs.data.model.*
 import retrofit2.Call
 import retrofit2.mock.Calls
 import java.io.IOException
-import java.util.*
+import ir.hossainkhademian.util.Texts.isEmoji
 
 object ChatMock : ChatService {
+  private val emojis = listOf("❤", "😊", "😎", "😁", "🌹", "👍", "😒", "🎁", "👏")
+
   override fun list(accessToken: String): Call<List<ChatData>> {
     MockApiStorage.fakeWait()
 
@@ -59,7 +61,19 @@ object ChatMock : ChatService {
       val chat = ChatData(
         senderId = contactId,
         receiverId = user.id,
-        message = "my answer lord: \n" + MockApiStorage.lorem.getWords(30, 100)
+        message = "my answer lord: \n" + MockApiStorage.lorem.getWords(30, 100),
+        time = chats[0].time + 100
+      )
+      chats += chat
+      MockApiStorage.chats.update(chat)
+    }
+
+    if (message.isEmoji) {
+      val chat = ChatData(
+        senderId = contactId,
+        receiverId = user.id,
+        message = emojis.shuffled().first(),
+        time = chats[0].time + 100
       )
       chats += chat
       MockApiStorage.chats.update(chat)
@@ -80,6 +94,7 @@ object ChatMock : ChatService {
     val chats = MockApiStorage.chats.items
       .filterByReceiverId(user.id)
       .filterBySenderId(senderId)
+      .filter { it.unseen }
       .map { it.copy(unseen = false) }
 
     chats.forEach { MockApiStorage.chats.update(it) }

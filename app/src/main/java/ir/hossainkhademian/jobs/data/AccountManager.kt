@@ -28,7 +28,7 @@ object AccountManager : Login by Storage {
   }
 
 
-  fun save(context: Context, login: Login) = Storage.run {
+  fun save(login: Login) = Storage.run {
     id = login.id
     title = login.title
     role = login.role
@@ -43,13 +43,13 @@ object AccountManager : Login by Storage {
   /**
    * get new access token from current login (update token)
    */
-  suspend fun refresh(context: Context, force: Boolean = true, loadData: Boolean = true) {
+  suspend fun refresh(force: Boolean = true, loadData: Boolean = true) {
     if (!isLoggedIn) return
     if (!force && isFresh) return
     val login = ApiManager.accounts.refresh(refreshToken).await()
-    save(context, login)
+    save(login)
     //delay(2000)
-    if (loadData) DataManager.loadOnlineUserData(context)
+    if (loadData) DataManager.loadOnlineUserData()
   }
 
   /**
@@ -64,15 +64,15 @@ object AccountManager : Login by Storage {
     //delay(1000)
   }
 
-  suspend fun login(context: Context, phone: String, password: String, loadData: Boolean = true) {
+  suspend fun login(phone: String, password: String, loadData: Boolean = true) {
     val login = ApiManager.accounts.login(phone, password).await()
-    save(context, login)
+    save(login)
     // if (loadData) DataManager.loadOnlineUserData(context)
   }
 
-  suspend fun register(context: Context, phone: String, loadData: Boolean = true) {
+  suspend fun register(phone: String, loadData: Boolean = true) {
     val login = ApiManager.accounts.register(phone).await()
-    save(context, login)
+    save(login)
     // if (loadData) DataManager.loadOnlineUserData(context)
   }
 

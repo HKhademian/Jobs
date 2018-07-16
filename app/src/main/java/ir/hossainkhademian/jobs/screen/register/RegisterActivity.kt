@@ -30,26 +30,12 @@ class RegisterActivity : BaseActivity() {
     super.onCreate(savedInstanceState)
     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
 
-//    AlertDialog.Builder(context).setTitle("MOCK !!!")
-//      .setMessage("In Test mode:\n\n" +
-//        "* any phone number ...\n" +
-//        "ends with 0 is Admin\n" +
-//        "end with 1 is Broker\n" +
-//        "and other are normal usersList (workers & companies).\n\n" +
-//        "so Admin and Brokers are not allowed to register in mobile app.\n\n" +
-//        "account password is last phone number digit!!\n\n" +
-//        "any number is valid to login now till server developed.")
-//      .setNeutralButton("OK !") { dialog, _ -> dialog.cancel() }
-//      .setCancelable(false)
-//      .show()
-
     setContentView(R.layout.activity_register)
     login_button.isEnabled = true
     register_button.isEnabled = true
     register_form.visibility = View.VISIBLE
     wait_form.visibility = View.INVISIBLE
     phone_field.error = null
-
 
     handleIntent(intent)
 
@@ -96,7 +82,7 @@ class RegisterActivity : BaseActivity() {
     val activity = this
     launch {
       val result = asyncUI {
-        tri(false) { AccountManager.register(context, phone); true }
+        tri(false) { AccountManager.register(phone); true }
       }.await()
 
       if (result) {

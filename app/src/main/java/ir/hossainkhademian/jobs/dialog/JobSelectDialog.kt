@@ -18,9 +18,10 @@ object JobSelectDialog {
 
   fun build(context: Context, listener: (Job) -> Unit): AlertDialog.Builder {
     val adapter = JobAdapter(context)
-    val job = Repository.jobsObservable
+    val job = Repository.Jobs.list()
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe { adapter.items = it }
+
     return AlertDialog.Builder(context)
       .setTitle("Select job from list below:")
       .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }

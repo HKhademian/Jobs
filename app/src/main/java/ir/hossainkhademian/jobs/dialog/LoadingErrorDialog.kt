@@ -28,7 +28,7 @@ object LoadingErrorDialog {
   ) = AlertDialog.Builder(context)
     .setCancelable(false)
     .setTitle("Error in loading data")
-    .setMessage("We have some problems in receiving data:\n($e)\n\nif this happens many times please contact support team!")
+    .setMessage("We have some problems in receiving data:\n\n*** ${e.message ?: e.toString()} ***\n\nif this happens many times please contact support team!")
     .apply {
 
       setNeutralButton("explore offline") { _, _ -> loadDatabase(retries + 1) }

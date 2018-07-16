@@ -18,7 +18,7 @@ object SkillMock : SkillService {
   override fun addSkills(accessToken: String, title: String, des: String): Call<Unit> {
     MockApiStorage.fakeWait()
 
-    val user = MockApiStorage.getUserByAccessToken(accessToken)
+    val login = MockApiStorage.getUserByAccessToken(accessToken)
       ?: return Calls.failure(IOException("no user with this id is found"))
 
     return Calls.failure(IOException("cannot create skill from app"))

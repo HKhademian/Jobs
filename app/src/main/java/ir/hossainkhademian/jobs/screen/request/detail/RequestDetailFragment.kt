@@ -17,7 +17,7 @@ import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.screen.BaseFragment
 import ir.hossainkhademian.util.Collections.consume
-import ir.hossainkhademian.util.LiveDatas.letObserveOn
+import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.ViewModels.getViewModel
 import kotlinx.android.synthetic.main.activity_request_detail.*
 import kotlinx.android.synthetic.main.fragment_request_detail.view.*
@@ -90,7 +90,7 @@ class RequestDetailFragment : BaseFragment() {
       recyclerView.itemAnimator = DefaultItemAnimator()
     }
 
-    viewModel.request.letObserveOn(this, EmptyRequest, ::setRequest)
+    viewModel.request.observe(this, EmptyRequest, ::setRequest)
     return rootView
   }
 

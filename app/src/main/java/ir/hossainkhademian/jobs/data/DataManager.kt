@@ -23,23 +23,24 @@ internal object DataManager {
   }
 
   /** update all cached data */
-  suspend fun loadOnlineData(context: Context) {
-    AccountManager.refresh(context, false, false)
+  suspend fun loadOnlineData() {
+    AccountManager.refresh(false, false)
 
-    loadOnlineStaticData(context)
-    loadOnlineUserData(context)
+    loadOnlineStaticData()
+    loadOnlineUserData()
 
     mode = Mode.Online
   }
 
   /** update all cached data for user */
-  suspend fun loadOnlineUserData(context: Context) {
+  suspend fun loadOnlineUserData() {
     if (!AccountManager.isFresh) return
 
     val calls = arrayListOf<Deferred<*>>()
     var requests = emptyList<Request>()
     var chats = emptyList<Chat>() // emptyList<MutableChatData>()
     var matches = emptyList<Match>() // emptyList<MutableChatData>()
+    var users = emptyList<User>() // emptyList<MutableChatData>()
 
     calls += async {
       requests = ApiManager.requests.list(AccountManager.accessToken).await()
@@ -53,11 +54,11 @@ internal object DataManager {
       matches = ApiManager.matches.list(AccountManager.accessToken).await()
     }
 
-    calls.map { it.await() }
+    calls += async {
+      users = ApiManager.users.list(AccountManager.accessToken).await()
+    }
 
-    val users = chats
-      .distinctUserId()
-      .let { userIds -> ApiManager.users.list(userIds).await() }
+    calls.map { it.await() }
 
 
     // All done, now set & save data
@@ -71,7 +72,7 @@ internal object DataManager {
   }
 
   /** update all cached data for static */
-  suspend fun loadOnlineStaticData(context: Context) {
+  suspend fun loadOnlineStaticData() {
     val calls = arrayListOf<Deferred<*>>()
     var jobs = emptyList<Job>()
     var skills = emptyList<Skill>()

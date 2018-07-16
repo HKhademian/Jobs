@@ -4,7 +4,6 @@ package ir.hossainkhademian.jobs.data.api
 
 import ir.hossainkhademian.jobs.data.AccountManager.isPhoneValid
 import ir.hossainkhademian.jobs.data.model.*
-import org.joda.time.DateTime
 import retrofit2.Call
 import retrofit2.mock.Calls
 import java.io.IOException
@@ -21,8 +20,15 @@ object AccountMock : AccountService {
     if (last != password)
       return Calls.failure(IOException("Phone & Password is nor matched"))
 
-    val user = MockApiStorage.users.items.firstOrNull { it.phone == phone }
+    val savedUser = MockApiStorage.users.items.firstOrNull { it.phone == phone }
       ?: return Calls.failure(IOException("No user with this phone founds!"))
+
+    val user = savedUser.copy(
+      refreshToken = "${savedUser.id}.$generateID",
+      accessToken = "${savedUser.id}.$generateID",
+      lastSeen = System.currentTimeMillis()
+    )
+    MockApiStorage.users.update(user)
 
     return Calls.response(user.toData())
   }
@@ -56,9 +62,9 @@ object AccountMock : AccountService {
 
     /*create fake initial chats */ let {
       MockApiStorage.users.items
-        .filter { it.isAdmin || it.isBroker }
+        .filter { it.isAdmin /*|| it.isBroker*/ }
         .union(MockApiStorage.users.items
-          .filter { !it.isAdmin && !it.isBroker }
+          .filter { it.isUser }
           .shuffled()
           .take(2))
         .flatMap {
@@ -114,11 +120,11 @@ object AccountMock : AccountService {
   override fun refresh(refreshToken: String): Call<LoginData> {
     MockApiStorage.fakeWait()
 
-    val oldUser = MockApiStorage.users.items.firstOrNull { it.refreshToken == refreshToken }
+    val savedUser = MockApiStorage.users.items.firstOrNull { it.refreshToken == refreshToken }
       ?: return Calls.failure(IOException("cannot update this token"))
 
-    val user = oldUser.copy(
-      accessToken = "${oldUser.id}.$generateID",
+    val user = savedUser.copy(
+      accessToken = "${savedUser.id}.$generateID",
       lastSeen = System.currentTimeMillis()
     )
     MockApiStorage.users.update(user)

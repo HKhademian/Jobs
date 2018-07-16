@@ -34,7 +34,7 @@ class LoadingActivity : BaseActivity() {
         throw IOException("a fake Exception to test the flow")
       }
 
-      DataManager.loadOnlineData(context)
+      DataManager.loadOnlineData()
       delay(100) // a sweet wait
     }.invokeOnCompletion { e ->
       launch(UI) {
@@ -61,10 +61,6 @@ class LoadingActivity : BaseActivity() {
   }
 
   private fun onLoadError(e: Throwable, retries: Int) {
-    //val snack = Snackbar.make(constraint, "Error while loading: \n${e.message}", Snackbar.LENGTH_INDEFINITE)
-    //snack.setAction("OK") { snack.dismiss() }
-    //snack.show()
-
     LoadingErrorDialog.show(
       context, e, retries,
       loadServer = ::loadServer,

@@ -6,9 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.emptyID
-import ir.hossainkhademian.jobs.data.model.idStr
-import ir.hossainkhademian.jobs.data.model.isEmpty
-import ir.hossainkhademian.jobs.data.model.title
 import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailFragment
 import ir.hossainkhademian.jobs.screen.chat.list.ChatListActivity
 import ir.hossainkhademian.jobs.screen.request.edit.RequestEditActivity
@@ -58,7 +55,7 @@ class RequestDetailActivity : AppCompatActivity() {
       toolbar.title = title
 
       supportFragmentManager.beginTransaction()
-        .replace(R.id.request_detail_container, fragment)
+        .replace(R.id.detailContainer, fragment)
         .commit()
     }
   }

@@ -1,6 +1,8 @@
 package ir.hossainkhademian.jobs.screen.request.list
 
+import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.*
@@ -16,10 +18,11 @@ import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailFragment
 import ir.hossainkhademian.util.ViewModels.getViewModel
 import ir.hossainkhademian.util.context
 import ir.hossainkhademian.util.launchActivity
+import kotlinx.android.synthetic.main.activity_request_list_holder.*
 import kotlinx.android.synthetic.main.activity_request_list.*
 import kotlinx.android.synthetic.main.fragment_request_list.*
 import kotlinx.android.synthetic.main.item_request_list.view.*
-import ir.hossainkhademian.util.LiveDatas.observeOn
+import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.bundle
 
 
@@ -33,8 +36,8 @@ class RequestListActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    setContentView(R.layout.activity_request_list)
-    twoPane = request_detail_container != null
+    setContentView(R.layout.activity_request_list_holder)
+    twoPane = detailContainer != null
 
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -45,12 +48,20 @@ class RequestListActivity : AppCompatActivity() {
 //        .setAction("Action", null).show()
 //    }
 
-    setupRecyclerView(request_list)
+    setupRecyclerView()
 
     viewModel = getViewModel { RequestListViewModel() }
 
-    viewModel.requests.observeOn(this) { items ->
-      adapter.items = items ?: emptyList()
+    viewModel.error.observe(this) { ex ->
+      Snackbar.make(recyclerView, "Error :\n${ex.message ?: ex.toString()}\n\nif it happens many times, contact support", Snackbar.LENGTH_LONG).show()
+    }
+
+    viewModel.requests.observe(this, emptyList()) { items ->
+      adapter.items = items
+    }
+
+    viewModel.isRefreshing.observe(this, false) { isRefreshing ->
+      swipeRefreshLayout.isRefreshing = isRefreshing
     }
   }
 
@@ -63,15 +74,15 @@ class RequestListActivity : AppCompatActivity() {
       else -> super.onOptionsItemSelected(item)
     }
 
-  private fun setupRecyclerView(recyclerView: RecyclerView) {
-    recyclerView.layoutManager = LinearLayoutManager(context).apply {
-      orientation = LinearLayoutManager.VERTICAL
-      reverseLayout = false
-      stackFromEnd = false
-    }
+  private fun setupRecyclerView() {
+    recyclerView.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.VERTICAL }
     recyclerView.itemAnimator = DefaultItemAnimator()
     recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
     recyclerView.adapter = adapter
+
+    swipeRefreshLayout.setOnRefreshListener {
+      viewModel.refresh()
+    }
   }
 
   private fun onItemSelected(item: Request) {
@@ -88,7 +99,7 @@ class RequestListActivity : AppCompatActivity() {
       }
       supportFragmentManager
         .beginTransaction()
-        .replace(R.id.chat_detail_container, fragment)
+        .replace(R.id.detailContainer, fragment)
         .commit()
     } else {
       launchActivity<RequestDetailActivity>(extras = *arrayOf(
@@ -98,10 +109,16 @@ class RequestListActivity : AppCompatActivity() {
     }
   }
 
-  private inner class RequestAdapter(data: List<Request> = emptyList()) : RecyclerView.Adapter<ViewHolder>() {
-    var items = data
+  private inner class RequestAdapter(items: List<Request> = emptyList(), selectedId: ID = emptyID) : RecyclerView.Adapter<ViewHolder>() {
+    var items = items
       set(items) {
         field = items
+        notifyDataSetChanged()
+      }
+
+    var selectedId = selectedId
+      set(selectedId) {
+        field = selectedId
         notifyDataSetChanged()
       }
 
@@ -112,7 +129,9 @@ class RequestListActivity : AppCompatActivity() {
       ViewHolder(LayoutInflater.from(context), parent)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-      holder.item = items[position]
+      val item = items[position]
+      holder.item = item
+      holder.selected = item.id == selectedId
     }
   }
 
@@ -124,7 +143,12 @@ class RequestListActivity : AppCompatActivity() {
     var item: Request = EmptyRequest
       set(item) {
         field = item
-        showItem(item)
+        showItem(item, selected)
+      }
+    var selected: Boolean = false
+      set(selected) {
+        field = selected
+        showItem(item, selected)
       }
 
     constructor(inflater: LayoutInflater, parent: ViewGroup) :
@@ -136,13 +160,14 @@ class RequestListActivity : AppCompatActivity() {
       }
     }
 
-    private fun showItem(item: Request) {
+    private fun showItem(item: Request, selected: Boolean) {
       val imageUrl = item.avatarUrl
-      val color = view.context.resources.getColor(
+
+      view.setBackgroundColor(if (twoPane && selected) Color.parseColor("#3666") else 0)
+
+      avatarView.borderColor = view.context.resources.getColor(
         if (item.isWorker) R.color.color_request_worker
         else R.color.color_request_company)
-
-      avatarView.borderColor = color
       picasso.load(imageUrl).placeholder(R.drawable.ic_avatar).into(avatarView)
 
       titleView.text = item.title

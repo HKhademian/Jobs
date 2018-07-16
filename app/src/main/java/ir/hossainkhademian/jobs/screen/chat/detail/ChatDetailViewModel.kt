@@ -3,74 +3,50 @@ package ir.hossainkhademian.jobs.screen.chat.detail
 import android.arch.lifecycle.*
 import ir.hossainkhademian.jobs.App
 import ir.hossainkhademian.jobs.data.Repository
-import ir.hossainkhademian.jobs.data.model.Chat
 import ir.hossainkhademian.jobs.data.model.ID
-import ir.hossainkhademian.jobs.data.model.isEmpty
-import ir.hossainkhademian.jobs.data.model.isReceived
 import ir.hossainkhademian.util.LiveDatas
 import ir.hossainkhademian.util.LiveDatas.map
 import ir.hossainkhademian.util.Observables.toLiveData
-import ir.hossainkhademian.util.Observables.debounceAfter
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.experimental.*
 
 internal class ChatDetailViewModel(val app: App, val userId: ID) : AndroidViewModel(app) {
-  private val chatsObservable = Repository.getChatsByContact(userId)
-  val chats = chatsObservable
-    .debounceAfter(1, 5, TimeUnit.SECONDS)
-    .doOnEach { markAsSeen() }
-    .toLiveData()
+  private val chatsObservable = Repository.Chats.listsByContact(userId)
+  val chats = chatsObservable.doOnEach { markAsSeen() }.toLiveData()
 
-  val messageField: LiveData<String> = MutableLiveData<String>().apply { postValue("") }
-
-  val isSending: LiveData<Boolean> = MutableLiveData<Boolean>().apply { postValue(false) }
-
+  val error: LiveData<Throwable> = MutableLiveData()
+  val messageField: LiveData<String> = MutableLiveData()
+  val isSending: LiveData<Boolean> = MutableLiveData()
   val sendEnabled = LiveDatas.zip(messageField, isSending)
     .map { (message, isSending) -> message.isNotBlank() && !isSending }
 
 
-  fun send(error: (e: Exception) -> Unit = {}): Job? {
+  fun send(): DisposableHandle {
     val message = messageField.value ?: ""
-    if (message.isBlank())
-      return null
-
-    (isSending as MutableLiveData)
-    (messageField as MutableLiveData)
-
+    error as MutableLiveData
+    isSending as MutableLiveData
+    messageField as MutableLiveData
 
     isSending.postValue(true)
-
-    return launch {
-      try {
-        Repository.chatSend(userId, message)
-
-        launch(UI) {
-          messageField.postValue("")
-        }
-      } catch (e: Exception) {
-        launch(UI) { error(e) }
-      }
-      launch(UI) {
-        isSending.postValue(false)
-      }
+    return launch(CommonPool + CoroutineExceptionHandler { _, ex ->
+      isSending.postValue(false)
+      error.postValue(ex)
+    }) {
+      Repository.Chats.send(userId, message)
+    }.invokeOnCompletion {
+      messageField.postValue("")
+      isSending.postValue(false)
     }
   }
 
-  fun markAsSeen(): Job? {
-    return launch {
-      try {
-        Repository.chatSeen(userId)
-      } catch (e: Exception) {
-        e.printStackTrace()
-        //launch(UI) { error(e) }
-      }
-    }
-  }
+  fun markAsSeen(): DisposableHandle {
+    error as MutableLiveData
 
-  class Factory(private val app: App, private val userId: ID) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-      ChatDetailViewModel(app, userId) as T
+    return launch(CommonPool + CoroutineExceptionHandler { _, ex ->
+      error.postValue(ex)
+    }) {
+      Repository.Chats.seen(userId)
+    }.invokeOnCompletion {
+
+    }
   }
 }

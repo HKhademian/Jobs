@@ -66,11 +66,11 @@ object DatabaseRepository {
 //    }
 //  }
 
-//  fun getChatsByContact(requestId: ID): LiveData<List<Chat>> {
+//  fun listsByContact(requestId: ID): LiveData<List<Chat>> {
 //    return chatDao.listByContact(requestId) as LiveData<List<Chat>>
 //  }
 //
-//  fun getUserChats(): LiveData<List<UserWithChats>> {
+//  fun listUserChats(): LiveData<List<UserWithChats>> {
 //    return chatDao.listUserChats() as LiveData<List<UserWithChats>>
 //  }
 //

@@ -12,6 +12,7 @@ import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.screen.BaseFragment
 import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.TextWatchers
+import ir.hossainkhademian.util.Texts.hideKeyboard
 import ir.hossainkhademian.util.ViewModels.getViewModel
 import kotlinx.android.synthetic.main.activity_request_edit.*
 import kotlinx.android.synthetic.main.fragment_request_edit.view.*
@@ -79,7 +80,7 @@ class RequestEditFragment : BaseFragment() {
 
 
     viewModel.request.observe(this, EmptyRequest) {
-      typeView.isEnabled = it?.isEmpty ?: true // create mode
+      typeView.isEnabled = it.isEmpty // create mode
     }
 
     viewModel.type.observe(this, RequestType.WORKER) {
@@ -102,6 +103,7 @@ class RequestEditFragment : BaseFragment() {
         if (it.isNotEmpty())
           detailView.setSelection(it.length - 1)
         detailView.clearFocus()
+        activity?.hideKeyboard()
       }
       detailCard.onActionClickListener = if (it.isEmpty()) null else clearDetailAction
     }

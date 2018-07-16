@@ -1,6 +1,5 @@
 package ir.hossainkhademian.jobs.screen.request.edit
 
-import android.app.Dialog
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -11,16 +10,14 @@ import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.dialog.JobSelectDialog
 import ir.hossainkhademian.jobs.dialog.SkillSelectDialog
 import ir.hossainkhademian.util.Observables.toLiveData
-import ir.hossainkhademian.util.LiveDatas.letObserveOn
+import ir.hossainkhademian.util.LiveDatas.observe
 
 internal class RequestEditViewModel(
   val app: App,
   val fragment: RequestEditFragment,
   val requestId: ID
 ) : AndroidViewModel(app) {
-  private val requestObservable = Repository.requestsObservable
-    .take(1).findById(requestId)
-  val request = requestObservable.toLiveData()
+  val request = Repository.Requests.findById(requestId).toLiveData()
 
   val type: LiveData<RequestType> = MutableLiveData()
   val job: LiveData<Job> = MutableLiveData()
@@ -42,7 +39,7 @@ internal class RequestEditViewModel(
     skills.value = skillList
     detail.value = ""
 
-    request.letObserveOn(fragment, EmptyRequest) {
+    request.observe(fragment, EmptyRequest) {
       type.postValue(it.type)
       job.postValue(it.job)
       detail.postValue(it.detail)

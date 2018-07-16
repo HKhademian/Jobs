@@ -9,8 +9,11 @@ import retrofit2.http.GET
 
 interface UserService {
   @GET("/users")
-  fun get(id: ID): Call<UserData>
+  fun get(accessToken: String, id: ID): Call<UserData>
 
   @GET("/users")
-  fun list(ids: List<ID>): Call<List<UserData>>
+  fun list(accessToken: String, ids: List<ID>): Call<List<UserData>>
+
+  @GET("/users")
+  fun list(accessToken: String): Call<List<UserData>>
 }

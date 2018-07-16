@@ -18,8 +18,7 @@ object SkillSelectDialog {
 
   fun build(context: Context, listener: (Skill) -> Unit): AlertDialog.Builder {
     val adapter = SkillAdapter(context)
-    val job = Repository.skillsObservable
-      .observeOn(AndroidSchedulers.mainThread())
+    val job = Repository.Skills.list()
       .subscribe { adapter.items = it }
     return AlertDialog.Builder(context)
       .setTitle("Select job from list below:")
@@ -48,7 +47,7 @@ object SkillSelectDialog {
       val view = convertView ?: LayoutInflater.from(context)
         .inflate(R.layout.item_dialog_skill, parent, false)
 
-       view.skillView.skill = getItem(position)
+      view.skillView.skill = getItem(position)
 
       return view
     }

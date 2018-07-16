@@ -9,7 +9,8 @@ class ObservableMutableList<T>(
   private val list: MutableList<T> = mutableListOf(),
   init: ObservableMutableList<T>.() -> Unit = {}
 ) : AbstractMutableList<T>() {
-  val observable = subject.hide()
+  val observable = subject.hide()!!
+  private var freeze: Boolean = false
 
   init {
     init()
@@ -19,7 +20,7 @@ class ObservableMutableList<T>(
   fun update() = update {}
   fun <T> update(block: () -> T): T {
     val res = block.invoke()
-    try {
+    if (!freeze) try {
       subject.onNext(list)
     } catch (ex: Exception) {
       ex.printStackTrace()
@@ -50,9 +51,29 @@ class ObservableMutableList<T>(
 
   fun replace(elements: Collection<T>) = update {
     list.clear()
-    list.addAll(elements)
+    list += elements
   }
 
   operator fun component1() = observable
   operator fun component2() = this
+
+  fun freeze(updateAtLast: Boolean = false, block: ObservableMutableList<T>.() -> Unit) = try {
+    freeze = true
+    block()
+    freeze = false
+    if (updateAtLast) update()
+    Unit
+  } finally {
+    freeze = false
+  }
+
+  fun merge(items: Iterable<T>, updateAtLast: Boolean = true, predicate: (T) -> Boolean = { false }) = freeze(updateAtLast) {
+    list.removeAll(predicate)
+    list += items
+  }
+
+  fun source(items: Iterable<T>, updateAtLast: Boolean = true) = freeze(updateAtLast) {
+    list.clear()
+    list += items
+  }
 }

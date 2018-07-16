@@ -1,7 +1,6 @@
 package ir.hossainkhademian.jobs.screen.chat.detail
 
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipboardManager
 import android.os.Build
 import android.os.Bundle
@@ -13,13 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import ir.hossainkhademian.jobs.App
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.Chat
 import ir.hossainkhademian.jobs.data.model.isSended
 import ir.hossainkhademian.jobs.screen.BaseFragment
 import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.TextWatchers.TextWatcher
+import ir.hossainkhademian.util.ViewModels.getViewModel
 import kotlinx.android.synthetic.main.activity_chat_detail.*
 import kotlinx.android.synthetic.main.fragment_chat_detail.view.*
 import kotlinx.android.synthetic.main.item_chat_detail.view.*
@@ -28,6 +27,7 @@ import android.content.Context
 import ir.hossainkhademian.jobs.data.model.EmptyChat
 import ir.hossainkhademian.util.Texts.getRelativeTime
 import ir.hossainkhademian.util.Texts.isEmoji
+import ir.hossainkhademian.util.Texts.hideKeyboard
 import java.util.*
 
 
@@ -48,9 +48,7 @@ class ChatDetailFragment : BaseFragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     val userId = arguments?.getString(ARG_USER_ID) ?: ""
-    viewModel = ViewModelProviders.of(this,
-      ChatDetailViewModel.Factory(activity!!.application as App, userId))
-      .get(ChatDetailViewModel::class.java)
+    viewModel = getViewModel { ChatDetailViewModel(app, userId) }
 
     val rootView = inflater.inflate(R.layout.fragment_chat_detail, container, false)
     this.rootView = rootView
@@ -78,9 +76,12 @@ class ChatDetailFragment : BaseFragment() {
     })
 
     sendButton.setOnClickListener {
-      viewModel.send { ex ->
-        Snackbar.make(rootView, "Cannot send Message! :\n${ex.message}", Snackbar.LENGTH_LONG).show()
-      }
+      activity?.hideKeyboard()
+      viewModel.send()
+    }
+
+    viewModel.error.observe(this) { ex ->
+      Snackbar.make(rootView, "Error :\n${ex.message ?: ex.toString()}\n\nif it happens many times, contact support", Snackbar.LENGTH_LONG).show()
     }
 
     viewModel.chats.observe(this, emptyList()) { chats ->
@@ -98,11 +99,12 @@ class ChatDetailFragment : BaseFragment() {
     viewModel.messageField.observe(this, "") { message ->
       if (messageField.text.toString() != message) {
         messageField.setText(message)
-        messageField.requestFocus()
+        // messageField.requestFocus()
+        activity?.hideKeyboard()
       }
     }
 
-    viewModel.isSending.observe<Boolean>(this, false) { isSending ->
+    viewModel.isSending.observe(this, false) { isSending ->
       rootView.chat_form.visibility = if (isSending) View.INVISIBLE else View.VISIBLE
       rootView.wait_form.visibility = if (isSending) View.VISIBLE else View.INVISIBLE
     }

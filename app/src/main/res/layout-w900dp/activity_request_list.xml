@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
@@ -9,18 +8,14 @@
   android:divider="?android:attr/dividerHorizontal"
   android:orientation="horizontal"
   android:showDividers="middle"
-  tools:context=".screen.chat.list.ChatListActivity">
+  tools:context=".screen.request.list.RequestListActivity">
 
-  <android.support.v7.widget.RecyclerView
-    android:id="@+id/chat_list"
-    android:name="ir.hossainkhademian.jobs.screen.chat.list.ChatListActivity"
+  <include
     android:layout_width="@dimen/item_width"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    tools:context="ir.hossainkhademian.jobs.screen.chat.list.ChatListActivity"
-    tools:listitem="@layout/item_chat_list"/>
+    layout="@layout/fragment_request_list"/>
 
   <FrameLayout
     android:layout_width="0dp"
@@ -30,8 +25,9 @@
     <include layout="@layout/view_detail_background"/>
 
     <FrameLayout
-      android:id="@+id/chat_detail_container"
-      android:layout_width="match_parent"
+      android:id="@+id/detailContainer"
+      android:layout_width="0dp"
       android:layout_height="match_parent"/>
   </FrameLayout>
+
 </LinearLayout>

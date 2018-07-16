@@ -21,7 +21,10 @@ object Observables {
 
 
   fun <T> Observable<T>.debounceAfter(count: Long = 1, timeout: Long, unit: TimeUnit) =
-    take(count).concatWith(skip(count).debounce(timeout, unit))
+    take(count).concatWith(skip(count).debounce(timeout, unit))!!
+
+  fun <T> Observable<T>.throttleWithTimeoutAfter(count: Long = 1, timeout: Long, unit: TimeUnit) =
+    take(count).concatWith(skip(count).throttleWithTimeout(timeout, unit))!!
 
   fun <T> Observable<T>.toLiveData() = object : LiveData<T>() {
     private var disposable: Disposable? = null

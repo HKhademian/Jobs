@@ -11,10 +11,7 @@ internal class RequestDetailViewModel(
   val fragment: RequestDetailFragment,
   val requestId: ID
 ) : AndroidViewModel(app) {
-  val request = Repository.requestsObservable
-    .take(1)
-    .findById(requestId)
-    .toLiveData()
+  val request = Repository.Requests.findById(requestId).toLiveData()
 
   fun edit() {
     fragment.onEditListener(requestId)
