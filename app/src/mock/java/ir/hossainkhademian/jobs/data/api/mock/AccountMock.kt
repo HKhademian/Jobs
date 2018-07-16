@@ -21,7 +21,7 @@ object AccountMock : AccountService {
     if (last != password)
       return Calls.failure(IOException("Phone & Password is nor matched"))
 
-    val user = MockApiStorage.users.firstOrNull { it.phone == phone }
+    val user = MockApiStorage.users.items.firstOrNull { it.phone == phone }
       ?: return Calls.failure(IOException("No user with this phone founds!"))
 
     return Calls.response(user.toData())
@@ -37,7 +37,7 @@ object AccountMock : AccountService {
     if (last == "0" || last == "1")
       return Calls.failure(IOException("cannot create admin/broker usersList from App"))
 
-    val user = MockApiStorage.users.firstOrNull { it.phone == phone }
+    val user = MockApiStorage.users.items.firstOrNull { it.phone == phone }
 
     if (user != null)
       return Calls.failure(IOException("User with this phone founds!"))
@@ -51,13 +51,13 @@ object AccountMock : AccountService {
       accessToken = "$userId.$generateID",
       refreshToken = "$userId.$generateID"
     )
-    MockApiStorage.update(loginData)
+    MockApiStorage.users.update(loginData)
 
 
     /*create fake initial chats */ let {
-      MockApiStorage.users
+      MockApiStorage.users.items
         .filter { it.isAdmin || it.isBroker }
-        .union(MockApiStorage.users
+        .union(MockApiStorage.users.items
           .filter { !it.isAdmin && !it.isBroker }
           .shuffled()
           .take(5))
@@ -83,13 +83,13 @@ object AccountMock : AccountService {
             )
           )
         }
-        .forEach { MockApiStorage.update(it) }
+        .forEach { MockApiStorage.chats.update(it) }
     }
 
     /*create fake initial requests */ let {
       (1..10).forEach {
-        val job = MockApiStorage.jobs[MockApiStorage.random.nextInt(MockApiStorage.jobs.size)]
-        val skills = MockApiStorage.skills.shuffled(MockApiStorage.random).take(3)
+        val job = MockApiStorage.jobs.items[MockApiStorage.random.nextInt(MockApiStorage.jobs.items.size)]
+        val skills = MockApiStorage.skills.items.shuffled(MockApiStorage.random).take(3)
         val type = if (MockApiStorage.random.nextBoolean()) RequestType.WORKER else RequestType.COMPANY
         val details = when (type) {
           RequestType.WORKER -> "a fake request for a `${job.title}` job, you tell you have ${skills.joinToString(" , ") { "`${it.title}`" }} skills :)"
@@ -102,7 +102,7 @@ object AccountMock : AccountService {
           skillIds = skills.map { it.id },
           detail = details
         )
-        MockApiStorage.update(request)
+        MockApiStorage.requests.update(request)
       }
     }
 
@@ -112,7 +112,7 @@ object AccountMock : AccountService {
   override fun refresh(refreshToken: String): Call<LoginData> {
     Thread.sleep(2000)
 
-    val user = MockApiStorage.users.firstOrNull { it.refreshToken == refreshToken }
+    val user = MockApiStorage.users.items.firstOrNull { it.refreshToken == refreshToken }
       ?: return Calls.failure(IOException("cannot update this token"))
 
     /* TODO: in here we must regenerate user tokens */

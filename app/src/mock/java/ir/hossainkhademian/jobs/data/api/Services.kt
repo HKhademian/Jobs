@@ -9,6 +9,7 @@ internal object Services {
   val request = RequestMock
   val chat = ChatMock
   val user = UserMock
+  val match = MatchMock
 
   internal fun App.initServices() {
     MockApiStorage.initMockApiStorage(applicationContext)

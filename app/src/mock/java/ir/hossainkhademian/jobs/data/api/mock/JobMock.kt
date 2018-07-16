@@ -11,6 +11,6 @@ object JobMock : JobService {
   override fun list(): Call<List<JobData>> {
     MockApiStorage.fakeWait()
 
-    return Calls.response(MockApiStorage.jobs.map { it.toData() })
+    return Calls.response(MockApiStorage.jobs.items.map { it.toData() })
   }
 }

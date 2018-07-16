@@ -14,4 +14,5 @@ internal object ApiManager {
   val requests get() = Services.request
   val chats get() = Services.chat
   val users get() = Services.user
+  val matches get() = Services.match
 }

@@ -4,12 +4,11 @@ import com.squareup.moshi.Json
 
 private fun generateAvatarUrl(userId: ID): String {
   val i = userId.sumBy { it.toInt() } // requestId.toInt() //
-  val index = i % 50
-  val gender = if (i % 2 == 0) "women" else "men"
-  return "https://randomuser.me/api/portraits/$gender/$index.jpg"
+  val index = i % 10
+  return "https://randomuser.me/api/portraits/lego/$index.jpg"
 }
 
-val EmptyJob = JobData(id = emptyID)
+val EmptyJob: Job = JobData(id = emptyID)
 val Job.avatarUrl get() = generateAvatarUrl(id)
 
 interface Job : IdModel {

@@ -17,7 +17,7 @@ internal object DataManager {
   internal val users = ObservableMutableList<User>()
   internal val requests = ObservableMutableList<Request>()
   internal val chats = ObservableMutableList<Chat>()
-  //internal val chats = ObservableMutableList<MutableChatData>()
+  internal val matches = ObservableMutableList<Match>()
 
   internal fun App.initDataManager() {
   }
@@ -38,7 +38,8 @@ internal object DataManager {
 
     val calls = arrayListOf<Deferred<*>>()
     var requests = emptyList<Request>()
-    var chats = emptyList<ChatData>() // emptyList<MutableChatData>()
+    var chats = emptyList<Chat>() // emptyList<MutableChatData>()
+    var matches = emptyList<Match>() // emptyList<MutableChatData>()
 
     calls += async {
       requests = ApiManager.requests.list(AccountManager.accessToken).await()
@@ -46,7 +47,10 @@ internal object DataManager {
 
     calls += async {
       chats = ApiManager.chats.list(AccountManager.accessToken).await()
-        // .map { it.toMutable() }
+    }
+
+    calls += async {
+      matches = ApiManager.matches.list(AccountManager.accessToken).await()
     }
 
     calls.map { it.await() }
@@ -60,6 +64,7 @@ internal object DataManager {
     //launch(UI) {
     this@DataManager.requests.replace(requests)
     this@DataManager.chats.replace(chats)
+    this@DataManager.matches.replace(matches)
     this@DataManager.users.replace(users)
     //}
     mode = Mode.Online

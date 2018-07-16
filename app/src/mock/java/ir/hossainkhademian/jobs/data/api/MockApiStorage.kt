@@ -9,49 +9,38 @@ import java.io.IOException
 import java.util.*
 
 internal object MockApiStorage {
-  private const val PREF_JOBS = "mock.jobsList"
-  private const val PREF_SKILLS = "mock.skillsList"
-  private const val PREF_USERS = "mock.usersList"
-  private const val PREF_CHATS = "mock.userChats"
-  private const val PREF_REQUESTS = "mock.requestsList"
+  private const val PREF_USERS = "mock.users"
+  private const val PREF_JOBS = "mock.jobs"
+  private const val PREF_SKILLS = "mock.skills"
+  private const val PREF_CHATS = "mock.chats"
+  private const val PREF_REQUESTS = "mock.requests"
+  private const val PREF_MATCHES = "mock.matches"
 
-  private lateinit var pref: SharedPreferences
+  internal lateinit var pref: SharedPreferences
   private val moshi = Moshi.Builder().build()
+  private val userAdapter = moshi.adapter(LoginData::class.java)
   private val jobAdapter = moshi.adapter(JobData::class.java)
   private val skillAdapter = moshi.adapter(SkillData::class.java)
-  private val userAdapter = moshi.adapter(LoginData::class.java)
   private val chatAdapter = moshi.adapter(ChatData::class.java)
   private val requestAdapter = moshi.adapter(RequestData::class.java)
+  private val matchAdapter = moshi.adapter(MatchData::class.java)
 
   val lorem = LoremIpsum.getInstance()
   val random = Random()
 
-  val users = arrayListOf<Login>()
-  val savedUsers = arrayListOf<Login>()
-
-  val jobs = arrayListOf<Job>()
-  val savedJobs = arrayListOf<Job>()
-
-  val skills = arrayListOf<Skill>()
-  val savedSkills = arrayListOf<Skill>()
-
-  val chats = arrayListOf<Chat>()
-  val savedChats = arrayListOf<Chat>()
-
-  val requests = arrayListOf<Request>()
-  val savedRequests = arrayListOf<Request>()
+  val users = MockStore<Login, LoginData>(PREF_USERS, userAdapter, Login::toData, ::initUsers)
+  val jobs = MockStore<Job, JobData>(PREF_JOBS, jobAdapter, Job::toData, ::initJobs)
+  val skills = MockStore<Skill, SkillData>(PREF_SKILLS, skillAdapter, Skill::toData, ::initSkills)
+  val chats = MockStore<Chat, ChatData>(PREF_CHATS, chatAdapter, Chat::toData, ::initChats)
+  val requests = MockStore<Request, RequestData>(PREF_REQUESTS, requestAdapter, Request::toData, ::initRequests)
+  val matches = MockStore<Match, MatchData>(PREF_MATCHES, matchAdapter, Match::toData, ::initMatches)
 
   fun initMockApiStorage(context: Context) {
     pref = context.getSharedPreferences("mock", Context.MODE_PRIVATE)
-    initJobs()
-    initSkills()
-    initUsers()
-    initChats()
-    initRequests()
     load()
   }
 
-  private fun initJobs() {
+  private fun initJobs(store: MockStore<Job, JobData>) {
     arrayOf("appdev" to "App Developer",
       "androiddec" to "Android App Developer",
       "iosdev" to "iOS App Developer",
@@ -59,30 +48,30 @@ internal object MockApiStorage {
       "crossdev" to "CrossPlatform App Developer",
       "gamedesigner" to "Game Designer",
       "gamedev" to "Game Developer").forEach {
-      jobs += JobData(
+      store.items += JobData(
         id = it.first,
         title = it.second
       )
     }
   }
 
-  private fun initSkills() {
+  private fun initSkills(store: MockStore<Skill, SkillData>) {
     arrayOf("Android", "Kotlin", "Database",
       "iOS", "Dart", "Flutter", "React",
       "ReactNative", "NodeJS", "Server",
       "Mobile", "Desktop").forEach {
-      skills += SkillData(
+      store.items += SkillData(
         id = it.toLowerCase(),
         title = it
       )
     }
   }
 
-  private fun initUsers() {
+  private fun initUsers(store: MockStore<Login, LoginData>) {
     (1 until 3).forEach {
       val index = "0$it"
       val id = "admin$index"
-      users += LoginData(
+      store.items += LoginData(
         id = id,
         title = "Admin $index",
         phone = "+9800000000$index",
@@ -94,7 +83,7 @@ internal object MockApiStorage {
     (1 until 5).forEach {
       val index = "0$it"
       val id = "broker$index"
-      users += LoginData(
+      store.items += LoginData(
         id = id,
         title = "Broker $index",
         phone = "+9811111111$index",
@@ -107,7 +96,7 @@ internal object MockApiStorage {
     (10 until 25).forEach {
       val index = "0$it"
       val id = "user$index"
-      users += LoginData(
+      store.items += LoginData(
         id = id,
         title = "User $index",
         phone = "+982222222$index",
@@ -118,111 +107,26 @@ internal object MockApiStorage {
     }
   }
 
-  private fun initChats() {
+  private fun initChats(store: MockStore<Chat, ChatData>) {
   }
 
-  private fun initRequests() {
+  private fun initRequests(store: MockStore<Request, RequestData>) {
+  }
+
+  private fun initMatches(store: MockStore<Match, MatchData>) {
   }
 
   private fun load() {
-    savedJobs.clear()
-    pref
-      .getStringSet(PREF_JOBS, emptySet())
-      .map { jobAdapter.fromJson(it)!! }
-      .forEach { update(it, false) }
-
-    savedSkills.clear()
-    pref
-      .getStringSet(PREF_SKILLS, emptySet())
-      .map { skillAdapter.fromJson(it)!! }
-      .forEach { update(it, false) }
-
-    savedUsers.clear()
-    pref
-      .getStringSet(PREF_USERS, emptySet())
-      .map { userAdapter.fromJson(it)!! }
-      .forEach { update(it, false) }
-
-    savedChats.clear()
-    pref
-      .getStringSet(PREF_CHATS, emptySet())
-      .map { chatAdapter.fromJson(it)!! }
-      .forEach { update(it, false) }
-
-    savedRequests.clear()
-    pref
-      .getStringSet(PREF_REQUESTS, emptySet())
-      .map { requestAdapter.fromJson(it)!! }
-      .forEach { update(it, false) }
-  }
-
-  fun update(item: Job, save: Boolean = true) {
-    savedJobs.removeAll { it.id == item.id }
-    jobs.removeAll { it.id == item.id }
-
-    savedJobs += item
-    jobs += item
-
-    if (save)
-      pref.edit().putStringSet(PREF_JOBS,
-        savedJobs.map { it.toData() }.map { jobAdapter.toJson(it)!! }.toSet()
-      ).apply()
-  }
-
-  fun update(item: Skill, save: Boolean = true) {
-    savedSkills.removeAll { it.id == item.id }
-    skills.removeAll { it.id == item.id }
-
-    savedSkills += item
-    skills += item
-
-    if (save)
-      pref.edit().putStringSet(PREF_SKILLS,
-        savedSkills.map { it.toData() }.map { skillAdapter.toJson(it)!! }.toSet()
-      ).apply()
-  }
-
-  fun update(item: Login, save: Boolean = true) {
-    savedUsers.removeAll { it.id == item.id }
-    users.removeAll { it.id == item.id }
-
-    savedUsers += item
-    users += item
-
-    if (save)
-      pref.edit().putStringSet(PREF_USERS,
-        savedUsers.map { it.toData() }.map { userAdapter.toJson(it)!! }.toSet()
-      ).apply()
-  }
-
-  fun update(item: Chat, save: Boolean = true) {
-    savedChats.removeAll { it.id == item.id }
-    chats.removeAll { it.id == item.id }
-
-    savedChats += item
-    chats += item
-
-    if (save)
-      pref.edit().putStringSet(PREF_CHATS,
-        savedChats.map { it.toData() }.map { chatAdapter.toJson(it)!! }.toSet()
-      ).apply()
-  }
-
-  fun update(item: Request, save: Boolean = true) {
-    savedRequests.removeAll { it.id == item.id }
-    requests.removeAll { it.id == item.id }
-
-    savedRequests += item
-    requests += item
-
-    if (save)
-      pref.edit().putStringSet(PREF_REQUESTS,
-        savedRequests.map { it.toData() }.map { requestAdapter.toJson(it)!! }.toSet()
-      ).apply()
+    users.load()
+    jobs.load()
+    skills.load()
+    chats.load()
+    requests.load()
+    matches.load()
   }
 
   fun getUserByAccessToken(accessToken: String) =
-    users.firstOrNull { it.accessToken == accessToken }
+    users.items.firstOrNull { it.accessToken == accessToken }
 
   fun fakeWait(errorChance: Int = 5) {
     val delay = 0L + random.nextInt(500) + random.nextInt(1500)

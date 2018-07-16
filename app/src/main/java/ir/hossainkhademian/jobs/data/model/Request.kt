@@ -15,11 +15,14 @@ interface Request : IdModel {
 
   val jobId: ID
   val skillIds: List<ID>
-
-  val user get() = DataManager.users.findById(userId) ?: EmptyUser
-  val job get() = DataManager.jobs.findById(jobId) ?: EmptyJob
-  val skills get() = DataManager.skills.filterById(skillIds)
+  val brokerIds: List<ID>
 }
+
+val Request.user get() = DataManager.users.findById(userId) ?: EmptyUser
+val Request.job get() = DataManager.jobs.findById(jobId) ?: EmptyJob
+val Request.skills get() = DataManager.skills.filterById(skillIds)
+val Request.brokers get() = DataManager.users.filterById(brokerIds)
+val Request.matches get() = DataManager.matches.filterByRequest(type, id)
 
 val Request.isWorker get() = type == RequestType.WORKER
 val Request.isCompany get() = type == RequestType.COMPANY
@@ -42,9 +45,9 @@ enum class RequestType(val key: String) {
 
   companion object {
     fun from(direction: String) = when (direction.toLowerCase()) {
-      WORKER.key.toLowerCase() -> WORKER
       COMPANY.key.toLowerCase() -> COMPANY
-      else -> throw RuntimeException("bad value")
+      WORKER.key.toLowerCase() -> WORKER
+      else -> WORKER // throw RuntimeException("bad value")
     }
   }
 }
@@ -56,7 +59,8 @@ class RequestData(
   @Json(name = "detail") override val detail: String = "",
   @Json(name = "time") override val time: Long = System.currentTimeMillis(),
   @Json(name = "jobId") override val jobId: ID = emptyID,
-  @Json(name = "skillIds") override val skillIds: List<ID> = emptyList()
+  @Json(name = "skillIds") override val skillIds: List<ID> = emptyList(),
+  @Json(name = "brokerIds") override val brokerIds: List<ID> = emptyList()
 ) : Request {
   override val type: RequestType get() = RequestType.from(typeStr)
 }
@@ -70,7 +74,8 @@ fun Request.toData() = when (this) {
     detail = detail,
     time = time,
     jobId = jobId,
-    skillIds = skillIds
+    skillIds = skillIds,
+    brokerIds = brokerIds
   )
 }
 
@@ -88,4 +93,11 @@ fun <T : Request> Iterable<T>.filterBySkillId(skillId: ID) =
 
 fun <T : Request> Iterable<T>.filterBySkillIds(skillIds: Collection<ID>) =
   filter { it.skillIds.containsAll(skillIds) }
+
+
+fun <T : Request> Iterable<T>.filterByBrokerId(brokerId: ID) =
+  filter { it.brokerIds.contains(brokerId) }
+
+fun <T : Request> Iterable<T>.filterByBrokerIds(brokerIds: Collection<ID>) =
+  filter { it.brokerIds.containsAll(brokerIds) }
 

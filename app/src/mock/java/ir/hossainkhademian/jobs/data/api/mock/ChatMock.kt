@@ -15,7 +15,7 @@ object ChatMock : ChatService {
     val user = MockApiStorage.getUserByAccessToken(accessToken)
       ?: return Calls.failure(IOException("user with this token not found. please relogin"))
 
-    return Calls.response(MockApiStorage.chats.filterByContactId(user.id).map { it.toData() })
+    return Calls.response(MockApiStorage.chats.items.filterByContactId(user.id).map { it.toData() })
   }
 
   override fun list(accessToken: String, contactId: ID): Call<List<ChatData>> {
@@ -24,10 +24,10 @@ object ChatMock : ChatService {
     val user = MockApiStorage.getUserByAccessToken(accessToken)
       ?: return Calls.failure(IOException("user with this token not found. please relogin"))
 
-    MockApiStorage.users.findById(contactId)
+    MockApiStorage.users.items.findById(contactId)
       ?: return Calls.failure(IOException("user with that contactId is not found"))
 
-    return Calls.response(MockApiStorage.chats.filterByUserContactId(user.id, contactId).map { it.toData() })
+    return Calls.response(MockApiStorage.chats.items.filterByUserContactId(user.id, contactId).map { it.toData() })
   }
 
   override fun send(accessToken: String, contactId: ID, message: String): Call<List<ChatData>> {
@@ -36,7 +36,7 @@ object ChatMock : ChatService {
     val user = MockApiStorage.getUserByAccessToken(accessToken)
       ?: return Calls.failure(IOException("user with this token not found. please relogin"))
 
-    val contact = MockApiStorage.users.findById(contactId)
+    val contact = MockApiStorage.users.items.findById(contactId)
       ?: return Calls.failure(IOException("no user with this contactId found"))
 
     if (message.contains("error"))
@@ -51,7 +51,7 @@ object ChatMock : ChatService {
         message = message
       )
       chats += chat
-      MockApiStorage.update(chat)
+      MockApiStorage.chats.update(chat)
       // return Calls.response(chat)
     }
 
@@ -62,7 +62,7 @@ object ChatMock : ChatService {
         message = "my answer lord: \n" + MockApiStorage.lorem.getWords(30, 100)
       )
       chats += chat
-      MockApiStorage.update(chat)
+      MockApiStorage.chats.update(chat)
     }
 
 //    val chance = 25
@@ -90,7 +90,7 @@ object ChatMock : ChatService {
     val user = MockApiStorage.getUserByAccessToken(accessToken)
       ?: return Calls.failure(IOException("user with this token not found. please relogin"))
 
-    val oldChat = MockApiStorage.chats.findById(chatId)
+    val oldChat = MockApiStorage.chats.items.findById(chatId)
       ?: return Calls.failure(IOException("no chat with this id found"))
 
     if (oldChat.receiverId != user.id)
@@ -104,7 +104,7 @@ object ChatMock : ChatService {
       unseen = false,
       time = oldChat.time
     )
-    MockApiStorage.update(chat)
+    MockApiStorage.chats.update(chat)
 
     return Calls.response(chat)
   }
