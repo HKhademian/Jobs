@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
 import com.thedeanda.lorem.LoremIpsum
 import ir.hossainkhademian.jobs.data.model.*
+import org.joda.time.Minutes
 import java.io.IOException
 import java.util.*
 
@@ -77,7 +78,8 @@ internal object MockApiStorage {
         phone = "+9800000000$index",
         roleStr = UserRole.Admin.key,
         accessToken = "$id.$generateID",
-        refreshToken = "$id.$generateID"
+        refreshToken = "$id.$generateID",
+        lastSeen = fakeTime(10)
       )
     }
     (1 until 5).forEach {
@@ -89,7 +91,8 @@ internal object MockApiStorage {
         phone = "+9811111111$index",
         roleStr = UserRole.Broker.key,
         accessToken = "$id.$generateID",
-        refreshToken = "$id.$generateID"
+        refreshToken = "$id.$generateID",
+        lastSeen = fakeTime(10)
       )
     }
 
@@ -102,7 +105,8 @@ internal object MockApiStorage {
         phone = "+982222222$index",
         roleStr = UserRole.User.key,
         accessToken = "$id.$generateID",
-        refreshToken = "$id.$generateID"
+        refreshToken = "$id.$generateID",
+        lastSeen = fakeTime(10)
       )
     }
   }
@@ -135,4 +139,17 @@ internal object MockApiStorage {
     if (random.nextInt(100) < errorChance)
       throw IOException("fake error")
   }
+
+  fun rand(max: Int) =
+    if (max <= 0) 0 else random.nextInt(max)
+
+  fun fakeDuration(days: Int = 7, hours: Int = 0, minutes: Int = 0, seconds: Int = 0, milis: Int = 0) =
+    rand(days) * 1000 * 60 * 60 * 24 +
+      rand(hours) * 1000 * 60 * 60 +
+      rand(minutes) * 1000 * 60 +
+      rand(seconds) * 1000 +
+      rand(milis)
+
+  fun fakeTime(days: Int = 7, hours: Int = 0, minutes: Int = 0, seconds: Int = 0, milis: Int = 0) =
+    System.currentTimeMillis() - fakeDuration(days, hours, minutes, seconds, milis)
 }

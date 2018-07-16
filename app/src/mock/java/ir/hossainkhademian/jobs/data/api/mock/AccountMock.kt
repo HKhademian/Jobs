@@ -66,19 +66,19 @@ object AccountMock : AccountService {
             ChatData(
               senderId = it.id,
               receiverId = userId,
-              time = System.currentTimeMillis() - MockApiStorage.random.nextInt(1000 * 60 * 60 * 24 * 7),
+              time = MockApiStorage.fakeTime(),
               message = "Your first messageField from `${it.title}`: wish happy explore :)"
             ),
             ChatData(
               senderId = it.id,
               receiverId = userId,
-              time = System.currentTimeMillis() - MockApiStorage.random.nextInt(1000 * 60 * 60 * 24 * 7),
+              time = MockApiStorage.fakeTime(),
               message = "send me `error` to create a fake api call error"
             ),
             ChatData(
               senderId = it.id,
               receiverId = userId,
-              time = System.currentTimeMillis() - MockApiStorage.random.nextInt(1000 * 60 * 60 * 24 * 7),
+              time = MockApiStorage.fakeTime(),
               message = "send me `answer` to answer you with fake message"
             )
           )
@@ -99,7 +99,7 @@ object AccountMock : AccountService {
           userId = userId,
           typeStr = type.key,
           detail = details,
-          time = System.currentTimeMillis() - MockApiStorage.random.nextInt(1000 * 60 * 60 * 7),
+          time = MockApiStorage.fakeTime(),
           jobId = job.id,
           skillIds = skills.map { it.id },
           brokerIds = MockApiStorage.users.items.filterIsBroker().shuffled().take(MockApiStorage.random.nextInt(3)).mapId()
@@ -114,10 +114,14 @@ object AccountMock : AccountService {
   override fun refresh(refreshToken: String): Call<LoginData> {
     Thread.sleep(2000)
 
-    val user = MockApiStorage.users.items.firstOrNull { it.refreshToken == refreshToken }
+    val oldUser = MockApiStorage.users.items.firstOrNull { it.refreshToken == refreshToken }
       ?: return Calls.failure(IOException("cannot update this token"))
 
-    /* TODO: in here we must regenerate user tokens */
+    val user = oldUser.copy(
+      refreshToken = "${oldUser.id}.$generateID",
+      lastSeen = System.currentTimeMillis()
+    )
+    MockApiStorage.users.update(user)
 
     return Calls.response(user.toData())
   }
