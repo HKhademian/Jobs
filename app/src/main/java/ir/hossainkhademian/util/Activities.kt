@@ -2,6 +2,7 @@ package ir.hossainkhademian.util
 
 import android.annotation.TargetApi
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -14,6 +15,7 @@ import java.io.Serializable
 
 val <T : Context> T.context get() = this
 val <T : Activity> T.activity get() = this
+val <T : Application> T.activity get() = this
 
 inline fun <reified T : Any> Activity.launchActivity(
   requestCode: Int = -1,
