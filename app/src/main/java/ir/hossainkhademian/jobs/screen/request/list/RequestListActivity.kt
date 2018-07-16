@@ -1,7 +1,6 @@
 package ir.hossainkhademian.jobs.screen.request.list
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.*
@@ -29,24 +28,30 @@ class RequestListActivity : AppCompatActivity() {
   private var twoPane: Boolean = false
   private lateinit var viewModel: RequestListViewModel
 
+  private val adapter = RequestAdapter()
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    viewModel = getViewModel { RequestListViewModel() }
 
     setContentView(R.layout.activity_request_list)
-
     twoPane = request_detail_container != null
 
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     toolbar.title = title
 
-    fab.setOnClickListener { view ->
-      Snackbar.make(view, "Not Implemented yet!", Snackbar.LENGTH_LONG)
-        .setAction("Action", null).show()
-    }
+//    fab.setOnClickListener { view ->
+//      Snackbar.make(view, "Not Implemented yet!", Snackbar.LENGTH_LONG)
+//        .setAction("Action", null).show()
+//    }
 
     setupRecyclerView(request_list)
+
+    viewModel = getViewModel { RequestListViewModel() }
+
+    viewModel.requests.observeOn(this) { items ->
+      adapter.items = items ?: emptyList()
+    }
   }
 
   override fun onOptionsItemSelected(item: MenuItem) =
@@ -66,16 +71,14 @@ class RequestListActivity : AppCompatActivity() {
     }
     recyclerView.itemAnimator = DefaultItemAnimator()
     recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-
-    val adapter = Adapter(LayoutInflater.from(context), viewModel.requests.value ?: emptyList())
     recyclerView.adapter = adapter
-    viewModel.requests.observeOn(this) { items ->
-      adapter.items = items ?: emptyList()
-      recyclerView.scrollToPosition(adapter.items.size - 1)
-    }
   }
 
   private fun onItemSelected(item: Request) {
+    showRequestDetail(item)
+  }
+
+  private fun showRequestDetail(item: Request) {
     if (twoPane) {
       val fragment = RequestDetailFragment().apply {
         arguments = bundle(
@@ -95,52 +98,42 @@ class RequestListActivity : AppCompatActivity() {
     }
   }
 
-  private inner class Adapter
-  (val inflater: LayoutInflater, data: List<Request> = emptyList())
-    : RecyclerView.Adapter<ViewHolder>() {
-
+  private inner class RequestAdapter(data: List<Request> = emptyList()) : RecyclerView.Adapter<ViewHolder>() {
     var items = data
-      set(value) {
-        field = value
+      set(items) {
+        field = items
         notifyDataSetChanged()
       }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-      ViewHolder(inflater, parent)
 
     override fun getItemCount() =
       items.count()
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-      holder.bindItem(items[position])
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+      ViewHolder(LayoutInflater.from(context), parent)
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+      holder.item = items[position]
+    }
   }
 
   private inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
     val avatarView = view.avatarView!!
     val titleView = view.titleView!!
     val subtitleView = view.subtitleView!!
-    lateinit var item: Request; private set
+
+    var item: Request = EmptyRequest
+      set(item) {
+        field = item
+        showItem(item)
+      }
 
     constructor(inflater: LayoutInflater, parent: ViewGroup) :
       this(inflater.inflate(R.layout.item_request_list, parent, false))
 
     init {
       view.setOnClickListener {
-        //        AlertDialog.Builder(view.context)
-//          .setTitle("Request ${item.id}")
-//          .setMessage("${item.title}\n\n${item.subtitle}")
-//          .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-//          .show()
-//
-//        Snackbar.make(view, "NOT IMPLEMENTED YET!", Snackbar.LENGTH_SHORT).show()
-
         onItemSelected(item)
       }
-    }
-
-    fun bindItem(item: Request) {
-      this.item = item
-      showItem(item)
     }
 
     private fun showItem(item: Request) {

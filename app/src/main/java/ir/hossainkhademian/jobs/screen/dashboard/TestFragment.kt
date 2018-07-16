@@ -18,6 +18,7 @@ class TestFragment : BaseFragment() {
 
     //return rootView
 
-    return inflater.inflate(R.layout.fragment_request_detail, container, false)
+    //return inflater.inflate(R.layout.fragment_request_detail, container, false)
+    return inflater.inflate(R.layout.fragment_test, container, false)
   }
 }

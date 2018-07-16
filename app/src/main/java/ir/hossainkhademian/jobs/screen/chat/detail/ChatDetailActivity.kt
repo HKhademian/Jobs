@@ -27,8 +27,8 @@ class ChatDetailActivity : AppCompatActivity() {
 
       val fragment = ChatDetailFragment().apply {
         arguments = intent.extras/* bundle(
-          RequestDetailFragment.ARG_REQUEST_ID to requestId,
-          RequestDetailFragment.ARG_REQUEST_TITLE to title
+          RequestEditFragment.ARG_REQUEST_ID to requestId,
+          RequestEditFragment.ARG_REQUEST_TITLE to title
         )*/
       }
 

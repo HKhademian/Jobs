@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.llollox.androidtoggleswitch.widgets.ToggleSwitch
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/typeView"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_gravity="center"
+  android:layout_marginStart="32dp"
+  android:layout_marginEnd="32dp"
+  app:textToggleRight="@string/choice_request_type_company"
+  app:textToggleLeft="@string/choice_request_type_worker"
+  app:toggleHeight="48dp"
+  app:toggleWidth="96dp" />

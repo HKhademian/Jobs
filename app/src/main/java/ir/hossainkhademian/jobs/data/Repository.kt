@@ -39,22 +39,17 @@ object Repository {
       throw RuntimeException("please login first")
 
     val chats = ApiManager.chats.send(AccountManager.accessToken, contactId, message).await()
-    DataManager.chats += chats  // .map { it.toMutable() }
-
-    // val chats = ApiManager.chats.list(AccountManager.accessToken, contactId).await()
-    // DataManager.chats.removeAll { chats.any { chat -> chat.id == it.id } }
-    // DataManager.chats += chats
+    DataManager.chats += chats
   }
 
-  suspend fun chatSeen(chatId: ID) {
+  suspend fun chatSeen(senderId: ID) {
     if (!AccountManager.isLoggedIn && AccountManager.isFresh)
       throw RuntimeException("please login first")
 
-    val chat = ApiManager.chats.markAsSeen(AccountManager.accessToken, chatId).await()
-
-    // DataManager.chats.findById(chatId)?.unseen = false
-    DataManager.chats.removeAll { it.id == chatId }
-    DataManager.chats += chat
+    val chats = ApiManager.chats.markAsSeen(AccountManager.accessToken, senderId).await()
+    val ids = chats.mapId()
+    DataManager.chats.removeAll { ids.contains(it.id) }
+    DataManager.chats += chats
   }
 
 
@@ -76,11 +71,5 @@ object Repository {
           .map { (contactId, contactChats) ->
             users.getById(contactId) to contactChats.filterUnseen().count()
           }
-        //chats
-        //  .sortedByDescending { it.time } // sort before filter is a bit slower
-        //  .distinctUserId(AccountManager.id)
-        //  .map { requestId ->
-        //    users.getById(requestId) to chats.filterByContactId(requestId).count()
-        //  }
       }!!
 }

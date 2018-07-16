@@ -44,6 +44,10 @@
   <string name="action_cancel">Cancel</string>
   <string name="action_back">Back</string>
   <string name="action_edit">Edit</string>
+  <string name="action_submit">Submit</string>
+  <string name="action_choose">Choose</string>
+  <string name="action_clear">Clear</string>
+  <string name="action_add">Add</string>
 
   <string name="chat_message">Your message …</string>
 
@@ -58,4 +62,9 @@
 
   <string name="choice_request_company">Company</string>
   <string name="choice_request_worker">Worker</string>
+  <string name="choice_request_type_company">Company</string>
+  <string name="choice_request_type_worker">Worker</string>
+  <string name="action_select">Select</string>
+  <string name="hint_request_skill_remove">Tap on skill to remove</string>
+  <string name="hint_request_skill_add">To add skills press \'Add\' button</string>
 </resources>

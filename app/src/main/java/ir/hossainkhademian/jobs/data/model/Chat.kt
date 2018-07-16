@@ -14,6 +14,8 @@ interface Chat : IdModel {
   val unseen: Boolean
   val time: Long
 
+  val seen: Boolean
+
   val direction get() = getDirection(AccountManager.id)
   val sender get() = DataManager.users.findById(senderId) ?: EmptyUser
   val receiver get() = DataManager.users.findById(receiverId) ?: EmptyUser
@@ -55,9 +57,13 @@ open class ChatData(
   @Json(name = "senderId") override val senderId: ID = emptyID,
   @Json(name = "receiverId") override val receiverId: ID = emptyID,
   @Json(name = "messageField") override val message: String = "",
-  @Json(name = "unseen") override val unseen: Boolean = true,
+  @Json(name = "unseen") override var unseen: Boolean = true,
   @Json(name = "time") override val time: Long = System.currentTimeMillis()
-) : Chat
+) : Chat {
+  @Suppress("LeakingThis")
+  override val seen: Boolean = !unseen
+
+}
 
 fun Chat.toData() = when (this) {
   is ChatData -> this
@@ -70,6 +76,22 @@ fun Chat.toData() = when (this) {
     unseen = unseen
   )
 }
+
+fun Chat.copy(
+  id: ID? = null,
+  senderId: ID? = null,
+  receiverId: ID? = null,
+  message: String? = null,
+  time: Long? = null,
+  unseen: Boolean? = null
+) = ChatData(
+  id = id ?: this.id,
+  senderId = senderId ?: this.senderId,
+  receiverId = receiverId ?: this.receiverId,
+  message = message ?: this.message,
+  time = time ?: this.time,
+  unseen = unseen ?: this.unseen
+)
 
 fun <T : Chat> Iterable<T>.toData() = map { it.toData() }
 

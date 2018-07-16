@@ -118,18 +118,18 @@ object Interceptors {
 //	class MixedRequestInterceptor : Interceptor {
 //		override fun intercept(chain: Interceptor.Chain?): Response? {
 //			if (chain == null) return null
-//			val request = chain.request()
-//			val cache = request.header(HEADER_CACHE)
-//			val cacheFresh = request.header(HEADER_CACHE_FRESH)
+//			val job = chain.job()
+//			val cache = job.header(HEADER_CACHE)
+//			val cacheFresh = job.header(HEADER_CACHE_FRESH)
 //
 //			if (cacheFresh != null) {
-//				val response = chain.proceed(offlineRequest(request, cacheFresh))
+//				val response = chain.proceed(offlineRequest(job, cacheFresh))
 //				if (response.isSuccessful)
 //					return response
 //			}
 //
 //			try {
-//				val newRequest = onlineRequest(request)
+//				val newRequest = onlineRequest(job)
 //				val response = chain.proceed(newRequest)
 //				if (response.isSuccessful)
 //					return if (cache == null) cache
@@ -138,7 +138,7 @@ object Interceptors {
 //			}
 //
 //			if (cache != null)
-//				return chain.proceed(offlineRequest(request, cache))
+//				return chain.proceed(offlineRequest(job, cache))
 //
 //			return null
 //		}
@@ -147,35 +147,35 @@ object Interceptors {
 //	class OfflineLastInterceptor : Interceptor {
 //		override fun intercept(chain: Interceptor.Chain?): Response? {
 //			if (chain == null) return null
-//			val request = chain.request()
-//			val cache = request.header(HEADER_CACHE)
-//			val cacheFresh = request.header(HEADER_CACHE_FRESH)
+//			val job = chain.job()
+//			val cache = job.header(HEADER_CACHE)
+//			val cacheFresh = job.header(HEADER_CACHE_FRESH)
 //
 //			try {
-//				val response = chain.proceed(onlineRequest(request))
+//				val response = chain.proceed(onlineRequest(job))
 //				return if (cache == null) response
 //				else cacheResponse(response, cacheFresh)
 //			} catch (e: Exception) {
 //			}
 //
-//			return chain.proceed(offlineRequest(request, cache))
+//			return chain.proceed(offlineRequest(job, cache))
 //		}
 //	}
 
 //	class OfflineFirstInterceptor : Interceptor {
 //		override fun intercept(chain: Interceptor.Chain?): Response? {
 //			if (chain == null) return null
-//			val request = chain.request()
-//			val cache = request.header(HEADER_CACHE)
-//			val cacheFresh = request.header(HEADER_CACHE_FRESH)
+//			val job = chain.job()
+//			val cache = job.header(HEADER_CACHE)
+//			val cacheFresh = job.header(HEADER_CACHE_FRESH)
 //
 //			if (cache != null) {
-//				val newRequest = offlineRequest(request, cache)
+//				val newRequest = offlineRequest(job, cache)
 //				val response = chain.proceed(newRequest)
 //				if (response.isSuccessful)
 //					return response
 //			}
-//			val response = chain.proceed(onlineRequest(request))
+//			val response = chain.proceed(onlineRequest(job))
 //			return if (cache == null) response
 //			else cacheResponse(response, cacheFresh)
 //		}

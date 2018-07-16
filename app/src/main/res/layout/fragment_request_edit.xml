@@ -6,7 +6,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/back"
-  tools:context=".screen.request.detail.RequestDetailActivity">
+  tools:context=".screen.request.edit.RequestEditActivity">
 
   <LinearLayout
     android:id="@+id/actionBar"
@@ -26,12 +26,12 @@
       android:textColor="@color/colorIcons"
       android:text="@string/action_cancel"/>
     <Button
-      android:id="@+id/editAction"
+      android:id="@+id/submitAction"
       android:layout_width="0dp"
       android:layout_height="match_parent"
       android:layout_weight="1"
       style="@style/Widget.AppCompat.Button.Colored"
-      android:text="@string/action_edit"/>
+      android:text="@string/action_submit"/>
   </LinearLayout>
 
   <ScrollView
@@ -64,112 +64,81 @@
       <ir.hossainkhademian.jobs.view.FieldBox
         android:id="@+id/jobCard"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="2dp"
-        android:text="@string/field_request_job">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/field_request_job"
+        app:action="@string/action_select">
         <ir.hossainkhademian.jobs.view.JobView
           android:id="@+id/jobView"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:layout_margin="4dp"
-          app:cardBackgroundColor="@null"
-          android:background="@null"
-          app:cardCornerRadius="0dp"
-          app:cardElevation="0dp"
-          app:cardPreventCornerOverlap="false"
-          app:small="true"/>
+          android:layout_margin="4dp"/>
       </ir.hossainkhademian.jobs.view.FieldBox>
 
       <ir.hossainkhademian.jobs.view.FieldBox
         android:id="@+id/skillsCard"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@string/field_request_skills">
+        android:text="@string/field_request_skills"
+        app:action="@string/action_add"
+        app:action2="@string/action_clear">
+        <TextView
+          android:id="@+id/skillsAddHintView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/hint_request_skill_add"
+          android:lines="1"
+          android:gravity="start|center_vertical"
+          android:padding="8dp"
+          android:textColor="@color/colorPrimary"
+          android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+        <TextView
+          android:id="@+id/skillsRemoveHintView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/hint_request_skill_remove"
+          android:lines="1"
+          android:gravity="start|center_vertical"
+          android:padding="8dp"
+          android:textColor="@color/colorAccent"
+          android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
         <me.gujun.android.taggroup.TagGroup
           android:id="@+id/skillsView"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="match_parent"
           android:layout_margin="4dp"
           style="@style/TagGroup.Large"/>
       </ir.hossainkhademian.jobs.view.FieldBox>
 
       <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/userCard"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="2dp"
-        android:text="@string/field_request_user">
-        <ir.hossainkhademian.jobs.view.UserView
-          android:id="@+id/userView"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_margin="4dp"
-          app:cardBackgroundColor="@null"
-          android:background="@null"
-          app:cardCornerRadius="0dp"
-          app:cardElevation="0dp"
-          app:cardPreventCornerOverlap="false"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
         android:id="@+id/detailCard"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@string/field_request_detail">
-        <TextView
+        android:text="@string/field_request_detail"
+        app:action="@string/action_clear">
+        <!-- dummy view to prevent auto focus -->
+        <View
+          android:focusable="true"
+          android:focusableInTouchMode="true"
+          android:layout_width="0dp"
+          android:layout_height="0dp"/>
+        <EditText
           android:id="@+id/detailView"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:layout_margin="4dp"
-          android:minLines="5"
-          android:maxLines="15"
-          android:lines="5"
-          android:scrollbars="vertical"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/stateCard"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_state">
-        <TextView
-          android:id="@+id/stateView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="4dp"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/brokersCard"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_brokers">
-        <android.support.v7.widget.RecyclerView
-          android:id="@+id/brokersView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="4dp"
-          android:scrollbars="none"
-          android:overScrollMode="never"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/matchesCard"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_matches">
-        <android.support.v7.widget.RecyclerView
-          android:id="@+id/matchesView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="4dp"
-          android:scrollbars="none"
-          android:overScrollMode="never"/>
+          android:singleLine="false"
+          android:minLines="15"
+          android:maxLines="35"
+          android:lines="15"
+          android:scrollbars="vertical"
+          android:gravity="start|top"
+          android:inputType="textMultiLine"
+          android:nextFocusUp="@id/detailView"
+          android:nextFocusLeft="@id/detailView"
+          android:nextFocusDown="@id/submitAction"/>
       </ir.hossainkhademian.jobs.view.FieldBox>
     </LinearLayout>
   </ScrollView>

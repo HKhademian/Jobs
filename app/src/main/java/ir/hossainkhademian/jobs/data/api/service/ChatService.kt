@@ -20,5 +20,5 @@ interface ChatService {
   fun send(accessToken: String, contactId: ID, message: String): Call<List<ChatData>> // Call<ChatData>
 
   @POST("/chats/seen")
-  fun markAsSeen(accessToken: String, chatId: ID): Call<ChatData>
+  fun markAsSeen(accessToken: String, senderId: ID): Call<List<ChatData>>
 }

@@ -18,14 +18,29 @@ interface Request : IdModel {
   val brokerIds: List<ID>
 }
 
+enum class RequestType(val key: String) {
+  WORKER("worker"), COMPANY("company");
+
+  companion object {
+    fun from(direction: String) = when (direction.toLowerCase()) {
+      COMPANY.key.toLowerCase() -> COMPANY
+      WORKER.key.toLowerCase() -> WORKER
+      else -> WORKER // throw RuntimeException("bad value")
+    }
+  }
+}
+
 val Request.user get() = DataManager.users.findById(userId) ?: EmptyUser
 val Request.job get() = DataManager.jobs.findById(jobId) ?: EmptyJob
 val Request.skills get() = DataManager.skills.filterById(skillIds)
 val Request.brokers get() = DataManager.users.filterById(brokerIds)
 val Request.matches get() = DataManager.matches.filterByRequest(type, id)
 
-val Request.isWorker get() = type == RequestType.WORKER
-val Request.isCompany get() = type == RequestType.COMPANY
+val RequestType.isWorker get() = this == RequestType.WORKER
+val RequestType.isCompany get() = this == RequestType.COMPANY
+val Request.isWorker get() = type.isWorker
+val Request.isCompany get() = type.isCompany
+
 val Request.title
   get() = when (type) {
 //  RequestType.WORKER-> "`${user.title}` seeks Job for `${job.title}`"
@@ -39,18 +54,6 @@ val Request.subtitle
     RequestType.COMPANY -> "needs ${skills.joinToString(" , ") { "`${it.title}`" }} skills"
   }
 val Request.avatarUrl get() = job.avatarUrl
-
-enum class RequestType(val key: String) {
-  WORKER("worker"), COMPANY("company");
-
-  companion object {
-    fun from(direction: String) = when (direction.toLowerCase()) {
-      COMPANY.key.toLowerCase() -> COMPANY
-      WORKER.key.toLowerCase() -> WORKER
-      else -> WORKER // throw RuntimeException("bad value")
-    }
-  }
-}
 
 class RequestData(
   @Json(name = "id") override val id: ID = generateID,

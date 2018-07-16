@@ -21,7 +21,7 @@ object UserMock : UserService {
     MockApiStorage.fakeWait()
 
     val users = MockApiStorage.users.items.filterById(ids).toData()
-    if (users.isEmpty()) return Calls.failure(IOException("no user with these ids is found"))
+    // if (users.isEmpty()) return Calls.failure(IOException("no user with these ids is found"))
 
     return Calls.response(users)
   }

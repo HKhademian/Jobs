@@ -2,10 +2,8 @@ package ir.hossainkhademian.jobs.data.model
 
 import com.squareup.moshi.Json
 
-private fun generateAvatarUrl(userId: ID): String {
-  val i = userId.sumBy { it.toInt() } // requestId.toInt() //
-  val index = i % 10
-  return "https://randomuser.me/api/portraits/lego/$index.jpg"
+private fun generateAvatarUrl(id: ID): String {
+  return "https://api.adorable.io/avatars/256/$id.png"
 }
 
 val EmptySkill = SkillData(id = emptyID)

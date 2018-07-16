@@ -1,4 +1,4 @@
-package ir.hossainkhademian.jobs.screen.request.detail
+package ir.hossainkhademian.jobs.screen.chat.list
 
 import ir.hossainkhademian.jobs.data.model.User
 

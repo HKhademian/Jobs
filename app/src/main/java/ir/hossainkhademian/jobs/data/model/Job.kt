@@ -2,8 +2,8 @@ package ir.hossainkhademian.jobs.data.model
 
 import com.squareup.moshi.Json
 
-private fun generateAvatarUrl(userId: ID): String {
-  val i = userId.sumBy { it.toInt() } // requestId.toInt() //
+private fun generateAvatarUrl(id: ID): String {
+  val i = id.sumBy { it.toInt() } // requestId.toInt() //
   val index = i % 10
   return "https://randomuser.me/api/portraits/lego/$index.jpg"
 }

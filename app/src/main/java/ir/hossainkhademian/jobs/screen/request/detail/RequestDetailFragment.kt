@@ -1,40 +1,40 @@
 package ir.hossainkhademian.jobs.screen.request.detail
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import com.llollox.androidtoggleswitch.widgets.ToggleSwitch
 import com.squareup.picasso.Picasso
 import ir.hossainkhademian.jobs.R
-import ir.hossainkhademian.jobs.data.DataManager
-import ir.hossainkhademian.jobs.data.Repository
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.screen.BaseFragment
+import ir.hossainkhademian.util.Collections.consume
 import ir.hossainkhademian.util.LiveDatas.letObserveOn
 import ir.hossainkhademian.util.ViewModels.getViewModel
 import kotlinx.android.synthetic.main.activity_request_detail.*
 import kotlinx.android.synthetic.main.fragment_request_detail.view.*
 import kotlinx.android.synthetic.main.item_request_broker.view.*
-import kotlinx.android.synthetic.main.item_request_match.view.*
-import java.text.FieldPosition
 
 class RequestDetailFragment : BaseFragment() {
   companion object {
-    const val ARG_REQUEST_ID = "request.id"
-    const val ARG_REQUEST_TITLE = "request.title"
+    const val ARG_REQUEST_ID = ARG_ID
+    const val ARG_REQUEST_TITLE = ARG_TITLE
   }
 
   private lateinit var viewModel: RequestDetailViewModel
   private lateinit var rootView: View
   private val cancelAction get() = rootView.cancelAction
   private val editAction get() = rootView.editAction
-  private val requestTypeWorkerView get() = rootView.requestTypeWorkerView
-  private val requestTypeCompanyView get() = rootView.requestTypeCompanyView
-  private val requestView get() = rootView.requestView
+  private val typeView get() = rootView.typeView  as ToggleSwitch
+  private val jobView get() = rootView.jobView
   private val skillsView get() = rootView.skillsView
   private val userView get() = rootView.userView
   private val detailView get() = rootView.detailView
@@ -45,22 +45,33 @@ class RequestDetailFragment : BaseFragment() {
   private val brokerAdapter: BrokerAdapter = BrokerAdapter()
   private val matchesAdapter: MatchAdapter = MatchAdapter()
 
-  var onEditListener: (Request) -> Unit = { }
-  var onSendChatListener: (User) -> Unit = { }
-  var onCancelListener: (Request) -> Unit = { }
+  var onEditListener: (ID) -> Unit = { }
+  var onSendChatListener: (ID) -> Unit = { }
+  var onCancelListener: (ID) -> Unit = { }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val requestId = arguments?.getString(ARG_REQUEST_ID) ?: ""
     val title = arguments?.getString(ARG_REQUEST_TITLE) ?: ""
 
-    viewModel = getViewModel { RequestDetailViewModel(app, requestId) }
+    viewModel = getViewModel { RequestDetailViewModel(app, this, requestId) }
 
     activity?.toolbar?.title = title
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     rootView = inflater.inflate(R.layout.fragment_request_detail, container, false)
+    typeView.isEnabled = false
+    editAction.setOnClickListener { viewModel.edit() }
+    cancelAction.setOnClickListener { viewModel.cancel() }
+
+    detailView.setOnTouchListener { v, event ->
+      v.parent.requestDisallowInterceptTouchEvent(true)
+      if (event.action and MotionEvent.ACTION_MASK == MotionEvent.ACTION_UP)
+        v.parent.requestDisallowInterceptTouchEvent(false)
+      false
+    }
 
     brokersView.let { recyclerView ->
       recyclerView.adapter = brokerAdapter
@@ -80,25 +91,18 @@ class RequestDetailFragment : BaseFragment() {
     }
 
     viewModel.request.letObserveOn(this, EmptyRequest, ::setRequest)
-
     return rootView
   }
 
   private fun setRequest(request: Request) {
-    editAction.setOnClickListener { onEditListener(request) }
-    cancelAction.setOnClickListener { viewModel.cancel(onCancelListener) }
-
-    requestTypeWorkerView.isEnabled = request.type == RequestType.WORKER
-    requestTypeCompanyView.isEnabled = request.type == RequestType.COMPANY
-    requestView.request = request.job
+    typeView.setCheckedPosition(if (request.isWorker) 0 else 1)
+    jobView.job = request.job
     userView.user = request.user
     detailView.text = request.detail
 
-    // brokerAdapter.items = request.brokers
-    brokerAdapter.items = Repository.usersList
-    matchesAdapter.items = request.matches
-
     skillsView.setTags(request.skills.map { it.title })
+    brokerAdapter.items = request.brokers
+    matchesAdapter.items = request.matches
   }
 
 
@@ -138,7 +142,7 @@ class RequestDetailFragment : BaseFragment() {
     }
   }
 
-  private class BrokerViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+  private inner class BrokerViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     private val avatarView get() = view.avatarView
     private val titleView get() = view.titleView
 
@@ -147,6 +151,12 @@ class RequestDetailFragment : BaseFragment() {
         field = value
         showItem(value)
       }
+
+    init {
+      view.setOnClickListener {
+        viewModel.sendChat(item.id)
+      }
+    }
 
     private fun showItem(item: User) {
       titleView.text = item.title

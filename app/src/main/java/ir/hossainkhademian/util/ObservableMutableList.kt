@@ -1,5 +1,6 @@
 package ir.hossainkhademian.util
 
+import android.util.Log
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 
@@ -18,7 +19,12 @@ class ObservableMutableList<T>(
   fun update() = update {}
   fun <T> update(block: () -> T): T {
     val res = block.invoke()
-    subject.onNext(list)
+    try {
+      subject.onNext(list)
+    } catch (ex: Exception) {
+      ex.printStackTrace()
+      Log.e(ObservableMutableList::class.java.simpleName, ex.message)
+    }
     return res
   }
 

@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v7.app.AlertDialog
 
 object LoadingErrorDialog {
-  private const val MAX_RETRY_COUNT = 3
+  private const val MAX_RETRY_COUNT = 5
 
   fun show(
     context: Context,

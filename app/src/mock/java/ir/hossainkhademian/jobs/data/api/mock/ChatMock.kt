@@ -40,7 +40,7 @@ object ChatMock : ChatService {
       ?: return Calls.failure(IOException("no user with this contactId found"))
 
     if (message.contains("error"))
-      return Calls.failure(IOException("error in sending message as you request lord"))
+      return Calls.failure(IOException("error in sending message as you job lord"))
 
     val chats = arrayListOf<ChatData>()
 
@@ -68,28 +68,22 @@ object ChatMock : ChatService {
     return Calls.response(chats)
   }
 
-  override fun markAsSeen(accessToken: String, chatId: ID): Call<ChatData> {
+  override fun markAsSeen(accessToken: String, senderId: ID): Call<List<ChatData>> {
     MockApiStorage.fakeWait()
 
     val user = MockApiStorage.getUserByAccessToken(accessToken)
       ?: return Calls.failure(IOException("user with this token not found. please relogin"))
 
-    val oldChat = MockApiStorage.chats.items.findById(chatId)
-      ?: return Calls.failure(IOException("no chat with this id found"))
+    val sender = MockApiStorage.users.items.findById(senderId)
+      ?: return Calls.failure(IOException("user with this senderId not found. please relogin"))
 
-    if (oldChat.receiverId != user.id)
-      return Calls.failure(IOException("user is not chat's sender"))
+    val chats = MockApiStorage.chats.items
+      .filterByReceiverId(user.id)
+      .filterBySenderId(senderId)
+      .map { it.copy(unseen = false) }
 
-    val chat = ChatData(
-      id = oldChat.id,
-      senderId = oldChat.senderId,
-      receiverId = oldChat.receiverId,
-      message = oldChat.message,
-      unseen = false,
-      time = oldChat.time
-    )
-    MockApiStorage.chats.update(chat)
+    chats.forEach { MockApiStorage.chats.update(it) }
 
-    return Calls.response(chat)
+    return Calls.response(chats)
   }
 }

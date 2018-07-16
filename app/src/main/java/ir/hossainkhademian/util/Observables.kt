@@ -5,6 +5,7 @@ import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
+import java.util.concurrent.TimeUnit
 
 object Observables {
   fun <T1, T2, R> Observable<T1>.withLatestFrom(second: ObservableSource<T2>, combiner: (T1, T2) -> R): Observable<R> =
@@ -17,6 +18,10 @@ object Observables {
     Observable.zip(first, second, BiFunction { a, b -> combiner.invoke(a, b) })
 
   // fun <T> Publisher<T>.toLiveData() = LiveDataReactiveStreams.fromPublisher(this)
+
+
+  fun <T> Observable<T>.debounceAfter(count: Long = 1, timeout: Long, unit: TimeUnit) =
+    take(count).concatWith(skip(count).debounce(timeout, unit))
 
   fun <T> Observable<T>.toLiveData() = object : LiveData<T>() {
     private var disposable: Disposable? = null

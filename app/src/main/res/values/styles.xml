@@ -31,4 +31,13 @@
     <attr format="string" name="action2"/>
     <attr format="string" name="action3"/>
   </declare-styleable>
+
+  <declare-styleable name="JobView">
+    <attr format="string" name="jobId"/>
+    <attr format="boolean" name="small"/>
+  </declare-styleable>
+
+  <declare-styleable name="SkillView">
+    <attr format="string" name="skillId"/>
+  </declare-styleable>
 </resources>

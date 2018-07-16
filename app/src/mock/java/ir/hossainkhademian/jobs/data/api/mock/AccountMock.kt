@@ -60,7 +60,7 @@ object AccountMock : AccountService {
         .union(MockApiStorage.users.items
           .filter { !it.isAdmin && !it.isBroker }
           .shuffled()
-          .take(5))
+          .take(2))
         .flatMap {
           listOf(
             ChatData(
@@ -92,8 +92,8 @@ object AccountMock : AccountService {
         val skills = MockApiStorage.skills.items.shuffled(MockApiStorage.random).take(3)
         val type = if (MockApiStorage.random.nextBoolean()) RequestType.WORKER else RequestType.COMPANY
         val details = when (type) {
-          RequestType.WORKER -> "a fake request for a `${job.title}` job, you tell you have ${skills.joinToString(" , ") { "`${it.title}`" }} skills :)"
-          RequestType.COMPANY -> "a fake request for a `${job.title}` worker, you tell you need ${skills.joinToString(" , ") { "`${it.title}`" }} skills :)"
+          RequestType.WORKER -> "a fake job for a `${job.title}` job, you tell you have ${skills.joinToString(" , ") { "`${it.title}`" }} skills :)"
+          RequestType.COMPANY -> "a fake job for a `${job.title}` worker, you tell you need ${skills.joinToString(" , ") { "`${it.title}`" }} skills :)"
         }
         val request = RequestData(
           userId = userId,
@@ -112,13 +112,13 @@ object AccountMock : AccountService {
   }
 
   override fun refresh(refreshToken: String): Call<LoginData> {
-    Thread.sleep(2000)
+    MockApiStorage.fakeWait()
 
     val oldUser = MockApiStorage.users.items.firstOrNull { it.refreshToken == refreshToken }
       ?: return Calls.failure(IOException("cannot update this token"))
 
     val user = oldUser.copy(
-      refreshToken = "${oldUser.id}.$generateID",
+      accessToken = "${oldUser.id}.$generateID",
       lastSeen = System.currentTimeMillis()
     )
     MockApiStorage.users.update(user)

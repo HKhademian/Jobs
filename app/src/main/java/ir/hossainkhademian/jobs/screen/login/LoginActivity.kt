@@ -100,7 +100,13 @@ class LoginActivity : BaseActivity() {
     val activity = this
     launch {
       val result = asyncUI {
-        tri(false) { AccountManager.login(context, phone, password); true }
+        try {
+          AccountManager.login(context, phone, password)
+          true
+        } catch (ex: Exception) {
+          ex.printStackTrace()
+          false
+        }
       }.await()
 
       if (result) {

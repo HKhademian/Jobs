@@ -35,6 +35,7 @@ class ChatDetailFragment : BaseFragment() {
   companion object {
     const val ARG_USER_ID = "user.id"
     const val ARG_USER_TITLE = "user.title"
+    const val ARG_SINGLE_PANEL = "singlePanel"
   }
 
   private lateinit var viewModel: ChatDetailViewModel
@@ -143,7 +144,6 @@ class ChatDetailFragment : BaseFragment() {
         set(value) {
           field = value
           showItem(item)
-          viewModel.markAsSeen(item)
         }
 
       init {

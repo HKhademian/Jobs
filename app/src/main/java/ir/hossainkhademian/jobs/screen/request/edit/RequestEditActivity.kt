@@ -1,4 +1,4 @@
-package ir.hossainkhademian.jobs.screen.request.detail
+package ir.hossainkhademian.jobs.screen.request.edit
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,41 +11,31 @@ import ir.hossainkhademian.jobs.data.model.isEmpty
 import ir.hossainkhademian.jobs.data.model.title
 import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailFragment
 import ir.hossainkhademian.jobs.screen.chat.list.ChatListActivity
-import ir.hossainkhademian.jobs.screen.request.edit.RequestEditActivity
-import ir.hossainkhademian.jobs.screen.request.edit.RequestEditFragment
 import ir.hossainkhademian.jobs.screen.request.list.RequestListActivity
 import ir.hossainkhademian.util.context
 import ir.hossainkhademian.util.launchActivity
-import kotlinx.android.synthetic.main.activity_request_detail.*
+import kotlinx.android.synthetic.main.activity_request_edit.*
 
-class RequestDetailActivity : AppCompatActivity() {
+class RequestEditActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_request_detail)
+    setContentView(R.layout.activity_request_edit)
 
     // Show the Up button in the action bar.
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     if (savedInstanceState == null) {
-      val requestId = intent.getStringExtra(RequestDetailFragment.ARG_REQUEST_ID) ?: emptyID
-      val title = intent.getStringExtra(RequestDetailFragment.ARG_REQUEST_TITLE) ?: ""
+      val requestId = intent.getStringExtra(RequestEditFragment.ARG_REQUEST_ID) ?: emptyID
+      val title = intent.getStringExtra(RequestEditFragment.ARG_REQUEST_TITLE) ?: ""
 
-      val fragment = RequestDetailFragment().apply {
+      val fragment = RequestEditFragment().apply {
         arguments = intent.extras
 
-        onEditListener = { requestId ->
+        onSubmitListener = { requestId ->
           if (requestId != emptyID)
             launchActivity<RequestEditActivity>(extras = *arrayOf(
               RequestEditFragment.ARG_REQUEST_ID to requestId
-            ))
-        }
-
-        onSendChatListener = { userId ->
-          if (userId != emptyID)
-            launchActivity<ChatListActivity>(extras = *arrayOf(
-              ChatDetailFragment.ARG_USER_ID to userId,
-              ChatDetailFragment.ARG_SINGLE_PANEL to true
             ))
         }
 

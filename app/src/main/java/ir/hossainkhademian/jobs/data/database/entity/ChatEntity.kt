@@ -4,6 +4,7 @@ package ir.hossainkhademian.jobs.data.database
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.arch.persistence.room.Query
 import ir.hossainkhademian.jobs.data.model.Chat
@@ -22,6 +23,9 @@ internal class ChatEntity(
   override var unseen: Boolean = true,
   override var time: Long = System.currentTimeMillis()
 ) : BaseEntity(), Chat {
+  @Ignore
+  override val seen = !unseen
+
 //
 //  class UserWithChatsEntity : UserWithChats {
 //    @Embedded

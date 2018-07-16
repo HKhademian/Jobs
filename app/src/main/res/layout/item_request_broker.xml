@@ -18,5 +18,6 @@
     android:id="@+id/titleView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+    android:gravity="center"/>
 </LinearLayout>

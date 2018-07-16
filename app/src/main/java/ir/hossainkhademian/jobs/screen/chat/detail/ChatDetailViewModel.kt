@@ -10,12 +10,18 @@ import ir.hossainkhademian.jobs.data.model.isReceived
 import ir.hossainkhademian.util.LiveDatas
 import ir.hossainkhademian.util.LiveDatas.map
 import ir.hossainkhademian.util.Observables.toLiveData
+import ir.hossainkhademian.util.Observables.debounceAfter
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import java.util.concurrent.TimeUnit
 
 internal class ChatDetailViewModel(val app: App, val userId: ID) : AndroidViewModel(app) {
-  val chats = Repository.getChatsByContact(userId).toLiveData()
+  private val chatsObservable = Repository.getChatsByContact(userId)
+  val chats = chatsObservable
+    .debounceAfter(1, 5, TimeUnit.SECONDS)
+    .doOnEach { markAsSeen() }
+    .toLiveData()
 
   val messageField: LiveData<String> = MutableLiveData<String>().apply { postValue("") }
 
@@ -52,15 +58,13 @@ internal class ChatDetailViewModel(val app: App, val userId: ID) : AndroidViewMo
     }
   }
 
-  fun markAsSeen(item: Chat, error: (e: Exception) -> Unit = {}): Job? {
-    if (item.isEmpty || !item.isReceived || !item.unseen)
-      return null
-
+  fun markAsSeen(): Job? {
     return launch {
       try {
-        Repository.chatSeen(item.id)
+        Repository.chatSeen(userId)
       } catch (e: Exception) {
-        launch(UI) { error(e) }
+        e.printStackTrace()
+        //launch(UI) { error(e) }
       }
     }
   }

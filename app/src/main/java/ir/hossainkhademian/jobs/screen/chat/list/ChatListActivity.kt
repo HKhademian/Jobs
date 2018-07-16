@@ -1,7 +1,5 @@
 package ir.hossainkhademian.jobs.screen.chat.list
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.NavUtils
@@ -20,9 +18,6 @@ import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailActivity
 import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailFragment
-import ir.hossainkhademian.jobs.screen.request.detail.UserChat
-import ir.hossainkhademian.jobs.screen.request.detail.unreadCount
-import ir.hossainkhademian.jobs.screen.request.detail.user
 import ir.hossainkhademian.util.ViewModels.getViewModel
 import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.context
@@ -42,31 +37,30 @@ class ChatListActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    val userId = intent.getStringExtra(ChatDetailFragment.ARG_USER_ID) ?: emptyID
+    val userTitle = intent.getStringExtra(ChatDetailFragment.ARG_USER_TITLE) ?: ""
+    val singlePanel = intent.getBooleanExtra(ChatDetailFragment.ARG_SINGLE_PANEL, false)
+    if (userId != emptyID && singlePanel) {
+      sendMessageTo(false, userId, userTitle)
+      finish()
+      return
+    }
+
     setContentView(R.layout.activity_chat_list)
 
     twoPane = chat_detail_container != null
-
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     toolbar.title = title
-
 //    fab.setOnClickListener { view ->
 //      Snackbar.make(view, "Not Implemented yet!", Snackbar.LENGTH_LONG)
 //        .setAction("Action", null).show()
 //    }
-
     setupRecyclerView(chat_list)
 
-
-    val userId = intent.getStringExtra(ChatDetailFragment.ARG_USER_ID) ?: emptyID
-    val userTitle = intent.getStringExtra(ChatDetailFragment.ARG_USER_TITLE) ?: emptyID
-    if (userId != emptyID) {
-      sendMessageTo(userId, userTitle)
-      if (!twoPane) {
-        finish()
-        return
-      }
-    }
+    if (userId != emptyID)
+      sendMessageTo(twoPane, userId, userTitle)
 
     viewModel = getViewModel { ChatListViewModel(userId) }
 
@@ -95,12 +89,12 @@ class ChatListActivity : AppCompatActivity() {
     recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
   }
 
-  private fun onItemSelected(item: Pair<User, Int>) {
+  private fun onItemSelected(item: UserChat) {
     val user = item.user
-    sendMessageTo(user.idStr, user.title)
+    sendMessageTo(twoPane, user.idStr, user.title)
   }
 
-  private fun sendMessageTo(userId: ID, userTitle: String) {
+  private fun sendMessageTo(twoPane: Boolean, userId: ID, userTitle: String) {
     if (twoPane) {
       val fragment = ChatDetailFragment().apply {
         arguments = bundleOf(
@@ -122,7 +116,7 @@ class ChatListActivity : AppCompatActivity() {
 
 
   private inner class UserChatAdapter(items: List<UserChat> = emptyList(), selectedUserId: ID = emptyID) : RecyclerView.Adapter<UserChatViewHolder>() {
-    var items: List<Pair<User, Int>> = items
+    var items = items
       set(items) {
         field = items
         notifyDataSetChanged()

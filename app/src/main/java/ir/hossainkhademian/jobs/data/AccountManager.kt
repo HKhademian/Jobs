@@ -67,13 +67,13 @@ object AccountManager : Login by Storage {
   suspend fun login(context: Context, phone: String, password: String, loadData: Boolean = true) {
     val login = ApiManager.accounts.login(phone, password).await()
     save(context, login)
-    if (loadData) DataManager.loadOnlineUserData(context)
+    // if (loadData) DataManager.loadOnlineUserData(context)
   }
 
   suspend fun register(context: Context, phone: String, loadData: Boolean = true) {
     val login = ApiManager.accounts.register(phone).await()
     save(context, login)
-    if (loadData) DataManager.loadOnlineUserData(context)
+    // if (loadData) DataManager.loadOnlineUserData(context)
   }
 
 
