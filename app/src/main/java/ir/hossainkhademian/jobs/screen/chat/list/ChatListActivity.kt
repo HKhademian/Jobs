@@ -65,7 +65,7 @@ class ChatListActivity : AppCompatActivity() {
     viewModel = getViewModel { ChatListViewModel(userId) }
 
     viewModel.userChats.observe(this) { userChats ->
-      adapter.items = userChats ?: emptyList()
+      adapter.items = userChats
     }
 
     viewModel.selectedUserId.observe(this) { selectedUserId ->
@@ -175,11 +175,15 @@ class ChatListActivity : AppCompatActivity() {
 
       Picasso.get().load(imageUrl).placeholder(R.drawable.ic_avatar).into(avatarView)
       titleView.text = user.title
-      subtitleView.text = "user id: ${user.id}"
       lastSeenView.text = user.lastSeen.getRelativeTime(context)
-
       badgeView.text = "$unreadCount"
       badgeView.visibility = if (unreadCount > 0) View.VISIBLE else View.GONE
+
+      val messagePrefix = if (item.lastChat.isSender) "you" else "to you"
+      subtitleView.text = when {
+        item.lastChat.isEmpty -> "Click to start chat with him/her" // rare occurrence
+        else -> "$messagePrefix: ${item.lastChat.message}"
+      }
     }
   }
 

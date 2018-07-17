@@ -44,10 +44,10 @@ fun Chat.getContactId(userId: ID) = when (userId) {
   else -> receiverId  // throw RuntimeException("bad value")
 }
 
-fun Chat.isSended(userId: ID) = getDirection(userId) == ChatDirection.SEND
-fun Chat.isReceived(userId: ID) = getDirection(userId) == ChatDirection.RECEIVE
-val LocalChat.isSended get() = isSended(AccountManager.id)
-val LocalChat.isReceived get() = isReceived(AccountManager.id)
+fun Chat.isSender(userId: ID) = getDirection(userId) == ChatDirection.SEND
+fun Chat.isReceiver(userId: ID) = getDirection(userId) == ChatDirection.RECEIVE
+val LocalChat.isSender get() = isSender(AccountManager.id)
+val LocalChat.isReceiver get() = isReceiver(AccountManager.id)
 val LocalChat.contactId get() = getContactId(AccountManager.id)
 val LocalChat.direction get() = getDirection(AccountManager.id)
 val LocalChat.sender get() = DataManager.users.findById(senderId) ?: EmptyUser
@@ -109,7 +109,7 @@ fun <T : Chat> Iterable<T>.filterByUserContactId(userId: ID, contactId: ID) =
   filter { (it.senderId == userId && it.receiverId == contactId) || (it.senderId == contactId && it.receiverId == userId) }
 
 fun <T : LocalChat> Iterable<T>.filterUnseen() =
-  filter { it.isReceived && it.unseen }
+  filter { it.isReceiver && it.unseen }
 
 fun <T : Chat> Iterable<T>.distinctUserId() =
   map { it.senderId }

@@ -13,8 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import ir.hossainkhademian.jobs.R
-import ir.hossainkhademian.jobs.data.model.Chat
-import ir.hossainkhademian.jobs.data.model.isSended
+import ir.hossainkhademian.jobs.data.model.isSender
 import ir.hossainkhademian.jobs.screen.BaseFragment
 import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.TextWatchers.TextWatcher
@@ -29,7 +28,6 @@ import ir.hossainkhademian.jobs.data.model.LocalChat
 import ir.hossainkhademian.util.Texts.getRelativeTime
 import ir.hossainkhademian.util.Texts.isEmoji
 import ir.hossainkhademian.util.Texts.hideKeyboard
-import java.util.*
 
 
 class ChatDetailFragment : BaseFragment() {
@@ -163,12 +161,12 @@ class ChatDetailFragment : BaseFragment() {
         val message = item.message
         val isEmoji = message.isEmoji
         val color = when {
-          item.isSended -> R.color.color_message_card_send
+          item.isSender -> R.color.color_message_card_send
           else -> R.color.color_message_card_receive
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-          view.layoutDirection = if (item.isSended) View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
+          view.layoutDirection = if (item.isSender) View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
 
         chatCard.setCardBackgroundColor(context.resources.getColor(color))
         chatCard.visibility = if (isEmoji) View.GONE else View.VISIBLE
