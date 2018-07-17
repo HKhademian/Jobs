@@ -68,12 +68,12 @@ class RequestEditFragment : BaseFragment() {
 
     val clearDetailAction = View.OnClickListener { viewModel.clearDetail() }
     detailCard.onActionClickListener = clearDetailAction
-    detailView.setOnTouchListener { v, event ->
-      v.parent.requestDisallowInterceptTouchEvent(true)
-      if (event.action and MotionEvent.ACTION_MASK == MotionEvent.ACTION_UP)
-        v.parent.requestDisallowInterceptTouchEvent(false)
-      false
-    }
+//    detailView.setOnTouchListener { v, event ->
+//      v.parent.requestDisallowInterceptTouchEvent(true)
+//      if (event.action and MotionEvent.ACTION_MASK == MotionEvent.ACTION_UP)
+//        v.parent.requestDisallowInterceptTouchEvent(false)
+//      false
+//    }
     detailView.addTextChangedListener(TextWatchers.TextWatcher {
       viewModel.onDetailChanged(detailView.text.toString())
     })

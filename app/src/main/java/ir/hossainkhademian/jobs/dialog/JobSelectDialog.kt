@@ -55,7 +55,7 @@ object JobSelectDialog {
       val item = getItem(position)
       val pastSelected = item.id == pastSelectionId
 
-      view.jobView.job = getItem(position)
+      view.jobView.job = item
       view.jobView.setCardBackgroundColor(if (pastSelected) Color.parseColor("#3666") else 0)
 
       return view

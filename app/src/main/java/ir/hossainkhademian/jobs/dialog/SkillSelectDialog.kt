@@ -1,6 +1,7 @@
 package ir.hossainkhademian.jobs.dialog
 
 import android.content.Context
+import android.graphics.Color
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -18,12 +19,11 @@ object SkillSelectDialog {
     builder(context, pastSelectionIds, listener).show()!!
 
   private fun builder(context: Context, pastSelectionIds: Collection<ID> = emptyList(), listener: (Skill) -> Unit): AlertDialog.Builder {
-    val adapter = SkillAdapter(context)
+    val adapter = SkillAdapter(context, pastSelectionIds)
     val job = Repository.Skills.list()
       .subscribe {
-        adapter.items = it!!.filterNot {
-          pastSelectionIds.contains(it.id)
-        }
+        adapter.items = it!!
+        // .filterNot { pastSelectionIds.contains(it.id) }
       }
     return AlertDialog.Builder(context)
       .setTitle("Select job from list below:")
@@ -35,7 +35,7 @@ object SkillSelectDialog {
       }
   }
 
-  private class SkillAdapter(val context: Context, items: List<Skill> = emptyList()) : BaseAdapter() {
+  private class SkillAdapter(val context: Context, val pastSelectionIds: Collection<ID> = emptyList(), items: List<Skill> = emptyList()) : BaseAdapter() {
     var items = items
       set(items) {
         field = items
@@ -51,8 +51,11 @@ object SkillSelectDialog {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
       val view = convertView ?: LayoutInflater.from(context)
         .inflate(R.layout.item_dialog_skill, parent, false)
+      val item = getItem(position)
+      val pastSelected = pastSelectionIds.contains(item.id)
 
-      view.skillView.skill = getItem(position)
+      view.skillView.skill = item
+      view.skillView.setCardBackgroundColor(if (pastSelected) Color.parseColor("#3666") else 0)
 
       return view
     }

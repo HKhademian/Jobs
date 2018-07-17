@@ -62,7 +62,7 @@ internal class RequestEditViewModel(
     job as MutableLiveData
 
     jobSelectDialog?.dismiss()
-    jobSelectDialog = JobSelectDialog.show(fragment.context) {
+    jobSelectDialog = JobSelectDialog.show(fragment.context, job.value?.id ?: emptyID) {
       job.postValue(it)
       jobSelectDialog?.dismiss()
       jobSelectDialog = null
@@ -73,7 +73,7 @@ internal class RequestEditViewModel(
     skills as MutableLiveData
 
     skillsSelectDialog?.dismiss()
-    skillsSelectDialog = SkillSelectDialog.show(fragment.context) {
+    skillsSelectDialog = SkillSelectDialog.show(fragment.context, skills.value?.mapId() ?: emptyList()) {
       skillList += it
       skills.postValue(skillList)
       skillsSelectDialog?.dismiss()
