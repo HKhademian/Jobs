@@ -4,5 +4,6 @@
 /.idea
 .DS_Store
 /build
+/test
 /captures
 .externalNativeBuild
