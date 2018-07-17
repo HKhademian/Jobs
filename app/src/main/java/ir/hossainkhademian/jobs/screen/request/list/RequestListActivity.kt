@@ -1,5 +1,6 @@
 package ir.hossainkhademian.jobs.screen.request.list
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -15,6 +16,9 @@ import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailActivity
 import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailFragment
+import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailListener
+import ir.hossainkhademian.jobs.screen.request.edit.RequestEditActivity
+import ir.hossainkhademian.jobs.screen.request.edit.RequestEditListener
 import ir.hossainkhademian.util.ViewModels.getViewModel
 import ir.hossainkhademian.util.context
 import ir.hossainkhademian.util.launchActivity
@@ -26,7 +30,7 @@ import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.bundle
 
 
-class RequestListActivity : AppCompatActivity() {
+class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestEditListener {
   private val picasso = Picasso.get()!!
   private var twoPane: Boolean = false
   private lateinit var viewModel: RequestListViewModel
@@ -35,6 +39,7 @@ class RequestListActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    viewModel = getViewModel { RequestListViewModel() }
 
     setContentView(R.layout.activity_request_list_holder)
     twoPane = detailContainer != null
@@ -50,10 +55,12 @@ class RequestListActivity : AppCompatActivity() {
 
     setupRecyclerView()
 
-    viewModel = getViewModel { RequestListViewModel() }
 
-    viewModel.error.observe(this) { ex ->
-      Snackbar.make(recyclerView, "Error :\n${ex.message ?: ex.toString()}\n\nif it happens many times, contact support", Snackbar.LENGTH_LONG).show()
+    viewModel.error.observe(this) {
+      val ex = it.getContentIfNotHandled() ?: return@observe
+      Snackbar.make(recyclerView,
+        "Error :\n${ex.message ?: ex.toString()}\n\nif it happens many times, contact support",
+        Snackbar.LENGTH_LONG).show()
     }
 
     viewModel.requests.observe(this, emptyList()) { items ->
@@ -77,6 +84,37 @@ class RequestListActivity : AppCompatActivity() {
       }
       else -> super.onOptionsItemSelected(item)
     }
+
+  override fun onRequestDetailEdit(request: Request) {
+//    launchActivity<RequestEditActivity>(extras = *arrayOf(
+//      RequestEditFragment.ARG_REQUEST_ID to request.id
+//    ))
+  }
+
+  override fun onRequestDetailChat(request: Request, user: User) {
+//    if(user.isNotEmpty)
+//      launchActivity<ChatListActivity>(extras = *arrayOf(
+//        ChatDetailFragment.ARG_USER_ID to user.id,
+//        ChatDetailFragment.ARG_SINGLE_PANEL to true
+//      ))
+  }
+
+  override fun onRequestDetailCancel(request: Request) {
+    //finish()
+//    navigateUpTo(Intent(context, RequestListActivity::class.java))
+  }
+
+  override fun onRequestEditSubmit(request: Request, type: RequestType, job: Job, skills: Collection<Skill>, detail: String) {
+//    if (request.isNotEmpty)
+//      launchActivity<RequestEditActivity>(extras = *arrayOf(
+//        RequestEditFragment.ARG_REQUEST_ID to requestId
+//      ))
+  }
+
+  override fun onRequestEditCancel(request: Request) {
+    //finish()
+    //navigateUpTo(Intent(context, RequestListActivity::class.java))
+  }
 
   private fun setupRecyclerView() {
     recyclerView.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.VERTICAL }
@@ -167,7 +205,7 @@ class RequestListActivity : AppCompatActivity() {
     private fun showItem(item: LocalRequest, selected: Boolean) {
       val imageUrl = item.avatarUrl
 
-      view.setBackgroundColor(if (twoPane && selected) Color.parseColor("#3666") else 0)
+      view.setBackgroundColor(if (twoPane && selected) Color.parseColor("#33666666") else 0)
 
       avatarView.borderColor = view.context.resources.getColor(
         if (item.isWorker) R.color.color_request_worker

@@ -38,6 +38,8 @@ object Repository {
       return DataManager.jobs.observable
         // .subscribeOn(Schedulers.io())
         //.debounceAfter(1, 5, TimeUnit.SECONDS)
+        .observeOn(Schedulers.computation())
+        .map { it.sortedBy { it.title } }
         .observeOn(AndroidSchedulers.mainThread())
     }
   }
@@ -47,6 +49,8 @@ object Repository {
       return DataManager.skills.observable
         // .subscribeOn(Schedulers.io())
         //.debounceAfter(1, 5, TimeUnit.SECONDS)
+        .observeOn(Schedulers.computation())
+        .map { it.sortedBy { it.title } }
         .observeOn(AndroidSchedulers.mainThread()) // because we use memory storage (DataManager) it is useless but error reduces on future
     }
   }

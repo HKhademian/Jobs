@@ -17,8 +17,9 @@ object Texts {
   fun Long.getRelativeTime(context: Context) =
     DateUtils.getRelativeTimeSpanString(context, DateTime(this))
 
-  fun Activity.hideKeyboard() {
+  fun Activity.hideKeyboard() = try {
     val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputManager.hideSoftInputFromWindow(currentFocus.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+  } catch (ex: Exception) {
   }
 }

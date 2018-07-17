@@ -1,90 +1,127 @@
 package ir.hossainkhademian.jobs.screen.request.edit
 
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.support.v7.app.AlertDialog
-import ir.hossainkhademian.jobs.App
+import io.reactivex.disposables.Disposable
 import ir.hossainkhademian.jobs.data.Repository
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.dialog.JobSelectDialog
 import ir.hossainkhademian.jobs.dialog.SkillSelectDialog
-import ir.hossainkhademian.util.Observables.toLiveData
-import ir.hossainkhademian.util.LiveDatas.observe
+import ir.hossainkhademian.jobs.util.BaseViewModel
 
-internal class RequestEditViewModel(
-  val app: App,
-  val fragment: RequestEditFragment,
-  val requestId: ID
-) : AndroidViewModel(app) {
-  val request = Repository.Requests.findById(requestId).toLiveData()
-
+internal class RequestEditViewModel : BaseViewModel() {
+  val request: LiveData<LocalRequest> = MutableLiveData()
   val type: LiveData<RequestType> = MutableLiveData()
   val job: LiveData<Job> = MutableLiveData()
   val detail: LiveData<String> = MutableLiveData()
   val skills: LiveData<Set<Skill>> = MutableLiveData()
 
-  private val skillList = mutableSetOf<Skill>()
   private var jobSelectDialog: AlertDialog? = null
   private var skillsSelectDialog: AlertDialog? = null
+  private var disposable: Disposable? = null
+  var listener: RequestEditListener? = null
+
+
+  var requestId: ID
+    get() = request.value?.id ?: emptyID
+    set(requestId) {
+      request as MutableLiveData
+      type as MutableLiveData
+      job as MutableLiveData
+      detail as MutableLiveData
+      skills as MutableLiveData
+
+      disposable?.dispose()
+      disposable = Repository.Requests.findById(requestId).subscribe {
+        val item = it ?: EmptyRequest
+        val skillSet = skills.value as? MutableSet ?: mutableSetOf()
+
+        request.postValue(item)
+        type.postValue(item.type)
+        job.postValue(item.job)
+        detail.postValue(item.detail)
+
+        skillSet.clear()
+        skillSet += item.skills
+        skills.postValue(skillSet)
+      }
+    }
 
   init {
+    request as MutableLiveData
     type as MutableLiveData
     job as MutableLiveData
     detail as MutableLiveData
     skills as MutableLiveData
 
+    request.value = EmptyRequest
     type.value = RequestType.WORKER
     job.value = EmptyJob
-    skills.value = skillList
+    skills.value = mutableSetOf()
     detail.value = ""
-
-    request.observe(fragment, EmptyRequest) {
-      type.postValue(it.type)
-      job.postValue(it.job)
-      detail.postValue(it.detail)
-
-      skillList.clear()
-      skillList += it.skills
-      skills.postValue(skillList)
-    }
   }
 
   fun submit() {
-    fragment.onSubmitListener(requestId)
+    val skillSet = skills.value ?: emptySet()
+
+    listener?.onRequestEditSubmit(
+      request.value ?: EmptyRequest,
+      type.value ?: RequestType.WORKER,
+      job.value ?: EmptyJob,
+      skills.value ?: skillSet,
+      detail.value ?: ""
+    )
   }
 
   fun cancel() {
-    fragment.onCancelListener(requestId)
+    listener?.onRequestEditCancel(
+      request.value ?: EmptyRequest
+    )
   }
 
   fun selectJob() {
     job as MutableLiveData
 
-    jobSelectDialog?.dismiss()
-    jobSelectDialog = JobSelectDialog.show(fragment.context, job.value?.id ?: emptyID) {
-      job.postValue(it)
+    try {
       jobSelectDialog?.dismiss()
-      jobSelectDialog = null
+    } catch (e: Exception) {
+    }
+
+    postActivityTask { activity ->
+      jobSelectDialog = JobSelectDialog.show(activity, job.value?.id ?: emptyID) {
+        job.postValue(it)
+        jobSelectDialog?.dismiss()
+        jobSelectDialog = null
+      }
     }
   }
 
   fun addSkill() {
     skills as MutableLiveData
 
-    skillsSelectDialog?.dismiss()
-    skillsSelectDialog = SkillSelectDialog.show(fragment.context, skills.value?.mapId() ?: emptyList()) {
-      skillList += it
-      skills.postValue(skillList)
+    try {
       skillsSelectDialog?.dismiss()
-      skillsSelectDialog = null
+    } catch (e: Exception) {
+    }
+
+    postActivityTask { activity ->
+      skillsSelectDialog = SkillSelectDialog.show(activity, skills.value?.mapId() ?: emptyList()) {
+        val skillSet = skills.value as? MutableSet ?: mutableSetOf()
+        skillSet += it
+        skills.postValue(skillSet)
+        skillsSelectDialog?.dismiss()
+        skillsSelectDialog = null
+      }
     }
   }
 
   fun clearSkills() {
     skills as MutableLiveData
-    skillList.clear()
-    skills.postValue(skillList)
+    val skillSet = skills.value as? MutableSet ?: mutableSetOf()
+
+    skillSet.clear()
+    skills.postValue(skillSet)
   }
 
   fun clearDetail() {
@@ -94,8 +131,10 @@ internal class RequestEditViewModel(
 
   fun removeSkill(skillTitle: String?) {
     skills as MutableLiveData
-    skillList.removeAll { it.title == skillTitle }
-    skills.postValue(skillList)
+    val skillSet = skills.value as? MutableSet ?: mutableSetOf()
+
+    skillSet.removeAll { it.title == skillTitle }
+    skills.postValue(skillSet)
   }
 
   fun onDetailChanged(newDetail: String) {

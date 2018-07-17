@@ -5,25 +5,30 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import ir.hossainkhademian.jobs.data.Repository
 import ir.hossainkhademian.jobs.data.model.ID
+import ir.hossainkhademian.jobs.util.BaseViewModel
+import ir.hossainkhademian.util.Event
 import ir.hossainkhademian.util.Observables.toLiveData
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.CoroutineExceptionHandler
+import kotlinx.coroutines.experimental.DisposableHandle
 import kotlinx.coroutines.experimental.launch
 
-internal class RequestListViewModel : ViewModel() {
+internal class RequestListViewModel : BaseViewModel() {
   val requests = Repository.Requests.list().toLiveData()
   val selectedUserId: LiveData<ID> = MutableLiveData()
-  val error: LiveData<Throwable> = MutableLiveData()
   val isRefreshing: LiveData<Boolean> = MutableLiveData()
 
+  private var job: DisposableHandle? = null
   fun refresh() {
     error as MutableLiveData
     isRefreshing as MutableLiveData
 
+    job?.dispose()
+
     isRefreshing.postValue(true)
-    launch(CommonPool + CoroutineExceptionHandler { _, ex ->
+    job = launch(CommonPool + CoroutineExceptionHandler { _, ex ->
       isRefreshing.postValue(false)
-      error.postValue(ex)
+      error.postValue(Event(ex))
     }) {
       Repository.Requests.refresh()
     }.invokeOnCompletion {

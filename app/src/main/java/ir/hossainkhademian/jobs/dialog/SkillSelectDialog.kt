@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import io.reactivex.android.schedulers.AndroidSchedulers
+import android.widget.Toast
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.Repository
 import ir.hossainkhademian.jobs.data.model.ID
@@ -15,27 +15,35 @@ import ir.hossainkhademian.jobs.data.model.Skill
 import kotlinx.android.synthetic.main.item_dialog_skill.view.*
 
 object SkillSelectDialog {
-  fun show(context: Context, pastSelectionIds: Collection<ID> = emptyList(), listener: (Skill) -> Unit) =
-    builder(context, pastSelectionIds, listener).show()!!
+  fun show(context: Context, selectedIds: Collection<ID> = emptyList(), listener: (Skill) -> Unit) =
+    builder(context, selectedIds, listener).show()!!
 
-  private fun builder(context: Context, pastSelectionIds: Collection<ID> = emptyList(), listener: (Skill) -> Unit): AlertDialog.Builder {
-    val adapter = SkillAdapter(context, pastSelectionIds)
+  private fun builder(context: Context, selectedIds: Collection<ID> = emptyList(), listener: (Skill) -> Unit): AlertDialog.Builder {
+    val adapter = SkillAdapter(context, selectedIds)
     val job = Repository.Skills.list()
       .subscribe {
         adapter.items = it!!
-        // .filterNot { pastSelectionIds.contains(it.id) }
+        // .filterNot { selectedIds.contains(it.id) }
       }
     return AlertDialog.Builder(context)
       .setTitle("Select job from list below:")
       .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
       .setOnDismissListener { job.dispose() }
-      .setAdapter(adapter) { dialog, pos ->
-        listener(adapter.getItem(pos))
-        dialog.dismiss()
+      .setOnCancelListener { job.dispose() }
+      .setAdapter(adapter) { _, pos ->
+        val item = adapter.getItem(pos)
+        if (isItemSelected(item.id, selectedIds)) {
+          Toast.makeText(context, "You can't select item. it exists there!", Toast.LENGTH_SHORT).show()
+        } else {
+          listener(item)
+        }
       }
   }
 
-  private class SkillAdapter(val context: Context, val pastSelectionIds: Collection<ID> = emptyList(), items: List<Skill> = emptyList()) : BaseAdapter() {
+  private fun isItemSelected(itemId: ID, selectedIds: Collection<ID>) =
+    selectedIds.contains(itemId)
+
+  private class SkillAdapter(val context: Context, val selectedIds: Collection<ID> = emptyList(), items: List<Skill> = emptyList()) : BaseAdapter() {
     var items = items
       set(items) {
         field = items
@@ -52,10 +60,10 @@ object SkillSelectDialog {
       val view = convertView ?: LayoutInflater.from(context)
         .inflate(R.layout.item_dialog_skill, parent, false)
       val item = getItem(position)
-      val pastSelected = pastSelectionIds.contains(item.id)
+      val isSelected = isItemSelected(item.id, selectedIds)
 
       view.skillView.skill = item
-      view.skillView.setCardBackgroundColor(if (pastSelected) Color.parseColor("#3666") else 0)
+      view.skillView.setCardBackgroundColor(if (isSelected) Color.parseColor("#33666666") else 0)
 
       return view
     }

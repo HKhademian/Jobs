@@ -53,10 +53,12 @@ class ChatListActivity : AppCompatActivity() {
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     toolbar.title = title
+
 //    fab.setOnClickListener { view ->
 //      Snackbar.make(view, "Not Implemented yet!", Snackbar.LENGTH_LONG)
 //        .setAction("Action", null).show()
 //    }
+
     setupRecyclerView()
 
     if (userId != emptyID)
@@ -171,7 +173,7 @@ class ChatListActivity : AppCompatActivity() {
       val unreadCount = item.unreadChatCount
       val imageUrl = user.avatarUrl
 
-      view.setBackgroundColor(if (twoPane && selected) Color.parseColor("#3666") else 0)
+      view.setBackgroundColor(if (twoPane && selected) Color.parseColor("#33666666") else 0)
 
       Picasso.get().load(imageUrl).placeholder(R.drawable.ic_avatar).into(avatarView)
       titleView.text = user.title

@@ -1,9 +1,10 @@
 package ir.hossainkhademian.jobs.screen.request.edit
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.llollox.androidtoggleswitch.widgets.ToggleSwitch
@@ -14,7 +15,6 @@ import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.TextWatchers
 import ir.hossainkhademian.util.Texts.hideKeyboard
 import ir.hossainkhademian.util.ViewModels.getViewModel
-import kotlinx.android.synthetic.main.activity_request_edit.*
 import kotlinx.android.synthetic.main.fragment_request_edit.view.*
 
 class RequestEditFragment : BaseFragment() {
@@ -37,19 +37,17 @@ class RequestEditFragment : BaseFragment() {
   private val detailCard get() = rootView.detailCard
   private val detailView get() = rootView.detailView
 
-  val context get() = activity!!
-  var onSubmitListener: (ID) -> Unit = { }
-  var onCancelListener: (ID) -> Unit = { }
+//  override fun onCreate(savedInstanceState: Bundle?) {
+//    super.onCreate(savedInstanceState)
+//    val title = arguments?.getString(ARG_REQUEST_TITLE) ?: ""
+//    activity?.toolbar?.title = title
+//  }
 
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    val requestId = arguments?.getString(ARG_REQUEST_ID) ?: ""
-    val title = arguments?.getString(ARG_REQUEST_TITLE) ?: ""
-
-    viewModel = getViewModel { RequestEditViewModel(app, this, requestId) }
-
-    activity?.toolbar?.title = title
+  override fun onAttach(context: Context?) {
+    super.onAttach(context)
+    viewModel = getViewModel { RequestEditViewModel() }
+    viewModel.requestId = arguments?.getString(ARG_REQUEST_ID) ?: ""
+    viewModel.listener = context as? RequestEditListener
   }
 
   @SuppressLint("ClickableViewAccessibility")
@@ -78,6 +76,11 @@ class RequestEditFragment : BaseFragment() {
       viewModel.onDetailChanged(detailView.text.toString())
     })
 
+
+    viewModel.activity.observe(this) {
+      val task = it.getContentIfNotHandled() ?: return@observe
+      task.invoke(context as Activity)
+    }
 
     viewModel.request.observe(this, EmptyRequest) {
       typeView.isEnabled = it.isEmpty // create mode

@@ -1,6 +1,7 @@
 package ir.hossainkhademian.jobs.screen.request.detail
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -10,16 +11,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import com.llollox.androidtoggleswitch.widgets.ToggleSwitch
 import com.squareup.picasso.Picasso
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.screen.BaseFragment
-import ir.hossainkhademian.util.Collections.consume
 import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.ViewModels.getViewModel
-import kotlinx.android.synthetic.main.activity_request_detail.*
 import kotlinx.android.synthetic.main.fragment_request_detail.view.*
 import kotlinx.android.synthetic.main.item_request_broker.view.*
 
@@ -45,18 +43,17 @@ class RequestDetailFragment : BaseFragment() {
   private val brokerAdapter: BrokerAdapter = BrokerAdapter()
   private val matchesAdapter: MatchAdapter = MatchAdapter()
 
-  var onEditListener: (ID) -> Unit = { }
-  var onSendChatListener: (ID) -> Unit = { }
-  var onCancelListener: (ID) -> Unit = { }
+//  override fun onCreate(savedInstanceState: Bundle?) {
+//    super.onCreate(savedInstanceState)
+//    //val title = arguments?.getString(ARG_REQUEST_TITLE) ?: ""
+//    //activity?.toolbar?.title = title
+//  }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    val requestId = arguments?.getString(ARG_REQUEST_ID) ?: ""
-    val title = arguments?.getString(ARG_REQUEST_TITLE) ?: ""
-
-    viewModel = getViewModel { RequestDetailViewModel(app, this, requestId) }
-
-    activity?.toolbar?.title = title
+  override fun onAttach(context: Context?) {
+    super.onAttach(context)
+    viewModel = getViewModel { RequestDetailViewModel() }
+    viewModel.requestId = arguments?.getString(ARG_REQUEST_ID) ?: ""
+    viewModel.listener = context as? RequestDetailListener
   }
 
   @SuppressLint("ClickableViewAccessibility")
@@ -90,7 +87,7 @@ class RequestDetailFragment : BaseFragment() {
       recyclerView.itemAnimator = DefaultItemAnimator()
     }
 
-    viewModel.request.observe(this, EmptyRequest, ::setRequest)
+    viewModel.request.observe(this) { setRequest(it) }
     return rootView
   }
 
@@ -154,7 +151,7 @@ class RequestDetailFragment : BaseFragment() {
 
     init {
       view.setOnClickListener {
-        viewModel.sendChat(item.id)
+        viewModel!!.sendChat(item)
       }
     }
 
@@ -168,7 +165,7 @@ class RequestDetailFragment : BaseFragment() {
     }
   }
 
-  private class MatchViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+  private class MatchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val titleView = view as TextView
 
     var item: LocalMatch = EmptyMatch

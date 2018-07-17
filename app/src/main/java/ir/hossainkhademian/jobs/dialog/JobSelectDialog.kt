@@ -7,21 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.Repository
-import ir.hossainkhademian.jobs.data.model.EmptyJob
 import ir.hossainkhademian.jobs.data.model.ID
 import ir.hossainkhademian.jobs.data.model.Job
 import ir.hossainkhademian.jobs.data.model.emptyID
 import kotlinx.android.synthetic.main.item_dialog_job.view.*
 
 object JobSelectDialog {
-  fun show(context: Context, pastSelectionId: ID = emptyID, listener: (Job) -> Unit) =
-    builder(context, pastSelectionId, listener).show()!!
+  fun show(context: Context, selectedId: ID = emptyID, listener: (Job) -> Unit) =
+    builder(context, selectedId, listener).show()!!
 
-  private fun builder(context: Context, pastSelectionId: ID = emptyID, listener: (Job) -> Unit): AlertDialog.Builder {
-    val adapter = JobAdapter(context, pastSelectionId)
+  private fun builder(context: Context, selectedId: ID = emptyID, listener: (Job) -> Unit): AlertDialog.Builder {
+    val adapter = JobAdapter(context, selectedId)
     val job = Repository.Jobs.list()
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe { adapter.items = it }
@@ -30,13 +30,21 @@ object JobSelectDialog {
       .setTitle("Select job from list below:")
       .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
       .setOnDismissListener { job.dispose() }
-      .setAdapter(adapter) { dialog, pos ->
-        listener(adapter.getItem(pos))
-        dialog.dismiss()
+      .setOnCancelListener { job.dispose() }
+      .setAdapter(adapter) { _, pos ->
+        val item = adapter.getItem(pos)
+        if (isItemSelected(item.id, selectedId)) {
+          Toast.makeText(context, "You can't select item!", Toast.LENGTH_SHORT).show()
+        } else {
+          listener(item)
+        }
       }
   }
 
-  private class JobAdapter(val context: Context, val pastSelectionId: ID = emptyID, items: List<Job> = emptyList()) : BaseAdapter() {
+  private fun isItemSelected(itemId: ID, selectedId: ID) =
+    selectedId == itemId
+
+  private class JobAdapter(val context: Context, val selectedId: ID = emptyID, items: List<Job> = emptyList()) : BaseAdapter() {
     var items = items
       set(items) {
         field = items
@@ -53,10 +61,10 @@ object JobSelectDialog {
       val view = convertView ?: LayoutInflater.from(context)
         .inflate(R.layout.item_dialog_job, parent, false)
       val item = getItem(position)
-      val pastSelected = item.id == pastSelectionId
+      val isSelected = isItemSelected(item.id, selectedId)
 
       view.jobView.job = item
-      view.jobView.setCardBackgroundColor(if (pastSelected) Color.parseColor("#3666") else 0)
+      view.jobView.setCardBackgroundColor(if (isSelected) Color.parseColor("#33666666") else 0)
 
       return view
     }

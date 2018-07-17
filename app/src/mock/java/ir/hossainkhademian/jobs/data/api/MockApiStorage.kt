@@ -55,7 +55,16 @@ internal object MockApiStorage {
       "fullstackdev" to "FullStack Developer",
       "crossdev" to "CrossPlatform App Developer",
       "gamedesigner" to "Game Designer",
-      "gamedev" to "Game Developer").forEach {
+      "gamedev" to "Game Developer",
+      "robotDev" to "Robot Developer",
+      "phpDev" to "Php Server Developer",
+      "perstaDev" to "Perstashop Plugin Developer",
+      "androidGameDesigner" to "Android Game Designer",
+      "cleaner" to "Cleaning Services",
+      "guard" to "Guard",
+      "clerk" to "Office Clerk",
+      "typeman" to "Type guy"
+    ).forEach {
       store.items += JobMock(
         id = it.first,
         title = it.second
@@ -67,7 +76,15 @@ internal object MockApiStorage {
     arrayOf("Android", "Kotlin", "Database",
       "iOS", "Dart", "Flutter", "React",
       "ReactNative", "NodeJS", "Server",
-      "Mobile", "Desktop").forEach {
+      "Mobile", "Desktop", "Python", "SQL",
+      "Database", "Test", "UI", "UX", "Java Script",
+      "JQuery", "CSS", "LESS", "SASS", "Coffee",
+      "PHP", "Scala", "Ruby", "C++", "C", "Delphi",
+      "Arduino", "IoT", "ARM", "Atmel", "Code Vision",
+      "Debug", "Support", "Robotics", "AI", "Machine Learning",
+      "C#", "J#", ".Net", "Visual Basic", "VB.Net", "TypeScript",
+      "PhotoShop", "Office", "Excel", "Access", "Word", "PowerPoint",
+      "Skype", "OutLook", "Publisher", "Paint").forEach {
       store.items += SkillMock(
         id = it.toLowerCase(),
         title = it

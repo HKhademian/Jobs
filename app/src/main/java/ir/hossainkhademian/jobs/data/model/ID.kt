@@ -17,7 +17,11 @@ val generateID: ID get() = UUID.randomUUID().toString()
 val IdModel.idStr
   get() = id.toString()
 
-val IdModel.isEmpty get() = id == emptyID
+val ID.isEmpty get() = this == emptyID
+val ID.isNotEmpty get() = this != emptyID
+
+val IdModel.isEmpty get() = id.isEmpty
+val IdModel.isNotEmpty get() = id.isNotEmpty
 
 interface IdModel {
   val id: ID
