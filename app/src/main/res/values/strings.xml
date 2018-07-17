@@ -67,4 +67,10 @@
   <string name="action_select">Select</string>
   <string name="hint_request_skill_remove">Tap on skill to remove</string>
   <string name="hint_request_skill_add">To add skills press \'Add\' button</string>
+
+  <string name="navigation_drawer_open">Open navigation drawer</string>
+  <string name="navigation_drawer_close">Close navigation drawer</string>
+  <string name="nav_header_title">Android Studio</string>
+  <string name="nav_header_subtitle">android.studio@android.com</string>
+  <string name="nav_header_desc">Navigation header</string>
 </resources>

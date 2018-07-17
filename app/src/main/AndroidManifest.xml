@@ -32,8 +32,7 @@
       android:launchMode="singleInstance"/>
     <activity
       android:name=".screen.dashboard.DashboardActivity"
-      android:launchMode="singleInstance"
-      android:theme="@style/AppTheme"/>
+      android:launchMode="singleInstance"/>
     <activity
       android:name=".screen.splash.SplashActivity"
       android:launchMode="singleInstance">
