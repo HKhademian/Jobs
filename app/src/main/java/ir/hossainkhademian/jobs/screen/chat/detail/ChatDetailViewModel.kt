@@ -2,7 +2,11 @@ package ir.hossainkhademian.jobs.screen.chat.detail
 
 import android.arch.lifecycle.*
 import com.vdurmont.emoji.EmojiParser
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
+import io.reactivex.internal.disposables.DisposableContainer
+import io.reactivex.rxkotlin.plusAssign
 import ir.hossainkhademian.jobs.data.Repository
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.util.BaseViewModel
@@ -11,6 +15,7 @@ import ir.hossainkhademian.util.LiveDatas.map
 import kotlinx.coroutines.experimental.*
 
 internal class ChatDetailViewModel : BaseViewModel() {
+  val contact: LiveData<LocalUser> = MutableLiveData()
   val chats: LiveData<List<LocalChat>> = MutableLiveData()
   val messageField: LiveData<String> = MutableLiveData()
   val isSending: LiveData<Boolean> = MutableLiveData()
@@ -23,19 +28,27 @@ internal class ChatDetailViewModel : BaseViewModel() {
   var contactId: ID = emptyID
     set(contactId) {
       field = contactId
-      this.chats as MutableLiveData
+      contact as MutableLiveData
+      chats as MutableLiveData
 
       disposable?.dispose()
-      disposable = Repository.Chats.listsByContact(contactId).subscribe {
-        this.chats.postValue(it ?: emptyList())
-        markAsSeen()
-      }
+
+      disposable = CompositeDisposable(
+        Repository.Chats.getContact(contactId).subscribe {
+          contact.postValue(it ?: EmptyUser)
+        },
+        Repository.Chats.listsByContact(contactId).subscribe {
+          chats.postValue(it ?: emptyList())
+          markAsSeen()
+        }
+      )
     }
 
-  fun init() {
+  fun init(contactId: ID = emptyID) {
     messageField as MutableLiveData
     isSending as MutableLiveData
 
+    this.contactId = contactId
     messageField.postValue("")
     isSending.postValue(false)
   }

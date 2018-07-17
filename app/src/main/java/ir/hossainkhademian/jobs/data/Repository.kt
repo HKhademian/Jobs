@@ -56,6 +56,17 @@ object Repository {
   }
 
   object Chats {
+    fun getContact(userId: ID): Observable<LocalUser> {
+      return DataManager.users.observable
+        // .subscribeOn(Schedulers.io())
+        //.debounceAfter(1, 5, TimeUnit.SECONDS)
+        .observeOn(Schedulers.computation())
+        .map { users ->
+          users.findById(userId) ?: EmptyUser
+        }
+        .observeOn(AndroidSchedulers.mainThread())
+    }
+
     fun listsByContact(userId: ID): Observable<List<LocalChat>> {
       return DataManager.chats.observable
         // .subscribeOn(Schedulers.io())
@@ -80,7 +91,13 @@ object Repository {
             .groupBy { it.contactId }
             .filterNot { it.key == AccountManager.id }
             .map { (contactId, contactChats) ->
-              UserChat(users.getById(contactId), contactChats.last(), contactChats.filterUnseen().count())
+              val lastChat = contactChats.first()
+              val unseenCount = contactChats.filterUnseen().count()
+
+              val badge = if (unseenCount > 0) "$unseenCount" else ""
+              val time = lastChat.time
+
+              UserChat(users.getById(contactId), lastChat, badge, time)
             }
         }
         .observeOn(AndroidSchedulers.mainThread())

@@ -18,6 +18,9 @@ import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.screen.BaseFragment
 import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.ViewModels.getViewModel
+
+import kotlinx.android.synthetic.main.activity_request_list_holder.toolbar as listToolbar
+import kotlinx.android.synthetic.main.activity_request_detail.toolbar as toolbar
 import kotlinx.android.synthetic.main.fragment_request_detail.view.*
 import kotlinx.android.synthetic.main.item_request_broker.view.*
 
@@ -43,18 +46,16 @@ class RequestDetailFragment : BaseFragment() {
   private val brokerAdapter: BrokerAdapter = BrokerAdapter()
   private val matchesAdapter: MatchAdapter = MatchAdapter()
 
-//  override fun onCreate(savedInstanceState: Bundle?) {
-//    super.onCreate(savedInstanceState)
-//    //val title = arguments?.getString(ARG_REQUEST_TITLE) ?: ""
-//    //activity?.toolbar?.title = title
-//  }
-
   override fun onAttach(context: Context?) {
     super.onAttach(context)
     viewModel = getViewModel { RequestDetailViewModel() }
     viewModel.init()
     viewModel.requestId = arguments?.getString(ARG_REQUEST_ID) ?: emptyID
     viewModel.listener = context as? RequestDetailListener
+    arguments?.getString(ARG_TITLE)?.let {
+      listToolbar?.title = it
+      toolbar?.title = it
+    }
   }
 
   @SuppressLint("ClickableViewAccessibility")

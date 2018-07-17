@@ -29,10 +29,11 @@ class UserView : CardView {
       field = item
 
       titleView.text = item.title
-      subtitleView.text = "ID: ${item.id}"
+      subtitleView.text = "Last Seen: ${item.lastSeen.getRelativeTime(context)}"
 
       badgeView.text = item.role.key
-      lastSeenView.text = item.lastSeen.getRelativeTime(context)
+      lastSeenView.text = ""
+
       Picasso.get().load(item.avatarUrl).placeholder(R.drawable.ic_avatar).into(avatarView)
     }
 }

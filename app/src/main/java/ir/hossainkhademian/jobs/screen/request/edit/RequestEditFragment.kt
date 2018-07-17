@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.fragment_request_edit.view.*
 class RequestEditFragment : BaseFragment() {
   companion object {
     const val ARG_REQUEST_ID = ARG_ID
-    const val ARG_REQUEST_TITLE = ARG_TITLE
   }
 
   private lateinit var viewModel: RequestEditViewModel
@@ -36,12 +35,6 @@ class RequestEditFragment : BaseFragment() {
   private val skillsView get() = rootView.skillsView
   private val detailCard get() = rootView.detailCard
   private val detailView get() = rootView.detailView
-
-//  override fun onCreate(savedInstanceState: Bundle?) {
-//    super.onCreate(savedInstanceState)
-//    val title = arguments?.getString(ARG_REQUEST_TITLE) ?: ""
-//    activity?.toolbar?.title = title
-//  }
 
   override fun onAttach(context: Context?) {
     super.onAttach(context)

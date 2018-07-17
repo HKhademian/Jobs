@@ -2,7 +2,8 @@ package ir.hossainkhademian.jobs.data.model
 
 import com.squareup.moshi.Json
 
-private fun generateAvatarUrl(id: ID): String {
+private fun generateAvatarUrl(id: ID): String? {
+  if (id.isEmpty) return null
   val i = id.sumBy { it.toInt() } // id.toInt() //
   val index = i % 50
   val gender = "men" // if (i % 2 == 0) "women" else "men"
@@ -15,7 +16,7 @@ private fun generateAvatarUrl(id: ID): String {
 //
 
 val EmptyUser = UserData(id = emptyID, lastSeen = 0L)
-val User.avatarUrl: String get() = generateAvatarUrl(id)
+val User.avatarUrl get() = generateAvatarUrl(id)
 val User.isAdmin get() = role == UserRole.Admin
 val User.isBroker get() = role == UserRole.Broker
 val User.isUser get() = role == UserRole.User

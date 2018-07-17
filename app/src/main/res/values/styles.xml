@@ -16,21 +16,37 @@
     <item name="windowNoTitle">true</item>
   </style>
 
-
-  <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
-  <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-
   <style name="WindowAnimationStyle">
     <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
     <item name="android:windowExitAnimation">@android:anim/fade_out</item>
   </style>
 
+  <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+  <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+
   <style name="TextAppearance">
     <item name="android:fontFamily">@font/iransans</item>
   </style>
 
+  <style name="CardView.Hidden" parent="CardView">
+    <item name="android:background">@null</item>
+    <item name="cardBackgroundColor">@null</item>
+    <item name="cardCornerRadius">0dp</item>
+    <item name="cardElevation">0dp</item>
+    <item name="cardPreventCornerOverlap">false</item>
+  </style>
+
   <style name="CardView.Light.Hidden" parent="CardView.Light">
+    <item name="android:background">@null</item>
+    <item name="cardBackgroundColor">@null</item>
+    <item name="cardCornerRadius">0dp</item>
+    <item name="cardElevation">0dp</item>
+    <item name="cardPreventCornerOverlap">false</item>
+  </style>
+
+  <style name="CardView.Dark.Hidden" parent="CardView.Dark">
     <item name="android:background">@null</item>
     <item name="cardBackgroundColor">@null</item>
     <item name="cardCornerRadius">0dp</item>

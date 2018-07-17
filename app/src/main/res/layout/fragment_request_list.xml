@@ -15,5 +15,7 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    tools:listitem="@layout/item_request_list"/>
+    tools:listitem="@layout/item_request_list"
+    android:layoutAnimation="@anim/layout_animation_fall_down"
+  />
 </android.support.v4.widget.SwipeRefreshLayout>

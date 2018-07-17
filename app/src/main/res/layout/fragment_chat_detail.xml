@@ -116,6 +116,8 @@
     android:layout_height="0dp"
     android:layout_weight="1"
     tools:visibility="invisible"
+    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+    android:orientation="vertical"
     app:layout_constraintBottom_toTopOf="@id/chat_bar"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_chainStyle="packed"/>

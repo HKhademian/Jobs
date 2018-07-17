@@ -3,7 +3,8 @@ package ir.hossainkhademian.jobs.data.model
 class UserChat(
   val user: LocalUser,
   val lastChat: LocalChat,
-  val unreadChatCount: Int
+  val badge: String,
+  val time: Long
 )
 
-val EmptyUserChat = UserChat(EmptyUser, EmptyChat, 0)
+val EmptyUserChat = UserChat(EmptyUser, EmptyChat, "", System.currentTimeMillis())

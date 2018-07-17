@@ -17,8 +17,18 @@
     <android.support.v7.widget.Toolbar
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      app:popupTheme="@style/AppTheme.PopupOverlay"/>
+      android:layout_height="wrap_content"
+      app:popupTheme="@style/AppTheme.PopupOverlay">
+      <ir.hossainkhademian.jobs.view.UserView
+        android:id="@+id/userView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        app:cardBackgroundColor="@color/colorPrimary"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="0dp"
+        app:cardPreventCornerOverlap="false"/>
+    </android.support.v7.widget.Toolbar>
 
   </android.support.design.widget.AppBarLayout>
 

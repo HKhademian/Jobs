@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.squareup.picasso.Picasso
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
@@ -27,6 +28,7 @@ import kotlinx.android.synthetic.main.activity_request_list.*
 import kotlinx.android.synthetic.main.fragment_request_list.*
 import kotlinx.android.synthetic.main.item_request_list.view.*
 import ir.hossainkhademian.util.LiveDatas.observe
+import ir.hossainkhademian.util.activity
 import ir.hossainkhademian.util.bundle
 
 
@@ -55,7 +57,6 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
 
     setupRecyclerView()
 
-
     viewModel.error.observe(this) {
       val ex = it.getContentIfNotHandled() ?: return@observe
       Snackbar.make(recyclerView,
@@ -73,6 +74,7 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
 
     viewModel.isRefreshing.observe(this, false) { isRefreshing ->
       swipeRefreshLayout.isRefreshing = isRefreshing
+      Toast.makeText(activity!!, "isRefreshing:$isRefreshing", Toast.LENGTH_SHORT).show()
     }
   }
 
@@ -94,7 +96,7 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
   override fun onRequestDetailChat(request: Request, user: User) {
 //    if(user.isNotEmpty)
 //      launchActivity<ChatListActivity>(extras = *arrayOf(
-//        ChatDetailFragment.ARG_USER_ID to user.id,
+//        ChatDetailFragment.ARG_CONTACT_ID to user.id,
 //        ChatDetailFragment.ARG_SINGLE_PANEL to true
 //      ))
   }
@@ -123,6 +125,7 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
     recyclerView.adapter = adapter
 
     swipeRefreshLayout.setOnRefreshListener {
+      Toast.makeText(activity!!, "Refreshing", Toast.LENGTH_SHORT).show()
       viewModel.refresh()
     }
   }
@@ -130,6 +133,7 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
   private fun onItemSelected(item: LocalRequest) {
     viewModel.postSelectedId(item.id)
     showRequestDetail(item)
+    viewModel.postSelectedId(item.id)
   }
 
   private fun showRequestDetail(item: LocalRequest) {

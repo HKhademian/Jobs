@@ -7,6 +7,7 @@ import android.view.MenuItem
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.screen.request.list.RequestListActivity
+import ir.hossainkhademian.util.bundle
 import ir.hossainkhademian.util.context
 import kotlinx.android.synthetic.main.activity_request_edit.*
 
@@ -15,19 +16,15 @@ class RequestEditActivity : AppCompatActivity(), RequestEditListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_request_edit)
 
-    // Show the Up button_accent in the action bar.
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     if (savedInstanceState == null) {
-      //val requestId = intent.getStringExtra(RequestEditFragment.ARG_REQUEST_ID) ?: emptyID
-      //val title = intent.getStringExtra(RequestEditFragment.ARG_REQUEST_TITLE) ?: ""
+      val requestId = intent.getStringExtra(RequestEditFragment.ARG_REQUEST_ID) ?: emptyID
 
       val fragment = RequestEditFragment().apply {
-        arguments = intent.extras // forward
+        arguments = bundle(RequestEditFragment.ARG_REQUEST_ID to requestId)
       }
-
-      //toolbar.title = title
 
       supportFragmentManager.beginTransaction()
         .replace(R.id.detailContainer, fragment)

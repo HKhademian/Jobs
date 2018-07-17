@@ -2,8 +2,11 @@ package ir.hossainkhademian.jobs.screen.dashboard
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v7.app.ActionBarDrawerToggle
+import android.view.MenuItem
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.dialog.WhatsNewDialog
 import ir.hossainkhademian.jobs.screen.BaseActivity
@@ -13,10 +16,27 @@ import ir.hossainkhademian.util.Collections.consume
 import ir.hossainkhademian.util.launchActivity
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
-class DashboardActivity : BaseActivity() {
+class DashboardActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
   private var currentFragment: Fragment? = null
 
-  private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_dashboard)
+
+    setSupportActionBar(toolbar)
+    val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+    drawer_layout.addDrawerListener(toggle)
+    toggle.syncState()
+
+    bottomNavigation.setOnNavigationItemSelectedListener(this)
+    navigationView.setNavigationItemSelectedListener(this)
+
+    initWhatsNew()
+
+    showAbout()
+  }
+
+  override fun onNavigationItemSelected(item: MenuItem) =
     when (item.itemId) {
       R.id.navigation_about -> consume {
         showAbout()
@@ -31,17 +51,7 @@ class DashboardActivity : BaseActivity() {
         Snackbar.make(container, "Not Implemented yet!", Snackbar.LENGTH_LONG).show()
       }
     }
-  }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_dashboard)
-
-    initWhatsNew()
-
-    navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
-    showAbout()
-  }
 
   private fun initWhatsNew() {
     WhatsNewDialog

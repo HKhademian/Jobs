@@ -14,44 +14,36 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import ir.hossainkhademian.jobs.R
-import ir.hossainkhademian.jobs.data.model.isSender
 import ir.hossainkhademian.jobs.screen.BaseFragment
 import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.TextWatchers.TextWatcher
 import ir.hossainkhademian.util.ViewModels.getViewModel
-import kotlinx.android.synthetic.main.fragment_chat_detail.view.*
-import kotlinx.android.synthetic.main.item_chat_detail.view.*
 import android.content.ClipData
 import android.content.Context
-import ir.hossainkhademian.jobs.data.model.EmptyChat
-import ir.hossainkhademian.jobs.data.model.LocalChat
+import android.view.animation.AnimationUtils
+import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.util.Texts
 import ir.hossainkhademian.util.Texts.getRelativeTime
 import ir.hossainkhademian.util.Texts.isEmoji
 import ir.hossainkhademian.util.Texts.hideKeyboard
+import kotlinx.android.synthetic.main.fragment_chat_detail.view.*
+import kotlinx.android.synthetic.main.item_chat_detail.view.*
 
 
 class ChatDetailFragment : BaseFragment() {
   companion object {
-    const val ARG_USER_ID = "user.id"
-    const val ARG_USER_TITLE = "user.title"
-    const val ARG_SINGLE_PANEL = "singlePanel"
+    const val ARG_CONTACT_ID = ARG_ID
   }
 
   private lateinit var viewModel: ChatDetailViewModel
   private var rootView: View? = null
-
-//  override fun onCreate(savedInstanceState: Bundle?) {
-//    super.onCreate(savedInstanceState)
-//    activity?.toolbar?.title = arguments?.getString(ARG_USER_TITLE) ?: ""
-//  }
+  private val adapter = ItemAdapter()
 
   override fun onAttach(context: Context?) {
     super.onAttach(context)
     viewModel = getViewModel { ChatDetailViewModel() }
-    viewModel.init()
+    viewModel.init(arguments?.getString(ARG_ID) ?: emptyID)
     viewModel.listener = context as? ChatDetailListener
-    viewModel.contactId = arguments?.getString(ARG_USER_ID) ?: ""
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,15 +55,6 @@ class ChatDetailFragment : BaseFragment() {
     val emojiAction = rootView.emojiAction
     val mediaAction = rootView.mediaAction
 
-    recyclerView.layoutManager = LinearLayoutManager(activity).apply {
-      orientation = LinearLayoutManager.VERTICAL
-      reverseLayout = false
-      stackFromEnd = false
-    }
-    recyclerView.itemAnimator = DefaultItemAnimator()
-    // recyclerView.addItemDecoration(DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL))
-
-    val adapter = ItemAdapter(inflater, viewModel.chats.value ?: emptyList())
     recyclerView.adapter = adapter
 
     messageField.addTextChangedListener(TextWatcher {
@@ -103,7 +86,7 @@ class ChatDetailFragment : BaseFragment() {
 
     }
 
-    viewModel.chats.observe(this, emptyList()) { chats ->
+    viewModel.chats.observe(this) { chats ->
       adapter.items = chats
       adapter.notifyDataSetChanged()
       recyclerView.scrollToPosition(adapter.items.size - 1)
@@ -131,7 +114,7 @@ class ChatDetailFragment : BaseFragment() {
     return rootView
   }
 
-  private inner class ItemAdapter(val inflater: LayoutInflater, items: List<LocalChat> = emptyList()) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+  private inner class ItemAdapter(items: List<LocalChat> = emptyList()) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
     var items = items
       set(items) {
         field = items
@@ -139,7 +122,8 @@ class ChatDetailFragment : BaseFragment() {
       }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-      ViewHolder(inflater.inflate(R.layout.item_chat_detail, parent, false))
+      ViewHolder(LayoutInflater.from(parent.context)
+        .inflate(R.layout.item_chat_detail, parent, false))
 
     override fun getItemCount() =
       items.size
@@ -155,6 +139,7 @@ class ChatDetailFragment : BaseFragment() {
       private val messageView = view.messageView!!
       private val emojiView = view.emojiView!!
       private val timeView = view.timeView!!
+      private val animation = AnimationUtils.loadAnimation(context, R.anim.emoji)
 
       var item: LocalChat = EmptyChat
         set(value) {
@@ -191,8 +176,10 @@ class ChatDetailFragment : BaseFragment() {
         chatCard.setCardBackgroundColor(context.resources.getColor(color))
         chatCard.visibility = if (isEmoji) View.GONE else View.VISIBLE
 
-        emojiView.visibility = if (!isEmoji) View.GONE else View.VISIBLE
         emojiView.text = item.message
+        emojiView.visibility = if (!isEmoji) View.GONE else View.VISIBLE
+        if (isEmoji) emojiView.startAnimation(animation)
+        else emojiView.clearAnimation()
 
         messageView.text = item.message
 

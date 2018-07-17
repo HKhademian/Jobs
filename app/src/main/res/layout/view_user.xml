@@ -38,7 +38,8 @@
       android:maxLines="1"
       android:singleLine="true"
       android:text="@string/app_name"
-      android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+      android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+      android:textStyle="bold"/>
 
     <TextView
       android:id="@+id/subtitleView"
@@ -55,6 +56,7 @@
       android:maxLines="1"
       android:singleLine="true"
       android:textAppearance="@style/TextAppearance.AppCompat.Small"
+      android:textStyle="bold"
       tools:text="@string/app_name"/>
 
     <TextView
@@ -66,13 +68,17 @@
       app:layout_constraintBaseline_toBaselineOf="@id/titleView"
       app:layout_constraintStart_toEndOf="@id/titleView"
       app:layout_constraintEnd_toEndOf="parent"
-      android:padding="2dp"
+      android:paddingTop="2dp"
+      android:paddingBottom="2dp"
+      android:paddingLeft="4dp"
+      android:paddingRight="4dp"
       android:gravity="start|center_vertical"
       android:maxLines="1"
       android:singleLine="true"
       android:textAppearance="@style/TextAppearance.AppCompat.Small"
       android:background="@color/colorAccent"
       android:textColor="@color/icons"
+      android:textStyle="bold"
       tools:text="@string/app_name"/>
 
     <TextView

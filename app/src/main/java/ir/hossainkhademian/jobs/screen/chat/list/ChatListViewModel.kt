@@ -10,6 +10,7 @@ import ir.hossainkhademian.jobs.util.BaseViewModel
 import ir.hossainkhademian.util.Observables.toLiveData
 
 internal class ChatListViewModel : BaseViewModel() {
+  val contact = Repository.Chats.listUserChats().toLiveData()
   val userChats = Repository.Chats.listUserChats().toLiveData()
   val selectedId: LiveData<ID> = MutableLiveData()
 

@@ -6,12 +6,12 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
+import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailActivity
 import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailFragment
-import ir.hossainkhademian.jobs.screen.chat.list.ChatListActivity
 import ir.hossainkhademian.jobs.screen.request.edit.RequestEditActivity
 import ir.hossainkhademian.jobs.screen.request.edit.RequestEditFragment
-import ir.hossainkhademian.jobs.screen.request.edit.RequestEditListener
 import ir.hossainkhademian.jobs.screen.request.list.RequestListActivity
+import ir.hossainkhademian.util.bundle
 import ir.hossainkhademian.util.context
 import ir.hossainkhademian.util.launchActivity
 import kotlinx.android.synthetic.main.activity_request_detail.*
@@ -21,19 +21,15 @@ class RequestDetailActivity : AppCompatActivity(), RequestDetailListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_request_detail)
 
-    // Show the Up button_accent in the action bar.
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     if (savedInstanceState == null) {
-      // val requestId = intent.getStringExtra(RequestDetailFragment.ARG_REQUEST_ID) ?: emptyID
-      // val title = intent.getStringExtra(RequestDetailFragment.ARG_REQUEST_TITLE) ?: ""
+      val requestId = intent.getStringExtra(RequestDetailFragment.ARG_REQUEST_ID) ?: emptyID
 
       val fragment = RequestDetailFragment().apply {
-        arguments = intent.extras // forward
+        arguments = bundle(RequestDetailFragment.ARG_REQUEST_ID to requestId)
       }
-
-      // toolbar.title = title
 
       supportFragmentManager.beginTransaction()
         .replace(R.id.detailContainer, fragment)
@@ -57,10 +53,9 @@ class RequestDetailActivity : AppCompatActivity(), RequestDetailListener {
   }
 
   override fun onRequestDetailChat(request: Request, user: User) {
-    if(user.isNotEmpty)
-      launchActivity<ChatListActivity>(extras = *arrayOf(
-        ChatDetailFragment.ARG_USER_ID to user.id,
-        ChatDetailFragment.ARG_SINGLE_PANEL to true
+    if (user.isNotEmpty)
+      launchActivity<ChatDetailActivity>(extras = *arrayOf(
+        ChatDetailFragment.ARG_CONTACT_ID to user.id
       ))
   }
 

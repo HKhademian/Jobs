@@ -17,6 +17,8 @@ import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailActivity
 import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailFragment
+import ir.hossainkhademian.util.Collections
+import ir.hossainkhademian.util.Collections.consume
 import ir.hossainkhademian.util.ViewModels.getViewModel
 import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.context
@@ -39,15 +41,6 @@ class ChatListActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     viewModel = getViewModel { ChatListViewModel() }
 
-    val userId = intent.getStringExtra(ChatDetailFragment.ARG_USER_ID) ?: emptyID
-    val userTitle = intent.getStringExtra(ChatDetailFragment.ARG_USER_TITLE) ?: ""
-    val singlePanel = intent.getBooleanExtra(ChatDetailFragment.ARG_SINGLE_PANEL, false)
-    if (userId != emptyID && singlePanel) {
-      sendMessageTo(false, userId, userTitle)
-      finish()
-      return
-    }
-
     setContentView(R.layout.activity_chat_list_holder)
 
     twoPane = detailContainer != null
@@ -55,15 +48,14 @@ class ChatListActivity : AppCompatActivity() {
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     toolbar.title = title
 
-//    fab.setOnClickListener { view ->
-//      Snackbar.make(view, "Not Implemented yet!", Snackbar.LENGTH_LONG)
-//        .setAction("Action", null).show()
-//    }
+    recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+    recyclerView.adapter = adapter
 
-    setupRecyclerView()
-
-    if (intent == null && userId != emptyID)
-      sendMessageTo(twoPane, userId, userTitle)
+    if (savedInstanceState == null) {
+      viewModel.init()
+      val selectedId = intent.getStringExtra(ChatDetailFragment.ARG_CONTACT_ID) ?: emptyID
+      if (twoPane) sendMessageTo(selectedId)
+    }
 
     viewModel.userChats.observe(this) { userChats ->
       adapter.items = userChats
@@ -74,33 +66,12 @@ class ChatListActivity : AppCompatActivity() {
     }
   }
 
-  override fun onOptionsItemSelected(item: MenuItem) =
-    when (item.itemId) {
-      android.R.id.home -> {
-        NavUtils.navigateUpFromSameTask(this)
-        true
-      }
-      else -> super.onOptionsItemSelected(item)
-    }
-
-  private fun setupRecyclerView() {
-    recyclerView.itemAnimator = DefaultItemAnimator()
-    recyclerView.layoutManager = LinearLayoutManager(this).apply { orientation = LinearLayoutManager.VERTICAL }
-    recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-    recyclerView.adapter = adapter
-  }
-
-  private fun onItemSelected(item: UserChat) {
-    val user = item.user
-    sendMessageTo(twoPane, user.idStr, user.title)
-  }
-
-  private fun sendMessageTo(twoPane: Boolean, userId: ID, userTitle: String) {
+  private fun sendMessageTo(userId: ID) {
+    if (userId.isEmpty) return
     if (twoPane) {
       val fragment = ChatDetailFragment().apply {
         arguments = bundleOf(
-          ChatDetailFragment.ARG_USER_TITLE to userTitle,
-          ChatDetailFragment.ARG_USER_ID to userId
+          ChatDetailFragment.ARG_CONTACT_ID to userId
         )
       }
       supportFragmentManager
@@ -109,10 +80,23 @@ class ChatListActivity : AppCompatActivity() {
         .commit()
     } else {
       launchActivity<ChatDetailActivity>(extras = *arrayOf(
-        ChatDetailFragment.ARG_USER_TITLE to userTitle,
-        ChatDetailFragment.ARG_USER_ID to userId
+        ChatDetailFragment.ARG_CONTACT_ID to userId
       ))
     }
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem) =
+    when (item.itemId) {
+      android.R.id.home -> consume {
+        NavUtils.navigateUpFromSameTask(this)
+      }
+      else -> super.onOptionsItemSelected(item)
+    }
+
+  private fun onItemSelected(item: UserChat) {
+    val user = item.user
+    sendMessageTo(user.idStr)
+    viewModel.postSelectedId(item.user.id)
   }
 
 
@@ -169,22 +153,25 @@ class ChatListActivity : AppCompatActivity() {
 
     private fun showItem(item: UserChat, selected: Boolean) {
       val user = item.user
-      val unreadCount = item.unreadChatCount
+      val badge = item.badge
       val imageUrl = user.avatarUrl
 
       view.setBackgroundColor(if (twoPane && selected) Color.parseColor("#33666666") else 0)
 
       Picasso.get().load(imageUrl).placeholder(R.drawable.ic_avatar).into(avatarView)
-      titleView.text = user.title
-      lastSeenView.text = user.lastSeen.getRelativeTime(context)
-      badgeView.text = "$unreadCount"
-      badgeView.visibility = if (unreadCount > 0) View.VISIBLE else View.GONE
 
-      val messagePrefix = if (item.lastChat.isSender) "you" else "to you"
+      titleView.text = user.title
+
+      val you = "you: "
       subtitleView.text = when {
         item.lastChat.isEmpty -> "Click to start chat with him/her" // rare occurrence
-        else -> "$messagePrefix: ${item.lastChat.message}"
+        else -> "${if (item.lastChat.isSender) you else ""}${item.lastChat.message.trim()}"
       }
+
+      badgeView.text = badge
+      badgeView.visibility = if (badge.isNotEmpty) View.VISIBLE else View.GONE
+
+      lastSeenView.text = user.lastSeen.getRelativeTime(context)
     }
   }
 
