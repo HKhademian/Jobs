@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 private fun generateAvatarUrl(id: ID): String {
   val i = id.sumBy { it.toInt() } // id.toInt() //
   val index = i % 50
-  val gender = if (i % 2 == 0) "women" else "men"
+  val gender = "men" // if (i % 2 == 0) "women" else "men"
   return "https://randomuser.me/api/portraits/$gender/$index.jpg"
 }
 
