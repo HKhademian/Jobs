@@ -76,8 +76,8 @@ internal object MockApiStorage {
   }
 
   private fun initUsers(store: MockStore<LoginMock>) {
-    (1 until 3).forEach {
-      val index = "0$it"
+    (10 until 20).forEach {
+      val index = "$it"
       val id = "admin$index"
       store.items += LoginMock(
         id = id,
@@ -89,8 +89,8 @@ internal object MockApiStorage {
         lastSeen = fakeTime(10)
       )
     }
-    (1 until 5).forEach {
-      val index = "0$it"
+    (10 until 30).forEach {
+      val index = "$it"
       val id = "broker$index"
       store.items += LoginMock(
         id = id,
@@ -103,13 +103,13 @@ internal object MockApiStorage {
       )
     }
 
-    (10 until 35).forEach {
-      val index = "0$it"
+    (10 until 50).forEach {
+      val index = "$it"
       val id = "user$index"
       store.items += LoginMock(
         id = id,
         title = "User $index",
-        phone = "+982222222$index",
+        phone = "+9822222222$index",
         roleStr = UserRole.User.key,
         accessToken = "$id.$generateID",
         refreshToken = "$id.$generateID",

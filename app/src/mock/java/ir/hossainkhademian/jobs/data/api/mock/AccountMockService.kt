@@ -109,7 +109,7 @@ object AccountMockService : AccountService {
           time = MockApiStorage.fakeTime(),
           jobId = job.id,
           skillIds = skills.map { it.id },
-          brokerIds = MockApiStorage.users.items.filterIsBroker().shuffled().take(MockApiStorage.random.nextInt(3)).mapId()
+          brokerIds = MockApiStorage.users.items.filterIsBroker().shuffled().take(2 + MockApiStorage.random.nextInt(3)).mapId()
         )
         MockApiStorage.requests.update(request)
       }
