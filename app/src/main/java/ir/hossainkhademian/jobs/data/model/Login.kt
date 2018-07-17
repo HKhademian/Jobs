@@ -17,6 +17,8 @@ interface Login : User {
   val accessToken: String
 }
 
+interface LocalLogin : Login
+
 class LoginData(
   id: ID = generateID,
   title: String = "",
@@ -25,7 +27,7 @@ class LoginData(
   @Json(name = "phone") override val phone: String = "",
   @Json(name = "refreshToken") override val refreshToken: String = "",
   @Json(name = "accessToken") override val accessToken: String = ""
-) : UserData(id, title, lastSeen, roleStr), Login {
+) : UserData(id, title, lastSeen, roleStr), LocalLogin {
   override val role get() = UserRole.from(roleStr)
 }
 

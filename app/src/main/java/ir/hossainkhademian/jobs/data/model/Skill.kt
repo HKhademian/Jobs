@@ -14,10 +14,12 @@ interface Skill : IdModel {
   val title: String
 }
 
+interface LocalSkill : Skill
+
 class SkillData(
   @Json(name = "id") override val id: ID = generateID,
   @Json(name = "title") override val title: String = ""
-) : Skill
+) : LocalSkill
 
 fun Skill.toData() = when (this) {
   is SkillData -> this

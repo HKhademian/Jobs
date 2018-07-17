@@ -18,6 +18,8 @@ interface Request : IdModel {
   val brokerIds: List<ID>
 }
 
+interface LocalRequest : Request
+
 enum class RequestType(val key: String) {
   WORKER("worker"), COMPANY("company");
 
@@ -30,30 +32,30 @@ enum class RequestType(val key: String) {
   }
 }
 
-val Request.user get() = DataManager.users.findById(userId) ?: EmptyUser
-val Request.job get() = DataManager.jobs.findById(jobId) ?: EmptyJob
-val Request.skills get() = DataManager.skills.filterById(skillIds)
-val Request.brokers get() = DataManager.users.filterById(brokerIds)
-val Request.matches get() = DataManager.matches.filterByRequest(type, id)
+val LocalRequest.user get() = DataManager.users.findById(userId) ?: EmptyUser
+val LocalRequest.job get() = DataManager.jobs.findById(jobId) ?: EmptyJob
+val LocalRequest.skills get() = DataManager.skills.filterById(skillIds)
+val LocalRequest.brokers get() = DataManager.users.filterById(brokerIds)
+val LocalRequest.matches get() = DataManager.matches.filterByRequest(type, id)
 
 val RequestType.isWorker get() = this == RequestType.WORKER
 val RequestType.isCompany get() = this == RequestType.COMPANY
 val Request.isWorker get() = type.isWorker
 val Request.isCompany get() = type.isCompany
 
-val Request.title
+val LocalRequest.title
   get() = when (type) {
 //  RequestType.WORKER-> "`${user.title}` seeks Job for `${job.title}`"
 //  RequestType.COMPANY-> "`${user.title}` seeks Worker for `${job.title}`"
     RequestType.WORKER -> "`${job.title}` is here from `${user.title}`"
     RequestType.COMPANY -> "`${job.title}` is need from `${user.title}`"
   }
-val Request.subtitle
+val LocalRequest.subtitle
   get() = when (type) {
     RequestType.WORKER -> "has ${skills.joinToString(" , ") { "`${it.title}`" }} skills"
     RequestType.COMPANY -> "needs ${skills.joinToString(" , ") { "`${it.title}`" }} skills"
   }
-val Request.avatarUrl get() = job.avatarUrl
+val LocalRequest.avatarUrl get() = job.avatarUrl
 
 class RequestData(
   @Json(name = "id") override val id: ID = generateID,
@@ -64,7 +66,7 @@ class RequestData(
   @Json(name = "jobId") override val jobId: ID = emptyID,
   @Json(name = "skillIds") override val skillIds: List<ID> = emptyList(),
   @Json(name = "brokerIds") override val brokerIds: List<ID> = emptyList()
-) : Request {
+) : LocalRequest {
   override val type: RequestType get() = RequestType.from(typeStr)
 }
 

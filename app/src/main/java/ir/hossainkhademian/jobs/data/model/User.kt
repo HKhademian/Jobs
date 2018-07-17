@@ -27,6 +27,8 @@ interface User : IdModel {
   val role: UserRole
 }
 
+interface LocalUser : User
+
 enum class UserRole(val key: String) {
   User("user"), Broker("broker"), Admin("admin");
 
@@ -44,7 +46,7 @@ open class UserData(
   @Json(name = "title") override val title: String = "",
   @Json(name = "lastSeen") override val lastSeen: Long = System.currentTimeMillis(),
   @Json(name = "role") open val roleStr: String = UserRole.User.key
-) : User {
+) : LocalUser {
   override val role get() = UserRole.from(roleStr)
 }
 

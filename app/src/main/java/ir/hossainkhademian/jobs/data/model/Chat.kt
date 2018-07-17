@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import ir.hossainkhademian.jobs.data.AccountManager
 import ir.hossainkhademian.jobs.data.DataManager
 
-val EmptyChat = ChatData(id = emptyID, unseen = false, time = 0)
+val EmptyChat: Chat = ChatData(id = emptyID, unseen = false, time = 0)
 
 interface Chat : IdModel {
   override val id: ID
@@ -13,14 +13,28 @@ interface Chat : IdModel {
   val message: String
   val unseen: Boolean
   val time: Long
+}
 
-  val seen: Boolean
-
+interface LocalChat : Chat {
   val direction get() = getDirection(AccountManager.id)
   val sender get() = DataManager.users.findById(senderId) ?: EmptyUser
   val receiver get() = DataManager.users.findById(receiverId) ?: EmptyUser
 
+  val seen: Boolean
 }
+
+enum class ChatDirection(val key: String) {
+  SEND("send"), RECEIVE("receive");
+
+  companion object {
+    fun from(direction: String) = when (direction.toLowerCase()) {
+      SEND.key.toLowerCase() -> SEND
+      RECEIVE.key.toLowerCase() -> RECEIVE
+      else -> SEND // throw RuntimeException("bad value")
+    }
+  }
+}
+
 
 fun Chat.getDirection(userId: ID) = when (userId) {
   senderId -> ChatDirection.SEND
@@ -36,21 +50,10 @@ fun Chat.getContactId(userId: ID) = when (userId) {
 
 fun Chat.isSended(userId: ID) = getDirection(userId) == ChatDirection.SEND
 fun Chat.isReceived(userId: ID) = getDirection(userId) == ChatDirection.RECEIVE
-val Chat.isSended get() = isSended(AccountManager.id)
-val Chat.isReceived get() = isReceived(AccountManager.id)
-val Chat.contactId get() = getContactId(AccountManager.id)
+val LocalChat.isSended get() = isSended(AccountManager.id)
+val LocalChat.isReceived get() = isReceived(AccountManager.id)
+val LocalChat.contactId get() = getContactId(AccountManager.id)
 
-enum class ChatDirection(val key: String) {
-  SEND("send"), RECEIVE("receive");
-
-  companion object {
-    fun from(direction: String) = when (direction.toLowerCase()) {
-      SEND.key.toLowerCase() -> SEND
-      RECEIVE.key.toLowerCase() -> RECEIVE
-      else -> SEND // throw RuntimeException("bad value")
-    }
-  }
-}
 
 open class ChatData(
   @Json(name = "id") override val id: ID = generateID,
@@ -59,7 +62,7 @@ open class ChatData(
   @Json(name = "messageField") override val message: String = "",
   @Json(name = "unseen") override var unseen: Boolean = true,
   @Json(name = "time") override val time: Long = System.currentTimeMillis()
-) : Chat {
+) : LocalChat {
   @Suppress("LeakingThis")
   override val seen: Boolean = !unseen
 
@@ -107,13 +110,8 @@ fun <T : Chat> Iterable<T>.filterByContactId(contactId: ID) =
 fun <T : Chat> Iterable<T>.filterByUserContactId(userId: ID, contactId: ID) =
   filter { (it.senderId == userId && it.receiverId == contactId) || (it.senderId == contactId && it.receiverId == userId) }
 
-fun <T : Chat> Iterable<T>.filterUnseen() =
+fun <T : LocalChat> Iterable<T>.filterUnseen() =
   filter { it.isReceived && it.unseen }
-
-//fun <T : Chat> Iterable<T>.filterSeen() =
-//  filter { it.isSended || if (it is ChatData) it.seen == true else !it.unseen }
-//fun <T : Chat> Iterable<T>.filterNotSeen() =
-//  filterNot { it.isSended || if (it is ChatData) it.seen == true else !it.unseen }
 
 fun <T : Chat> Iterable<T>.distinctUserId() =
   map { it.senderId }

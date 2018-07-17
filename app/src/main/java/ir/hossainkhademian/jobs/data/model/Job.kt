@@ -16,11 +16,13 @@ interface Job : IdModel {
   val title: String
 }
 
+interface LocalJob : Job
+
 
 class JobData(
   @Json(name = "id") override val id: ID = generateID,
   @Json(name = "title") override val title: String = ""
-) : Job
+) : LocalJob
 
 fun <T : Job> Iterable<T>.toData() = map { it.toData() }
 

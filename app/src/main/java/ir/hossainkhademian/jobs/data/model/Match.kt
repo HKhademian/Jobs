@@ -23,6 +23,9 @@ interface Match : IdModel {
   val companyNote: String
 }
 
+interface LocalMatch : Match {
+}
+
 enum class MatchState(val key: String) {
   Waiting("waiting"),
   Accepted("accepted"),
@@ -37,9 +40,9 @@ enum class MatchState(val key: String) {
   }
 }
 
-val Match.broker get() = DataManager.users.findById(brokerId)
-val Match.workerRequest get() = DataManager.requests.findById(workerRequestId)
-val Match.companyRequest get() = DataManager.requests.findById(companyRequestId)
+val LocalMatch.broker get() = DataManager.users.findById(brokerId)
+val LocalMatch.workerRequest get() = DataManager.requests.findById(workerRequestId)
+val LocalMatch.companyRequest get() = DataManager.requests.findById(companyRequestId)
 
 val Match.state
   get() = when {
@@ -48,14 +51,14 @@ val Match.state
     else -> MatchState.Waiting
   }
 
-fun Match.getNote(userId: ID) = when (userId) {
+fun LocalMatch.getNote(userId: ID) = when (userId) {
   brokerId -> brokerNote
   workerRequest?.userId -> workerNote
   companyRequest?.userId -> companyNote
   else -> ""
 }
 
-val Match.note get() = getNote(AccountManager.id)
+val LocalMatch.note get() = getNote(AccountManager.id)
 val Match.isRejected get() = brokerState.isRejected || workerState.isRejected || companyState.isRejected
 val Match.isAccepted get() = brokerState.isAccepted && workerState.isAccepted && companyState.isAccepted
 val MatchState.isRejected get() = this == MatchState.Rejected
@@ -76,7 +79,7 @@ class MatchData(
   @Json(name = "companyRequestId") override val companyRequestId: ID = emptyID,
   @Json(name = "companyState") override val companyState: MatchState = MatchState.Waiting,
   @Json(name = "companyNote") override val companyNote: String = ""
-) : Match
+) : LocalMatch
 
 fun Match.toData() = when (this) {
   is MatchData -> this
@@ -114,11 +117,11 @@ fun <T : Match> Iterable<T>.filterByCompanyRequestId(requestId: ID) =
 fun <T : Match> Iterable<T>.filterByBrokerId(userId: ID) =
   filter { it.brokerId == userId }
 
-fun <T : Match> Iterable<T>.filterByWorkerId(userId: ID) =
+fun <T : LocalMatch> Iterable<T>.filterByWorkerId(userId: ID) =
   filter { it.workerRequest?.userId == userId }
 
-fun <T : Match> Iterable<T>.filterByCompanyId(userId: ID) =
+fun <T : LocalMatch> Iterable<T>.filterByCompanyId(userId: ID) =
   filter { it.companyRequest?.userId == userId }
 
-fun <T : Match> Iterable<T>.filterByUserId(userId: ID) =
+fun <T : LocalMatch> Iterable<T>.filterByUserId(userId: ID) =
   filter { it.brokerId == userId || it.workerRequest?.userId == userId || it.companyRequest?.userId == userId }
