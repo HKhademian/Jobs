@@ -4,7 +4,6 @@ package ir.hossainkhademian.jobs.data.api
 
 import ir.hossainkhademian.jobs.data.model.ID
 import ir.hossainkhademian.jobs.data.model.MatchData
-import ir.hossainkhademian.jobs.data.model.SkillData
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.PUT

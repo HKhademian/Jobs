@@ -23,8 +23,8 @@ class LoginData(
   lastSeen: Long = System.currentTimeMillis(),
   roleStr: String = UserRole.User.key,
   @Json(name = "phone") override val phone: String = "",
-  @Json(name = "accessToken") override val accessToken: String = "",
-  @Json(name = "refreshToken") override val refreshToken: String = ""
+  @Json(name = "refreshToken") override val refreshToken: String = "",
+  @Json(name = "accessToken") override val accessToken: String = ""
 ) : UserData(id, title, lastSeen, roleStr), Login {
   override val role get() = UserRole.from(roleStr)
 }

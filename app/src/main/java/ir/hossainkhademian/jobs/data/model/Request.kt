@@ -57,7 +57,7 @@ val Request.avatarUrl get() = job.avatarUrl
 
 class RequestData(
   @Json(name = "id") override val id: ID = generateID,
-  @Json(name = "requestId") override val userId: ID = emptyID,
+  @Json(name = "userId") override val userId: ID = emptyID,
   @Json(name = "type") val typeStr: String = "",
   @Json(name = "detail") override val detail: String = "",
   @Json(name = "time") override val time: Long = System.currentTimeMillis(),
