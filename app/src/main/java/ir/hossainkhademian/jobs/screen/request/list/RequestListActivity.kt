@@ -60,6 +60,10 @@ class RequestListActivity : AppCompatActivity() {
       adapter.items = items
     }
 
+    viewModel.selectedUserId.observe(this, emptyID) { selectedId ->
+      adapter.selectedId = selectedId
+    }
+
     viewModel.isRefreshing.observe(this, false) { isRefreshing ->
       swipeRefreshLayout.isRefreshing = isRefreshing
     }

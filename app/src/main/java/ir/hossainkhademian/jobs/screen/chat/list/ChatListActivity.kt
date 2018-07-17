@@ -149,7 +149,7 @@ class ChatListActivity : AppCompatActivity() {
     private val lastSeenView = view.lastSeenView
     private val badgeView = view.badgeView
 
-    var item: UserChat = Pair(EmptyUser, 0)
+    var item: UserChat = EmptyUserChat
       set(item) {
         field = item
         showItem(item, selected)
@@ -168,7 +168,7 @@ class ChatListActivity : AppCompatActivity() {
 
     private fun showItem(item: UserChat, selected: Boolean) {
       val user = item.user
-      val unreadCount = item.unreadCount
+      val unreadCount = item.unreadChatCount
       val imageUrl = user.avatarUrl
 
       view.setBackgroundColor(if (twoPane && selected) Color.parseColor("#3666") else 0)

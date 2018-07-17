@@ -65,10 +65,10 @@ object Repository {
         .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun listUserChats(): Observable<List<Pair<LocalUser, Int>>> {
+    fun listUserChats(): Observable<List<UserChat>> {
       return Observables.combineLatest(DataManager.chats.observable, DataManager.users.observable) { chats, users -> chats to users }
         // .subscribeOn(Schedulers.io())
-        .throttleWithTimeoutAfter(1, 5, TimeUnit.SECONDS)
+        //.throttleWithTimeoutAfter(1, 5, TimeUnit.SECONDS)
         .observeOn(Schedulers.computation())
         .map { (chats, users) ->
           chats
@@ -76,7 +76,7 @@ object Repository {
             .groupBy { it.contactId }
             .filterNot { it.key == AccountManager.id }
             .map { (contactId, contactChats) ->
-              users.getById(contactId) to contactChats.filterUnseen().count()
+              UserChat(users.getById(contactId), contactChats.last(), contactChats.filterUnseen().count())
             }
         }
         .observeOn(AndroidSchedulers.mainThread())

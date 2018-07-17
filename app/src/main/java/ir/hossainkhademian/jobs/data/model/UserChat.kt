@@ -5,3 +5,5 @@ class UserChat(
   val lastChat: Chat,
   val unreadChatCount: Int
 )
+
+val EmptyUserChat = UserChat(EmptyUser, EmptyChat, 0)
