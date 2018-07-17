@@ -2,16 +2,8 @@ package ir.hossainkhademian.jobs.dialog
 
 import android.content.Context
 import android.support.v7.app.AlertDialog
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
-import io.reactivex.android.schedulers.AndroidSchedulers
 import ir.hossainkhademian.jobs.R
-import ir.hossainkhademian.jobs.data.Repository
-import ir.hossainkhademian.jobs.data.model.Job
 import ir.hossainkhademian.jobs.data.model.Request
-import kotlinx.android.synthetic.main.item_dialog_job.view.*
 
 object JobCancelDialog {
   fun <T : Request> show(context: Context, item: T, listener: (T) -> Unit) =

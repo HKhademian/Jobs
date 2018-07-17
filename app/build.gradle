@@ -176,7 +176,14 @@ dependencies {
   */
   implementation 'io.github.tonnyl:whatsnew:0.1.1'
 
-
+  /*
+   * calligraphy3: Custom global fonts
+   * viewPump: calligraphy3 dependency to inject views
+   * https://github.com/InflationX/Calligraphy
+   * https://github.com/InflationX/ViewPump
+   */
+  //  implementation 'io.github.inflationx:calligraphy3:3.0.0'
+  //  implementation 'io.github.inflationx:viewpump:1.0.0'
 }
 
 kotlin {

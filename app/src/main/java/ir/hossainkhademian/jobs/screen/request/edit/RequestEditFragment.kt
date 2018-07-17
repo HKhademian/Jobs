@@ -46,7 +46,8 @@ class RequestEditFragment : BaseFragment() {
   override fun onAttach(context: Context?) {
     super.onAttach(context)
     viewModel = getViewModel { RequestEditViewModel() }
-    viewModel.requestId = arguments?.getString(ARG_REQUEST_ID) ?: ""
+    viewModel.init()
+    viewModel.requestId = arguments?.getString(ARG_REQUEST_ID) ?: emptyID
     viewModel.listener = context as? RequestEditListener
   }
 

@@ -6,15 +6,20 @@ import android.arch.lifecycle.ViewModel
 import ir.hossainkhademian.jobs.data.Repository
 import ir.hossainkhademian.jobs.data.model.ID
 import ir.hossainkhademian.jobs.data.model.emptyID
+import ir.hossainkhademian.jobs.util.BaseViewModel
 import ir.hossainkhademian.util.Observables.toLiveData
 
-internal class ChatListViewModel(selectedUserId: ID = emptyID) : ViewModel() {
+internal class ChatListViewModel : BaseViewModel() {
   val userChats = Repository.Chats.listUserChats().toLiveData()
-  val selectedUserId: LiveData<ID> = MutableLiveData()
+  val selectedId: LiveData<ID> = MutableLiveData()
 
-  init {
-    this.selectedUserId as MutableLiveData
+  fun init() {
+    this.selectedId as MutableLiveData
 
-    this.selectedUserId.postValue(selectedUserId)
+    this.selectedId.postValue(emptyID)
+  }
+
+  fun postSelectedId(id: ID) {
+    (selectedId as MutableLiveData).postValue(id)
   }
 }

@@ -21,7 +21,7 @@ class RequestDetailActivity : AppCompatActivity(), RequestDetailListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_request_detail)
 
-    // Show the Up button in the action bar.
+    // Show the Up button_accent in the action bar.
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

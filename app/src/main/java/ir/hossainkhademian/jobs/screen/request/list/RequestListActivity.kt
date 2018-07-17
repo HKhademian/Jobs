@@ -67,7 +67,7 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
       adapter.items = items
     }
 
-    viewModel.selectedUserId.observe(this, emptyID) { selectedId ->
+    viewModel.selectedId.observe(this, emptyID) { selectedId ->
       adapter.selectedId = selectedId
     }
 
@@ -128,6 +128,7 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
   }
 
   private fun onItemSelected(item: LocalRequest) {
+    viewModel.postSelectedId(item.id)
     showRequestDetail(item)
   }
 

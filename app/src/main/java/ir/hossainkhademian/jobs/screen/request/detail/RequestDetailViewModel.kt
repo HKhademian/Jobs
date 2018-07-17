@@ -24,6 +24,10 @@ internal class RequestDetailViewModel : BaseViewModel() {
         }
     }
 
+  fun init() {
+    requestId = emptyID
+  }
+
   fun edit() {
     listener?.onRequestDetailEdit(request.value ?: EmptyRequest)
   }

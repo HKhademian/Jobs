@@ -9,30 +9,26 @@ import ir.hossainkhademian.jobs.data.model.emptyID
 import ir.hossainkhademian.jobs.screen.chat.list.ChatListActivity
 import kotlinx.android.synthetic.main.activity_chat_detail.*
 
-class ChatDetailActivity : AppCompatActivity() {
-
+class ChatDetailActivity : AppCompatActivity(), ChatDetailListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_chat_detail)
 
-    // Show the Up button in the action bar.
+    // Show the Up button_accent in the action bar.
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     if (savedInstanceState == null) {
-      val userId = intent.getStringExtra(ChatDetailFragment.ARG_USER_ID) ?: emptyID
-      val title = intent.getStringExtra(ChatDetailFragment.ARG_USER_TITLE) ?: ""
+      //  val userId = intent.getStringExtra(ChatDetailFragment.ARG_USER_ID) ?: emptyID
+      //  val title = intent.getStringExtra(ChatDetailFragment.ARG_USER_TITLE) ?: ""
 
       //Picasso.get().list(generateAvatarUrl(requestId)).placeholder(R.drawable.ic_avatar).into(avatar_view)
 
       val fragment = ChatDetailFragment().apply {
-        arguments = intent.extras/* bundle(
-          RequestEditFragment.ARG_REQUEST_ID to requestId,
-          RequestEditFragment.ARG_REQUEST_TITLE to title
-        )*/
+        arguments = intent.extras // forward
       }
 
-      toolbar.title = title
+  //      toolbar.title = title
 
       supportFragmentManager.beginTransaction()
         .replace(R.id.detailContainer, fragment)

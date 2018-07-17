@@ -37,6 +37,7 @@ class ChatListActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    viewModel = getViewModel { ChatListViewModel() }
 
     val userId = intent.getStringExtra(ChatDetailFragment.ARG_USER_ID) ?: emptyID
     val userTitle = intent.getStringExtra(ChatDetailFragment.ARG_USER_TITLE) ?: ""
@@ -61,17 +62,15 @@ class ChatListActivity : AppCompatActivity() {
 
     setupRecyclerView()
 
-    if (userId != emptyID)
+    if (intent == null && userId != emptyID)
       sendMessageTo(twoPane, userId, userTitle)
-
-    viewModel = getViewModel { ChatListViewModel(userId) }
 
     viewModel.userChats.observe(this) { userChats ->
       adapter.items = userChats
     }
 
-    viewModel.selectedUserId.observe(this) { selectedUserId ->
-      adapter.selectedId = selectedUserId
+    viewModel.selectedId.observe(this) { selectedId ->
+      adapter.selectedId = selectedId
     }
   }
 

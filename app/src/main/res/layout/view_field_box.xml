@@ -48,7 +48,7 @@
         android:padding="8dp"
         android:maxLines="1"
         android:singleLine="true"
-        android:textColor="@color/button"
+        android:textColor="@color/button_accent"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"/>
 
       <TextView
@@ -62,7 +62,7 @@
         android:padding="8dp"
         android:maxLines="1"
         android:singleLine="true"
-        android:textColor="@color/button"
+        android:textColor="@color/button_accent"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"/>
 
       <TextView
@@ -76,7 +76,7 @@
         android:padding="8dp"
         android:maxLines="1"
         android:singleLine="true"
-        android:textColor="@color/button"
+        android:textColor="@color/button_accent"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"/>
     </LinearLayout>
 

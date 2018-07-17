@@ -15,7 +15,7 @@ class RequestEditActivity : AppCompatActivity(), RequestEditListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_request_edit)
 
-    // Show the Up button in the action bar.
+    // Show the Up button_accent in the action bar.
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

@@ -5,16 +5,17 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:padding="12dp"
+  android:padding="6dp"
   tools:context=".screen.chat.list.ChatListActivity">
 
   <de.hdodenhof.circleimageview.CircleImageView
     android:id="@+id/avatarView"
-    android:layout_width="96dp"
-    android:layout_height="96dp"
+    android:layout_width="74dp"
+    android:layout_height="74dp"
+    android:layout_margin="4dp"
     android:src="@drawable/ic_avatar"
-    app:civ_border_color="@color/colorPrimaryDark"
-    app:civ_border_width="1dp"
+    app:civ_border_color="@color/colorPrimaryLight"
+    app:civ_border_width="0.75dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
@@ -71,7 +72,7 @@
     android:paddingRight="8dp"
     android:paddingTop="2dp"
     android:paddingBottom="2dp"
-    android:background="@color/colorAccent"
+    android:background="@color/colorPrimaryDark"
     android:textColor="@color/colorIcons"
     android:textAppearance="@style/TextAppearance.AppCompat.Small"
   />
@@ -90,6 +91,6 @@
     android:maxLines="1"
     android:singleLine="true"
     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-    android:textColor="@color/colorAccent"/>
+    android:textColor="@color/colorPrimaryDark"/>
 
 </android.support.constraint.ConstraintLayout>

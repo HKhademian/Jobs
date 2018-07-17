@@ -11,6 +11,10 @@ import android.support.multidex.MultiDex
 import com.chibatching.kotpref.Kotpref
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.picasso.Picasso
+//import io.github.inflationx.calligraphy3.CalligraphyConfig
+//import io.github.inflationx.calligraphy3.CalligraphyInterceptor
+//import io.github.inflationx.viewpump.ViewPump
+//import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import ir.hossainkhademian.jobs.data.Repository.initRepository
 import ir.hossainkhademian.util.LocaleManager.initLocalManager
 import ir.hossainkhademian.util.LocaleManager.updateLocale
@@ -32,12 +36,23 @@ class App : Application() {
       .loggingEnabled(true)
       .build())
 
+//    ViewPump.init(ViewPump.builder()
+//      .addInterceptor(CalligraphyInterceptor(
+//        CalligraphyConfig.Builder()
+//          .setDefaultFontPath("fonts/iransans.ttf")
+//          .setFontAttrId(R.attr.fontPath)
+//          .build()
+//      )).build())
+
     initLocalManager("en-US")//("fa-IR")
     initRepository()
   }
 
   override fun attachBaseContext(base: Context) {
-    super.attachBaseContext(base.updateLocale())
+    var context = base
+    context = context.updateLocale() // load saved locale
+//    context = ViewPumpContextWrapper.wrap(context) // ViewPump view injector
+    super.attachBaseContext(context)
     MultiDex.install(this)
   }
 

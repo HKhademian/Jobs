@@ -48,7 +48,7 @@ internal class RequestEditViewModel : BaseViewModel() {
       }
     }
 
-  init {
+  fun init() {
     request as MutableLiveData
     type as MutableLiveData
     job as MutableLiveData

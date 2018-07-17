@@ -6,8 +6,13 @@ import android.view.inputmethod.InputMethodManager
 import com.vdurmont.emoji.EmojiManager
 import net.danlew.android.joda.DateUtils
 import org.joda.time.DateTime
+import ir.hossainkhademian.util.Collections.pickRandom
+import ir.hossainkhademian.util.Collections.random
 
 object Texts {
+  private val emojis = arrayOf(
+    "😀", "🤣", "😅", "😊", "😍", "😘", "😋", "😆", "😃", "😁", "😂", "😄", "😉", "😎", "😗", "🎈", "🎆", "🎇", "🎊", "🎉", "✨", "🎃", "🎄", "🎋", "🎏", "🎎", "🎍", "🎐", "🎑", "🎀", "🎁", "🎪", "🎨", "🎭", "🍕", "🍔", "🍟", "🥓", "🍿", "🌭", "🥚", "🥞", "🍳", "🥨", "🥐", "🍞", "🥖", "🧀", "🥗", "🌮", "🥪", "🥙", "🌯", "🥫"
+  )
   //  val emojiPattern = "/[\u2190-\u21FF]|[\u2600-\u26FF]|[\u2700-\u27BF]|[\u3000-\u303F]|[\u1F300-\u1F64F]|[\u1F680-\u1F6FF]/g".toRegex()
 //  val String.isEmoji get() = matches(emojyPattern)
 //  val String.containsEmoji get() = contains(emojyPattern)
@@ -22,4 +27,13 @@ object Texts {
     inputManager.hideSoftInputFromWindow(currentFocus.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
   } catch (ex: Exception) {
   }
+
+  val randomEmoji
+    get() = emojis[random.nextInt(emojis.size)]
+
+  fun getRandomEmojis(n: Int = 10) =
+    emojis.pickRandom(n, n)
+
+  fun getRandomEmojis(min: Int = 1, max: Int = 10) =
+    emojis.pickRandom(min, max)
 }

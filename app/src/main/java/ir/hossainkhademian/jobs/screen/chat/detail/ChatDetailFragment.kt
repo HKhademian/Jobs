@@ -1,5 +1,6 @@
 package ir.hossainkhademian.jobs.screen.chat.detail
 
+import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
 import android.content.ClipboardManager
 import android.os.Build
@@ -18,13 +19,13 @@ import ir.hossainkhademian.jobs.screen.BaseFragment
 import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.TextWatchers.TextWatcher
 import ir.hossainkhademian.util.ViewModels.getViewModel
-import kotlinx.android.synthetic.main.activity_chat_detail.*
 import kotlinx.android.synthetic.main.fragment_chat_detail.view.*
 import kotlinx.android.synthetic.main.item_chat_detail.view.*
 import android.content.ClipData
 import android.content.Context
 import ir.hossainkhademian.jobs.data.model.EmptyChat
 import ir.hossainkhademian.jobs.data.model.LocalChat
+import ir.hossainkhademian.util.Texts
 import ir.hossainkhademian.util.Texts.getRelativeTime
 import ir.hossainkhademian.util.Texts.isEmoji
 import ir.hossainkhademian.util.Texts.hideKeyboard
@@ -40,22 +41,27 @@ class ChatDetailFragment : BaseFragment() {
   private lateinit var viewModel: ChatDetailViewModel
   private var rootView: View? = null
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    activity?.toolbar?.title = arguments?.getString(ARG_USER_TITLE) ?: ""
+//  override fun onCreate(savedInstanceState: Bundle?) {
+//    super.onCreate(savedInstanceState)
+//    activity?.toolbar?.title = arguments?.getString(ARG_USER_TITLE) ?: ""
+//  }
+
+  override fun onAttach(context: Context?) {
+    super.onAttach(context)
+    viewModel = getViewModel { ChatDetailViewModel() }
+    viewModel.init()
+    viewModel.listener = context as? ChatDetailListener
+    viewModel.contactId = arguments?.getString(ARG_USER_ID) ?: ""
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    val userId = arguments?.getString(ARG_USER_ID) ?: ""
-    viewModel = getViewModel { ChatDetailViewModel(app, userId) }
-
     val rootView = inflater.inflate(R.layout.fragment_chat_detail, container, false)
     this.rootView = rootView
     val recyclerView = rootView.recyclerView
     val messageField = rootView.message_field
-    val sendButton = rootView.sendAction
-    val emojiButton = rootView.emojiAction
-    val mediaButton = rootView.mediaAction
+    val sendAction = rootView.sendAction
+    val emojiAction = rootView.emojiAction
+    val mediaAction = rootView.mediaAction
 
     recyclerView.layoutManager = LinearLayoutManager(activity).apply {
       orientation = LinearLayoutManager.VERTICAL
@@ -71,16 +77,30 @@ class ChatDetailFragment : BaseFragment() {
     messageField.addTextChangedListener(TextWatcher {
       val message = messageField.text.toString()
       if (viewModel.messageField.value != message)
-        (viewModel.messageField as MutableLiveData).postValue(message)
+        viewModel.onMessageChanged(message)
     })
 
-    sendButton.setOnClickListener {
+    sendAction.setOnClickListener {
       activity?.hideKeyboard()
       viewModel.send()
     }
 
-    viewModel.error.observe(this) { ex ->
+    emojiAction.setOnClickListener {
+      viewModel.onMessageChanged((viewModel.messageField.value ?: "") + Texts.randomEmoji)
+    }
+
+    mediaAction.setOnClickListener {
+      Snackbar.make(rootView, "Not Implemented yet!", Snackbar.LENGTH_SHORT).show()
+    }
+
+    viewModel.error.observe(this) {
+      val ex = it.getContentIfNotHandled() ?: return@observe
       Snackbar.make(rootView, "Error :\n${ex.message ?: ex.toString()}\n\nif it happens many times, contact support", Snackbar.LENGTH_LONG).show()
+    }
+    viewModel.activity.observe(this) {
+      val task = it.getContentIfNotHandled() ?: return@observe
+      task.invoke(context as Activity)
+
     }
 
     viewModel.chats.observe(this, emptyList()) { chats ->
@@ -90,9 +110,9 @@ class ChatDetailFragment : BaseFragment() {
     }
 
     viewModel.sendEnabled.observe(this, true) { isEnabled ->
-      sendButton.isEnabled = isEnabled == true
-      emojiButton.isEnabled = isEnabled != true
-      mediaButton.isEnabled = isEnabled != true
+      sendAction.isEnabled = isEnabled == true
+      // emojiAction.isEnabled = isEnabled != true
+      mediaAction.isEnabled = isEnabled != true
     }
 
     viewModel.messageField.observe(this, "") { message ->

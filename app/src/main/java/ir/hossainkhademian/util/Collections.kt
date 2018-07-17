@@ -3,6 +3,8 @@ package ir.hossainkhademian.util
 import java.util.*
 
 object Collections {
+  val random by lazy(::Random)
+
   inline fun <T> consume(res: T, call: () -> Unit): T {
     call()
     return res
@@ -12,15 +14,13 @@ object Collections {
     consume(true, call)
 
   inline fun <reified T> List<T>.pickRandom(min: Int = 0, max: Int = 10): Array<T> {
-    val rnd = Random()
-    val count = rnd.nextInt(min + max) + min
-    return Array(count) { get(rnd.nextInt(size)) }
+    val count = random.nextInt(min + max) + min
+    return Array(count) { get(random.nextInt(size)) }
   }
 
   inline fun <reified T> Array<T>.pickRandom(min: Int = 0, max: Int = 10): Array<T> {
-    val rnd = Random()
-    val count = rnd.nextInt(min + max) + min
-    return Array(count) { get(rnd.nextInt(size)) }
+    val count = random.nextInt(min + max) + min
+    return Array(count) { get(random.nextInt(size)) }
   }
 
 
