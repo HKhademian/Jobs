@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.item_chat_detail.view.*
 import android.content.ClipData
 import android.content.Context
 import ir.hossainkhademian.jobs.data.model.EmptyChat
+import ir.hossainkhademian.jobs.data.model.LocalChat
 import ir.hossainkhademian.util.Texts.getRelativeTime
 import ir.hossainkhademian.util.Texts.isEmoji
 import ir.hossainkhademian.util.Texts.hideKeyboard
@@ -85,7 +86,7 @@ class ChatDetailFragment : BaseFragment() {
     }
 
     viewModel.chats.observe(this, emptyList()) { chats ->
-      adapter.setData(chats)
+      adapter.items = chats
       adapter.notifyDataSetChanged()
       recyclerView.scrollToPosition(adapter.items.size - 1)
     }
@@ -112,17 +113,12 @@ class ChatDetailFragment : BaseFragment() {
     return rootView
   }
 
-  private inner class ItemAdapter(val inflater: LayoutInflater, data: List<Chat> = emptyList()) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
-    val items = ArrayList<Chat>()
-
-    init {
-      setData(data)
-    }
-
-    fun setData(data: List<Chat>) {
-      items.clear()
-      items += data
-    }
+  private inner class ItemAdapter(val inflater: LayoutInflater, items: List<LocalChat> = emptyList()) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+    var items = items
+      set(items) {
+        field = items
+        notifyDataSetChanged()
+      }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
       ViewHolder(inflater.inflate(R.layout.item_chat_detail, parent, false))
@@ -142,7 +138,7 @@ class ChatDetailFragment : BaseFragment() {
       private val emojiView = view.emojiView!!
       private val timeView = view.timeView!!
 
-      var item: Chat = EmptyChat
+      var item: LocalChat = EmptyChat
         set(value) {
           field = value
           showItem(item)
@@ -163,7 +159,7 @@ class ChatDetailFragment : BaseFragment() {
         }
       }
 
-      private fun showItem(item: Chat) {
+      private fun showItem(item: LocalChat) {
         val message = item.message
         val isEmoji = message.isEmoji
         val color = when {

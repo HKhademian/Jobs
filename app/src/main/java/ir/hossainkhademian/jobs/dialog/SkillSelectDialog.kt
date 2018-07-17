@@ -9,17 +9,22 @@ import android.widget.BaseAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.Repository
+import ir.hossainkhademian.jobs.data.model.ID
 import ir.hossainkhademian.jobs.data.model.Skill
 import kotlinx.android.synthetic.main.item_dialog_skill.view.*
 
 object SkillSelectDialog {
-  fun show(context: Context, listener: (Skill) -> Unit) =
-    build(context, listener).show()!!
+  fun show(context: Context, pastSelectionIds: Collection<ID> = emptyList(), listener: (Skill) -> Unit) =
+    builder(context, pastSelectionIds, listener).show()!!
 
-  fun build(context: Context, listener: (Skill) -> Unit): AlertDialog.Builder {
+  private fun builder(context: Context, pastSelectionIds: Collection<ID> = emptyList(), listener: (Skill) -> Unit): AlertDialog.Builder {
     val adapter = SkillAdapter(context)
     val job = Repository.Skills.list()
-      .subscribe { adapter.items = it }
+      .subscribe {
+        adapter.items = it!!.filterNot {
+          pastSelectionIds.contains(it.id)
+        }
+      }
     return AlertDialog.Builder(context)
       .setTitle("Select job from list below:")
       .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }

@@ -33,7 +33,7 @@ class RequestDetailFragment : BaseFragment() {
   private lateinit var rootView: View
   private val cancelAction get() = rootView.cancelAction
   private val editAction get() = rootView.editAction
-  private val typeView get() = rootView.typeView  as ToggleSwitch
+  private val typeView get() = rootView.typeView as ToggleSwitch
   private val jobView get() = rootView.jobView
   private val skillsView get() = rootView.skillsView
   private val userView get() = rootView.userView
@@ -94,7 +94,7 @@ class RequestDetailFragment : BaseFragment() {
     return rootView
   }
 
-  private fun setRequest(request: Request) {
+  private fun setRequest(request: LocalRequest) {
     typeView.setCheckedPosition(if (request.isWorker) 0 else 1)
     jobView.job = request.job
     userView.user = request.user
@@ -106,7 +106,7 @@ class RequestDetailFragment : BaseFragment() {
   }
 
 
-  private inner class BrokerAdapter(items: List<User> = emptyList()) : RecyclerView.Adapter<BrokerViewHolder>() {
+  private inner class BrokerAdapter(items: List<LocalUser> = emptyList()) : RecyclerView.Adapter<BrokerViewHolder>() {
     var items = items
       set(value) {
         field = value
@@ -124,7 +124,7 @@ class RequestDetailFragment : BaseFragment() {
     }
   }
 
-  private inner class MatchAdapter(items: List<Match> = emptyList()) : RecyclerView.Adapter<MatchViewHolder>() {
+  private inner class MatchAdapter(items: List<LocalMatch> = emptyList()) : RecyclerView.Adapter<MatchViewHolder>() {
     var items = items
       set(value) {
         field = value
@@ -146,7 +146,7 @@ class RequestDetailFragment : BaseFragment() {
     private val avatarView get() = view.avatarView
     private val titleView get() = view.titleView
 
-    var item = EmptyUser
+    var item: LocalUser = EmptyUser
       set(value) {
         field = value
         showItem(value)
@@ -171,7 +171,7 @@ class RequestDetailFragment : BaseFragment() {
   private class MatchViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     private val titleView = view as TextView
 
-    var item = EmptyMatch
+    var item: LocalMatch = EmptyMatch
       set(value) {
         field = value
         showItem(value)

@@ -35,7 +35,7 @@ class ChatDetailActivity : AppCompatActivity() {
       toolbar.title = title
 
       supportFragmentManager.beginTransaction()
-        .replace(R.id.chat_detail_container, fragment)
+        .replace(R.id.detailContainer, fragment)
         .commit()
     }
   }

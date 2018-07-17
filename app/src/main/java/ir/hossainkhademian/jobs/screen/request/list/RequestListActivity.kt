@@ -85,11 +85,11 @@ class RequestListActivity : AppCompatActivity() {
     }
   }
 
-  private fun onItemSelected(item: Request) {
+  private fun onItemSelected(item: LocalRequest) {
     showRequestDetail(item)
   }
 
-  private fun showRequestDetail(item: Request) {
+  private fun showRequestDetail(item: LocalRequest) {
     if (twoPane) {
       val fragment = RequestDetailFragment().apply {
         arguments = bundle(
@@ -109,7 +109,7 @@ class RequestListActivity : AppCompatActivity() {
     }
   }
 
-  private inner class RequestAdapter(items: List<Request> = emptyList(), selectedId: ID = emptyID) : RecyclerView.Adapter<ViewHolder>() {
+  private inner class RequestAdapter(items: List<LocalRequest> = emptyList(), selectedId: ID = emptyID) : RecyclerView.Adapter<ViewHolder>() {
     var items = items
       set(items) {
         field = items
@@ -140,7 +140,7 @@ class RequestListActivity : AppCompatActivity() {
     val titleView = view.titleView!!
     val subtitleView = view.subtitleView!!
 
-    var item: Request = EmptyRequest
+    var item: LocalRequest = EmptyRequest
       set(item) {
         field = item
         showItem(item, selected)
@@ -160,7 +160,7 @@ class RequestListActivity : AppCompatActivity() {
       }
     }
 
-    private fun showItem(item: Request, selected: Boolean) {
+    private fun showItem(item: LocalRequest, selected: Boolean) {
       val imageUrl = item.avatarUrl
 
       view.setBackgroundColor(if (twoPane && selected) Color.parseColor("#3666") else 0)

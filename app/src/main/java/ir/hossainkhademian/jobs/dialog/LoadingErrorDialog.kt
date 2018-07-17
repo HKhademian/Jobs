@@ -15,9 +15,9 @@ object LoadingErrorDialog {
     modifyServer: (Int) -> Unit,
     exit: (Int) -> Unit
   ) =
-    build(context, e, retries, loadServer, loadDatabase, modifyServer, exit).show()
+    builder(context, e, retries, loadServer, loadDatabase, modifyServer, exit).show()
 
-  fun build(
+  private fun builder(
     context: Context,
     e: Throwable,
     retries: Int,
@@ -28,7 +28,7 @@ object LoadingErrorDialog {
   ) = AlertDialog.Builder(context)
     .setCancelable(false)
     .setTitle("Error in loading data")
-    .setMessage("We have some problems in receiving data:\n\n*** ${e.message ?: e.toString()} ***\n\nif this happens many times please contact support team!")
+    .setMessage("We have some problems in receiving data:\n\n*< ${e.message ?: e.toString()} >*\n\nif this happens many times please contact support team!")
     .apply {
 
       setNeutralButton("explore offline") { _, _ -> loadDatabase(retries + 1) }

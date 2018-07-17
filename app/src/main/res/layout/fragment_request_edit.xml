@@ -72,7 +72,8 @@
           android:id="@+id/jobView"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:layout_margin="4dp"/>
+          android:layout_margin="2dp"
+          style="@style/CardView.Light.Hidden"/>
       </ir.hossainkhademian.jobs.view.FieldBox>
 
       <ir.hossainkhademian.jobs.view.FieldBox
@@ -90,7 +91,7 @@
           android:text="@string/hint_request_skill_add"
           android:lines="1"
           android:gravity="start|center_vertical"
-          android:padding="8dp"
+          android:padding="4dp"
           android:textColor="@color/colorPrimary"
           android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
         <TextView
@@ -100,7 +101,7 @@
           android:text="@string/hint_request_skill_remove"
           android:lines="1"
           android:gravity="start|center_vertical"
-          android:padding="8dp"
+          android:padding="4dp"
           android:textColor="@color/colorAccent"
           android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
         <me.gujun.android.taggroup.TagGroup
@@ -130,9 +131,9 @@
           android:layout_height="match_parent"
           android:layout_margin="4dp"
           android:singleLine="false"
-          android:minLines="15"
+          android:minLines="5"
           android:maxLines="35"
-          android:lines="15"
+          android:lines="5"
           android:scrollbars="vertical"
           android:gravity="start|top"
           android:inputType="textMultiLine"
