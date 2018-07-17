@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import ir.hossainkhademian.jobs.data.AccountManager
 import ir.hossainkhademian.jobs.data.DataManager
 
-val EmptyChat: Chat = ChatData(id = emptyID, unseen = false, time = 0)
+val EmptyChat = ChatData(id = emptyID, unseen = false, time = 0)
 
 interface Chat : IdModel {
   override val id: ID
@@ -16,10 +16,6 @@ interface Chat : IdModel {
 }
 
 interface LocalChat : Chat {
-  val direction get() = getDirection(AccountManager.id)
-  val sender get() = DataManager.users.findById(senderId) ?: EmptyUser
-  val receiver get() = DataManager.users.findById(receiverId) ?: EmptyUser
-
   val seen: Boolean
 }
 
@@ -53,7 +49,9 @@ fun Chat.isReceived(userId: ID) = getDirection(userId) == ChatDirection.RECEIVE
 val LocalChat.isSended get() = isSended(AccountManager.id)
 val LocalChat.isReceived get() = isReceived(AccountManager.id)
 val LocalChat.contactId get() = getContactId(AccountManager.id)
-
+val LocalChat.direction get() = getDirection(AccountManager.id)
+val LocalChat.sender get() = DataManager.users.findById(senderId) ?: EmptyUser
+val LocalChat.receiver get() = DataManager.users.findById(receiverId) ?: EmptyUser
 
 open class ChatData(
   @Json(name = "id") override val id: ID = generateID,

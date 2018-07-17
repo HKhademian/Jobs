@@ -2,7 +2,7 @@ package ir.hossainkhademian.jobs.data.model
 
 import com.squareup.moshi.Json
 
-val EmptyLogin: Login = LoginData(id = emptyID, lastSeen = 0)
+val EmptyLogin = LoginData(id = emptyID, lastSeen = 0)
 
 val Login.isGuest get() = refreshToken.isEmpty()
 val Login.isLoggedIn get() = refreshToken.isNotEmpty()

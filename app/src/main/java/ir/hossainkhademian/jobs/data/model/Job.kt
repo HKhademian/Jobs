@@ -8,7 +8,7 @@ private fun generateAvatarUrl(id: ID): String {
   return "https://randomuser.me/api/portraits/lego/$index.jpg"
 }
 
-val EmptyJob: Job = JobData(id = emptyID)
+val EmptyJob = JobData(id = emptyID)
 val Job.avatarUrl get() = generateAvatarUrl(id)
 
 interface Job : IdModel {

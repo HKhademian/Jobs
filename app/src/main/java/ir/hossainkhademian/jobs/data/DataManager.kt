@@ -1,10 +1,8 @@
 package ir.hossainkhademian.jobs.data
 
-import android.content.Context
 import ir.hossainkhademian.jobs.App
 import ir.hossainkhademian.jobs.data.api.ApiManager
 import ir.hossainkhademian.jobs.data.model.*
-//import ir.hossainkhademian.jobs.data.model.toMutable
 import ir.hossainkhademian.util.ObservableMutableList
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
@@ -12,12 +10,12 @@ import ru.gildor.coroutines.retrofit.await
 
 internal object DataManager {
   var mode: Mode = Mode.Offline
-  internal val jobs = ObservableMutableList<Job>()
-  internal val skills = ObservableMutableList<Skill>()
-  internal val users = ObservableMutableList<User>()
-  internal val requests = ObservableMutableList<Request>()
-  internal val chats = ObservableMutableList<Chat>()
-  internal val matches = ObservableMutableList<Match>()
+  internal val jobs = ObservableMutableList<LocalJob>()
+  internal val skills = ObservableMutableList<LocalSkill>()
+  internal val users = ObservableMutableList<LocalUser>()
+  internal val requests = ObservableMutableList<LocalRequest>()
+  internal val chats = ObservableMutableList<LocalChat>()
+  internal val matches = ObservableMutableList<LocalMatch>()
 
   internal fun App.initDataManager() {
   }
@@ -37,10 +35,10 @@ internal object DataManager {
     if (!AccountManager.isFresh) return
 
     val calls = arrayListOf<Deferred<*>>()
-    var requests = emptyList<Request>()
-    var chats = emptyList<Chat>() // emptyList<MutableChatData>()
-    var matches = emptyList<Match>() // emptyList<MutableChatData>()
-    var users = emptyList<User>() // emptyList<MutableChatData>()
+    var requests = emptyList<RequestData>()
+    var chats = emptyList<ChatData>()
+    var matches = emptyList<MatchData>()
+    var users = emptyList<UserData>()
 
     calls += async {
       requests = ApiManager.requests.list(AccountManager.accessToken).await()
@@ -62,20 +60,19 @@ internal object DataManager {
 
 
     // All done, now set & save data
-    //launch(UI) {
     this@DataManager.requests.replace(requests)
     this@DataManager.chats.replace(chats)
     this@DataManager.matches.replace(matches)
     this@DataManager.users.replace(users)
-    //}
+
     mode = Mode.Online
   }
 
   /** update all cached data for static */
   suspend fun loadOnlineStaticData() {
     val calls = arrayListOf<Deferred<*>>()
-    var jobs = emptyList<Job>()
-    var skills = emptyList<Skill>()
+    var jobs = emptyList<JobData>()
+    var skills = emptyList<SkillData>()
 
     calls += async {
       jobs = ApiManager.jobs.list().await()
@@ -88,10 +85,8 @@ internal object DataManager {
     calls.map { it.await() }
 
     // All done, now set & save data
-    //launch(UI) {
     this@DataManager.jobs.replace(jobs)
     this@DataManager.skills.replace(skills)
-    //}
   }
 
   enum class Mode { Online, Offline, Error }

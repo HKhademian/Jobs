@@ -14,7 +14,7 @@ private fun generateAvatarUrl(id: ID): String {
 //}
 //
 
-val EmptyUser: User = UserData(id = emptyID, lastSeen = 0L)
+val EmptyUser = UserData(id = emptyID, lastSeen = 0L)
 val User.avatarUrl: String get() = generateAvatarUrl(id)
 val User.isAdmin get() = role == UserRole.Admin
 val User.isBroker get() = role == UserRole.Broker

@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import ir.hossainkhademian.jobs.data.AccountManager
 import ir.hossainkhademian.jobs.data.DataManager
 
-val EmptyMatch: Match = MatchData(id = emptyID)
+val EmptyMatch = MatchData(id = emptyID)
 
 interface Match : IdModel {
   override val id: ID

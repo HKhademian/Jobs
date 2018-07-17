@@ -7,10 +7,7 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.arch.persistence.room.Query
-import ir.hossainkhademian.jobs.data.model.Chat
-import ir.hossainkhademian.jobs.data.model.ID
-import ir.hossainkhademian.jobs.data.model.emptyID
-import ir.hossainkhademian.jobs.data.model.generateID
+import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.util.BaseDao
 import ir.hossainkhademian.jobs.util.BaseEntity
 
@@ -22,7 +19,7 @@ internal class ChatEntity(
   override var message: String = "",
   override var unseen: Boolean = true,
   override var time: Long = System.currentTimeMillis()
-) : BaseEntity(), Chat {
+) : BaseEntity(), LocalChat {
   @Ignore
   override val seen = !unseen
 

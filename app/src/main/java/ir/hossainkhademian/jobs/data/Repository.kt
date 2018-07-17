@@ -34,7 +34,7 @@ object Repository {
   }
 
   object Jobs {
-    fun list(): Observable<List<Job>> {
+    fun list(): Observable<List<LocalJob>> {
       return DataManager.jobs.observable
         // .subscribeOn(Schedulers.io())
         //.debounceAfter(1, 5, TimeUnit.SECONDS)
@@ -43,7 +43,7 @@ object Repository {
   }
 
   object Skills {
-    fun list(): Observable<List<Skill>> {
+    fun list(): Observable<List<LocalSkill>> {
       return DataManager.skills.observable
         // .subscribeOn(Schedulers.io())
         //.debounceAfter(1, 5, TimeUnit.SECONDS)
@@ -52,7 +52,7 @@ object Repository {
   }
 
   object Chats {
-    fun listsByContact(userId: ID): Observable<List<Chat>> {
+    fun listsByContact(userId: ID): Observable<List<LocalChat>> {
       return DataManager.chats.observable
         // .subscribeOn(Schedulers.io())
         //.debounceAfter(1, 5, TimeUnit.SECONDS)
@@ -65,7 +65,7 @@ object Repository {
         .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun listUserChats(): Observable<List<Pair<User, Int>>> {
+    fun listUserChats(): Observable<List<Pair<LocalUser, Int>>> {
       return Observables.combineLatest(DataManager.chats.observable, DataManager.users.observable) { chats, users -> chats to users }
         // .subscribeOn(Schedulers.io())
         .throttleWithTimeoutAfter(1, 5, TimeUnit.SECONDS)
@@ -107,7 +107,7 @@ object Repository {
   }
 
   object Requests {
-    fun list(): Observable<List<Request>> {
+    fun list(): Observable<List<LocalRequest>> {
       return DataManager.requests.observable
         // .subscribeOn(Schedulers.io())
         //.debounceAfter(1, 5, TimeUnit.SECONDS)
@@ -116,7 +116,7 @@ object Repository {
         .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun findById(requestId: ID): Observable<Request> {
+    fun findById(requestId: ID): Observable<LocalRequest> {
       return DataManager.requests.observable
         // .subscribeOn(Schedulers.io())
         .take(1)

@@ -3,7 +3,7 @@ package ir.hossainkhademian.jobs.data.model
 import com.squareup.moshi.Json
 import ir.hossainkhademian.jobs.data.DataManager
 
-val EmptyRequest: Request = RequestData(id = emptyID, time = 0L)
+val EmptyRequest = RequestData(id = emptyID, time = 0L)
 
 
 interface Request : IdModel {
