@@ -2,8 +2,7 @@
 
 package ir.hossainkhademian.jobs.data.api
 
-import ir.hossainkhademian.jobs.data.model.SkillData
-import ir.hossainkhademian.jobs.data.model.toData
+import ir.hossainkhademian.jobs.data.api.model.SkillData
 import retrofit2.Call
 import retrofit2.mock.Calls
 import java.io.IOException
@@ -12,7 +11,7 @@ object SkillMock : SkillService {
   override fun list(): Call<List<SkillData>> {
     MockApiStorage.fakeWait()
 
-    return Calls.response(MockApiStorage.skills.items.toData())
+    return Calls.response(ir.hossainkhademian.jobs.data.api.model.toData())
   }
 
   override fun addSkills(accessToken: String, title: String, des: String): Call<Unit> {

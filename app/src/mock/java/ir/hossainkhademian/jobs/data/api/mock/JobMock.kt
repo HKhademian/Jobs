@@ -3,7 +3,7 @@
 package ir.hossainkhademian.jobs.data.api
 
 import ir.hossainkhademian.jobs.data.model.JobData
-import ir.hossainkhademian.jobs.data.model.toData
+import ir.hossainkhademian.jobs.data.api.model.toData
 import retrofit2.Call
 import retrofit2.mock.Calls
 

@@ -3,14 +3,13 @@ package ir.hossainkhademian.jobs.data.api
 import com.squareup.moshi.JsonAdapter
 import ir.hossainkhademian.jobs.data.model.IdModel
 
-class MockStore<T : IdModel, D : T>(
+class MockStore<M : IdModel>(
   private val prefKey: String,
-  private val adapter: JsonAdapter<D>,
-  private val toData: T.() -> D,
-  init: MockStore<T, D>.() -> Unit = {}) {
+  private val adapter: JsonAdapter<M>,
+  init: MockStore<M>.() -> Unit = {}) {
 
-  val items = mutableListOf<T>()
-  val saveItems = mutableListOf<T>()
+  val items = mutableListOf<M>()
+  val saveItems = mutableListOf<M>()
 
   init {
     init()
@@ -24,7 +23,7 @@ class MockStore<T : IdModel, D : T>(
       .forEach { update(it, false) }
   }
 
-  fun update(item: T, save: Boolean = true) {
+  fun update(item: M, save: Boolean = true) {
     saveItems.removeAll { it.id == item.id }
     items.removeAll { it.id == item.id }
 
@@ -33,7 +32,7 @@ class MockStore<T : IdModel, D : T>(
 
     if (save)
       MockApiStorage.pref.edit().putStringSet(prefKey,
-        saveItems.map { it.toData() }.map { adapter.toJson(it)!! }.toSet()
+        saveItems.map { it }.map { adapter.toJson(it)!! }.toSet()
       ).apply()
   }
 }

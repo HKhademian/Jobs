@@ -4,8 +4,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
 import com.thedeanda.lorem.LoremIpsum
+import ir.hossainkhademian.jobs.data.api.model.ChatMock
+import ir.hossainkhademian.jobs.data.api.model.JobMock
+import ir.hossainkhademian.jobs.data.api.model.LoginMock
+import ir.hossainkhademian.jobs.data.api.model.MatchMock
+import ir.hossainkhademian.jobs.data.api.model.RequestMock
+import ir.hossainkhademian.jobs.data.api.model.SkillMock
+import ir.hossainkhademian.jobs.data.api.model.UserMock
+import ir.hossainkhademian.jobs.data.api.model.toData
 import ir.hossainkhademian.jobs.data.model.*
-import org.joda.time.Minutes
 import java.io.IOException
 import java.util.*
 
@@ -19,29 +26,29 @@ internal object MockApiStorage {
 
   internal lateinit var pref: SharedPreferences
   private val moshi = Moshi.Builder().build()
-  private val userAdapter = moshi.adapter(LoginData::class.java)
-  private val jobAdapter = moshi.adapter(JobData::class.java)
-  private val skillAdapter = moshi.adapter(SkillData::class.java)
-  private val chatAdapter = moshi.adapter(ChatData::class.java)
-  private val requestAdapter = moshi.adapter(RequestData::class.java)
-  private val matchAdapter = moshi.adapter(MatchData::class.java)
+  private val userAdapter = moshi.adapter(LoginMock::class.java)
+  private val jobAdapter = moshi.adapter(JobMock::class.java)
+  private val skillAdapter = moshi.adapter(SkillMock::class.java)
+  private val chatAdapter = moshi.adapter(ChatMock::class.java)
+  private val requestAdapter = moshi.adapter(RequestMock::class.java)
+  private val matchAdapter = moshi.adapter(MatchMock::class.java)
 
   val lorem = LoremIpsum.getInstance()
   val random = Random()
 
-  val users = MockStore<Login, LoginData>(PREF_USERS, userAdapter, Login::toData, ::initUsers)
-  val jobs = MockStore<Job, JobData>(PREF_JOBS, jobAdapter, Job::toData, ::initJobs)
-  val skills = MockStore<Skill, SkillData>(PREF_SKILLS, skillAdapter, Skill::toData, ::initSkills)
-  val chats = MockStore<Chat, ChatData>(PREF_CHATS, chatAdapter, Chat::toData, ::initChats)
-  val requests = MockStore<Request, RequestData>(PREF_REQUESTS, requestAdapter, Request::toData, ::initRequests)
-  val matches = MockStore<Match, MatchData>(PREF_MATCHES, matchAdapter, Match::toData, ::initMatches)
+  val users = MockStore<LoginMock>(PREF_USERS, userAdapter, ::initUsers)
+  val jobs = MockStore<JobMock>(PREF_JOBS, jobAdapter, ::initJobs)
+  val skills = MockStore<SkillMock>(PREF_SKILLS, skillAdapter, ::initSkills)
+  val chats = MockStore<ChatMock>(PREF_CHATS, chatAdapter, ::initChats)
+  val requests = MockStore<RequestMock>(PREF_REQUESTS, requestAdapter, ::initRequests)
+  val matches = MockStore<MatchMock>(PREF_MATCHES, matchAdapter, ::initMatches)
 
   fun initMockApiStorage(context: Context) {
     pref = context.getSharedPreferences("mock", Context.MODE_PRIVATE)
     load()
   }
 
-  private fun initJobs(store: MockStore<Job, JobData>) {
+  private fun initJobs(store: MockStore<JobMock>) {
     arrayOf("appdev" to "App Developer",
       "androiddec" to "Android App Developer",
       "iosdev" to "iOS App Developer",
@@ -49,30 +56,30 @@ internal object MockApiStorage {
       "crossdev" to "CrossPlatform App Developer",
       "gamedesigner" to "Game Designer",
       "gamedev" to "Game Developer").forEach {
-      store.items += JobData(
+      store.items += JobMock(
         id = it.first,
         title = it.second
       )
     }
   }
 
-  private fun initSkills(store: MockStore<Skill, SkillData>) {
+  private fun initSkills(store: MockStore<SkillMock>) {
     arrayOf("Android", "Kotlin", "Database",
       "iOS", "Dart", "Flutter", "React",
       "ReactNative", "NodeJS", "Server",
       "Mobile", "Desktop").forEach {
-      store.items += SkillData(
+      store.items += SkillMock(
         id = it.toLowerCase(),
         title = it
       )
     }
   }
 
-  private fun initUsers(store: MockStore<Login, LoginData>) {
+  private fun initUsers(store: MockStore<LoginMock>) {
     (1 until 3).forEach {
       val index = "0$it"
       val id = "admin$index"
-      store.items += LoginData(
+      store.items += LoginMock(
         id = id,
         title = "Admin $index",
         phone = "+9800000000$index",
@@ -85,7 +92,7 @@ internal object MockApiStorage {
     (1 until 5).forEach {
       val index = "0$it"
       val id = "broker$index"
-      store.items += LoginData(
+      store.items += LoginMock(
         id = id,
         title = "Broker $index",
         phone = "+9811111111$index",
@@ -99,7 +106,7 @@ internal object MockApiStorage {
     (10 until 35).forEach {
       val index = "0$it"
       val id = "user$index"
-      store.items += LoginData(
+      store.items += LoginMock(
         id = id,
         title = "User $index",
         phone = "+982222222$index",
@@ -111,13 +118,13 @@ internal object MockApiStorage {
     }
   }
 
-  private fun initChats(store: MockStore<Chat, ChatData>) {
+  private fun initChats(store: MockStore<ChatMock>) {
   }
 
-  private fun initRequests(store: MockStore<Request, RequestData>) {
+  private fun initRequests(store: MockStore<RequestMock>) {
   }
 
-  private fun initMatches(store: MockStore<Match, MatchData>) {
+  private fun initMatches(store: MockStore<MatchMock>) {
   }
 
   private fun load() {
