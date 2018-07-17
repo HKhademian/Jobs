@@ -57,7 +57,7 @@
         <include
           android:id="@+id/typeView"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="wrap_content"
           layout="@layout/view_request_type"/>
       </ir.hossainkhademian.jobs.view.FieldBox>
 
@@ -71,7 +71,7 @@
         <ir.hossainkhademian.jobs.view.JobView
           android:id="@+id/jobView"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="wrap_content"
           android:layout_margin="2dp"
           style="@style/CardView.Light.Hidden"/>
       </ir.hossainkhademian.jobs.view.FieldBox>
@@ -107,7 +107,7 @@
         <me.gujun.android.taggroup.TagGroup
           android:id="@+id/skillsView"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="wrap_content"
           android:layout_margin="4dp"
           style="@style/TagGroup.Large"/>
       </ir.hossainkhademian.jobs.view.FieldBox>
@@ -128,13 +128,12 @@
         <EditText
           android:id="@+id/detailView"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="wrap_content"
           android:layout_margin="4dp"
           android:singleLine="false"
           android:minLines="5"
-          android:maxLines="35"
           android:lines="5"
-          android:scrollbars="vertical"
+          android:scrollbars="none"
           android:gravity="start|top"
           android:inputType="textMultiLine"
           android:nextFocusUp="@id/detailView"

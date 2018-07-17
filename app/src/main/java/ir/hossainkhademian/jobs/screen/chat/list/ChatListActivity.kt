@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import cn.nekocode.badge.BadgeDrawable
 import com.squareup.picasso.Picasso
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
@@ -28,7 +27,6 @@ import kotlinx.android.synthetic.main.activity_chat_list.*
 import kotlinx.android.synthetic.main.fragment_chat_list.*
 import kotlinx.android.synthetic.main.item_chat_list.view.*
 import org.jetbrains.anko.bundleOf
-import org.jetbrains.anko.image
 
 
 class ChatListActivity : AppCompatActivity() {
@@ -149,7 +147,7 @@ class ChatListActivity : AppCompatActivity() {
     private val titleView = view.titleView
     private val subtitleView = view.subtitleView
     private val lastSeenView = view.lastSeenView
-    private val badgeView = view.badge_view
+    private val badgeView = view.badgeView
 
     var item: UserChat = Pair(EmptyUser, 0)
       set(item) {
@@ -180,12 +178,8 @@ class ChatListActivity : AppCompatActivity() {
       subtitleView.text = "user id: ${user.id}"
       lastSeenView.text = user.lastSeen.getRelativeTime(context)
 
-      badgeView.image = when (unreadCount) {
-        0 -> null
-        else -> BadgeDrawable.Builder()
-          .type(BadgeDrawable.TYPE_NUMBER).number(unreadCount)
-          .badgeColor(badgeView.context.resources.getColor(R.color.colorAccent)).build()
-      }
+      badgeView.text = "$unreadCount"
+      badgeView.visibility = if (unreadCount > 0) View.VISIBLE else View.GONE
     }
   }
 
