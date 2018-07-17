@@ -3,13 +3,14 @@
 package ir.hossainkhademian.jobs.data.api
 
 import ir.hossainkhademian.jobs.data.AccountManager.isPhoneValid
+import ir.hossainkhademian.jobs.data.api.model.*
 import ir.hossainkhademian.jobs.data.model.*
 import retrofit2.Call
 import retrofit2.mock.Calls
 import java.io.IOException
 import java.util.*
 
-object AccountMock : AccountService {
+object AccountMockService : AccountService {
   override fun login(phone: String, password: String): Call<LoginData> {
     MockApiStorage.fakeWait()
 
@@ -49,7 +50,7 @@ object AccountMock : AccountService {
       return Calls.failure(IOException("User with this phone founds!"))
 
     val userId = UUID.randomUUID().toString()
-    val loginData = LoginData(
+    val loginData = LoginMock(
       id = userId,
       title = "User $phone",
       phone = phone,
@@ -69,19 +70,19 @@ object AccountMock : AccountService {
           .take(2))
         .flatMap {
           listOf(
-            ChatData(
+            ChatMock(
               senderId = it.id,
               receiverId = userId,
               time = MockApiStorage.fakeTime(),
               message = "Your first messageField from `${it.title}`: wish happy explore :)"
             ),
-            ChatData(
+            ChatMock(
               senderId = it.id,
               receiverId = userId,
               time = MockApiStorage.fakeTime(),
               message = "send me `error` to create a fake api call error"
             ),
-            ChatData(
+            ChatMock(
               senderId = it.id,
               receiverId = userId,
               time = MockApiStorage.fakeTime(),
@@ -101,7 +102,7 @@ object AccountMock : AccountService {
           RequestType.WORKER -> "a fake job for a `${job.title}` job, you tell you have ${skills.joinToString(" , ") { "`${it.title}`" }} skills :)"
           RequestType.COMPANY -> "a fake job for a `${job.title}` worker, you tell you need ${skills.joinToString(" , ") { "`${it.title}`" }} skills :)"
         }
-        val request = RequestData(
+        val request = RequestMock(
           userId = userId,
           typeStr = type.key,
           detail = details,
@@ -114,17 +115,17 @@ object AccountMock : AccountService {
       }
     }
 
-    return Calls.response(loginData)
+    return Calls.response(loginData.toData())
   }
 
   override fun refresh(refreshToken: String): Call<LoginData> {
     MockApiStorage.fakeWait()
 
-    val savedUser = MockApiStorage.users.items.firstOrNull { it.refreshToken == refreshToken }
+    val login = MockApiStorage.users.items.firstOrNull { it.refreshToken == refreshToken }
       ?: return Calls.failure(IOException("cannot update this token"))
 
-    val user = savedUser.copy(
-      accessToken = "${savedUser.id}.$generateID",
+    val user = login.copy(
+      accessToken = "${login.id}.$generateID",
       lastSeen = System.currentTimeMillis()
     )
     MockApiStorage.users.update(user)

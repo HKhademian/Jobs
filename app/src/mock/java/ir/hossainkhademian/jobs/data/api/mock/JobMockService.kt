@@ -7,7 +7,7 @@ import ir.hossainkhademian.jobs.data.api.model.toData
 import retrofit2.Call
 import retrofit2.mock.Calls
 
-object JobMock : JobService {
+object JobMockService : JobService {
   override fun list(): Call<List<JobData>> {
     MockApiStorage.fakeWait()
 

@@ -5,12 +5,12 @@ import ir.hossainkhademian.jobs.data.model.*
 
 data class ChatMock(
   @Json(name = "id") override val id: ID = generateID,
-  @Json(name = "senderId") val senderId: ID = emptyID,
-  @Json(name = "receiverId") val receiverId: ID = emptyID,
-  @Json(name = "messageField") val message: String = "",
-  @Json(name = "unseen") var unseen: Boolean = true,
-  @Json(name = "time") val time: Long = System.currentTimeMillis()
-):IdModel
+  @Json(name = "senderId") override val senderId: ID = emptyID,
+  @Json(name = "receiverId") override val receiverId: ID = emptyID,
+  @Json(name = "messageField") override val message: String = "",
+  @Json(name = "unseen") override var unseen: Boolean = true,
+  @Json(name = "time") override val time: Long = System.currentTimeMillis()
+) : Chat
 
 fun ChatMock.copy(
   id: ID? = null,

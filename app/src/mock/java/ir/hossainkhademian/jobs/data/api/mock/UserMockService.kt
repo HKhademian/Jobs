@@ -7,7 +7,7 @@ import retrofit2.Call
 import retrofit2.mock.Calls
 import java.io.IOException
 
-object UserMock : UserService {
+object UserMockService : UserService {
   override fun get(accessToken: String, id: ID): Call<UserData> {
     MockApiStorage.fakeWait()
 

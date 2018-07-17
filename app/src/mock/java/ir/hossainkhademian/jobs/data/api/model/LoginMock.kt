@@ -8,10 +8,10 @@ class LoginMock(
   title: String = "",
   lastSeen: Long = System.currentTimeMillis(),
   roleStr: String = UserRole.User.key,
-  @Json(name = "phone") val phone: String = "",
-  @Json(name = "refreshToken") val refreshToken: String = "",
-  @Json(name = "accessToken") val accessToken: String = ""
-) : UserMock(id, title, lastSeen, roleStr)
+  @Json(name = "phone") override val phone: String = "",
+  @Json(name = "refreshToken") override val refreshToken: String = "",
+  @Json(name = "accessToken") override val accessToken: String = ""
+) : UserMock(id, title, lastSeen, roleStr), Login
 
 fun LoginMock.copy(
   id: ID? = null,

@@ -5,8 +5,8 @@ import ir.hossainkhademian.jobs.data.model.*
 
 class JobMock(
   @Json(name = "id") override val id: ID = generateID,
-  @Json(name = "title") val title: String = ""
-) : IdModel
+  @Json(name = "title") override val title: String = ""
+) : Job
 
 fun JobMock.copy(
   id: ID? = null,

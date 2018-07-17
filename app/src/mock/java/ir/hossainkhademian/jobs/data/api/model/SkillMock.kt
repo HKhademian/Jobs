@@ -8,8 +8,8 @@ import ir.hossainkhademian.jobs.data.model.SkillData
 
 class SkillMock(
   @Json(name = "id") override val id: ID = generateID,
-  @Json(name = "title") val title: String = ""
-) : IdModel
+  @Json(name = "title") override val title: String = ""
+) : Skill
 
 fun SkillMock.copy(
   id: ID? = null,

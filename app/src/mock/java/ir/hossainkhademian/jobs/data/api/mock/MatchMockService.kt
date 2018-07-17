@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.mock.Calls
 import java.io.IOException
 
-object MatchMock : MatchService {
+object MatchMockService : MatchService {
   override fun list(accessToken: String): Call<List<MatchData>> {
     MockApiStorage.fakeWait()
 
@@ -19,7 +19,7 @@ object MatchMock : MatchService {
   override fun addMatch(accessToken: String, workerRequestId: ID, companyRequestId: ID, note: String): Call<Unit> {
     MockApiStorage.fakeWait()
 
-    val user = MockApiStorage.getUserByAccessToken(accessToken)
+    val login = MockApiStorage.getUserByAccessToken(accessToken)
       ?: return Calls.failure(IOException("no user with this id is found"))
 
     return Calls.failure(IOException("cannot create match from app"))

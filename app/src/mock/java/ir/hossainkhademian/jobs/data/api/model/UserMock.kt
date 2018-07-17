@@ -6,11 +6,11 @@ import ir.hossainkhademian.jobs.data.model.*
 
 open class UserMock(
   @Json(name = "id") override val id: ID = generateID,
-  @Json(name = "title") val title: String = "",
-  @Json(name = "lastSeen") val lastSeen: Long = System.currentTimeMillis(),
+  @Json(name = "title") override val title: String = "",
+  @Json(name = "lastSeen") override val lastSeen: Long = System.currentTimeMillis(),
   @Json(name = "role") val roleStr: String = UserRole.User.key
-) : IdModel {
-  val role get() = UserRole.from(roleStr)
+) : User {
+  override val role get() = UserRole.from(roleStr)
 }
 
 fun UserMock.copy(

@@ -6,15 +6,15 @@ import ir.hossainkhademian.jobs.data.model.*
 
 class RequestMock(
   @Json(name = "id") override val id: ID = generateID,
-  @Json(name = "userId") val userId: ID = emptyID,
+  @Json(name = "userId") override val userId: ID = emptyID,
   @Json(name = "type") val typeStr: String = "",
-  @Json(name = "detail") val detail: String = "",
-  @Json(name = "time") val time: Long = System.currentTimeMillis(),
-  @Json(name = "jobId") val jobId: ID = emptyID,
-  @Json(name = "skillIds") val skillIds: List<ID> = emptyList(),
-  @Json(name = "brokerIds") val brokerIds: List<ID> = emptyList()
-) : IdModel {
-  val type: RequestType get() = RequestType.from(typeStr)
+  @Json(name = "detail") override val detail: String = "",
+  @Json(name = "time") override val time: Long = System.currentTimeMillis(),
+  @Json(name = "jobId") override val jobId: ID = emptyID,
+  @Json(name = "skillIds") override val skillIds: List<ID> = emptyList(),
+  @Json(name = "brokerIds") override val brokerIds: List<ID> = emptyList()
+) : Request {
+  override val type: RequestType get() = RequestType.from(typeStr)
 }
 
 fun RequestMock.copy(

@@ -7,14 +7,14 @@ import retrofit2.Call
 import retrofit2.mock.Calls
 import java.io.IOException
 
-object RequestMock : RequestService {
+object RequestMockService : RequestService {
   override fun list(accessToken: String): Call<List<RequestData>> {
     MockApiStorage.fakeWait()
 
-    val user = MockApiStorage.getUserByAccessToken(accessToken)
+    val login = MockApiStorage.getUserByAccessToken(accessToken)
       ?: return Calls.failure(IOException("user with this token not found. please relogin"))
 
-    return Calls.response(MockApiStorage.requests.items.filterByUserId(user.id).toData())
+    return Calls.response(MockApiStorage.requests.items.filterByUserId(login.id).toData())
   }
 
   override fun edit(accessToken: String, id: ID, typeStr: String, detail: String, jobId: ID, skillIds: List<ID>): Call<RequestData> {

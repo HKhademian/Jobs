@@ -3,13 +3,13 @@ package ir.hossainkhademian.jobs.data.api
 import ir.hossainkhademian.jobs.App
 
 internal object Services {
-  val account = AccountMock
-  val skill = SkillMock
-  val job = JobMock
-  val request = RequestMock
-  val chat = ChatMock
-  val user = UserMock
-  val match = MatchMock
+  val account = AccountMockService
+  val skill = SkillMockService
+  val job = JobMockService
+  val request = RequestMockService
+  val chat = ChatMockService
+  val user = UserMockService
+  val match = MatchMockService
 
   internal fun App.initServices() {
     MockApiStorage.initMockApiStorage(applicationContext)
