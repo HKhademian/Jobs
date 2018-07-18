@@ -49,7 +49,7 @@ class SplashActivity : BaseActivity() {
     launchActivity<LoadingActivity>()
 
 
-    if (AccountManager.isLoggedIn)
+    if (AccountManager.user.isLoggedIn)
       launchActivity<LoadingActivity>()
     else
       launchActivity<RegisterActivity>()

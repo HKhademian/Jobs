@@ -38,6 +38,13 @@ class AboutFragment : BaseFragment() {
       startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SOCIAL_TELEGRAM_URL)))
     }
 
+    rootView.social_github_action.setOnClickListener {
+      startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SOCIAL_GITHUB_URL)))
+    }
+    rootView.social_stackoverflow_action.setOnClickListener {
+      startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SOCIAL_STACKOVERFLOW_URL)))
+    }
+
     return rootView
   }
 }

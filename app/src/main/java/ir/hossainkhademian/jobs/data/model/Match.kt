@@ -58,7 +58,7 @@ fun LocalMatch.getNote(userId: ID) = when (userId) {
   else -> ""
 }
 
-val LocalMatch.note get() = getNote(AccountManager.id)
+val LocalMatch.note get() = getNote(AccountManager.user.id)
 val Match.isRejected get() = brokerState.isRejected || workerState.isRejected || companyState.isRejected
 val Match.isAccepted get() = brokerState.isAccepted && workerState.isAccepted && companyState.isAccepted
 val MatchState.isRejected get() = this == MatchState.Rejected

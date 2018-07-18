@@ -46,10 +46,10 @@ fun Chat.getContactId(userId: ID) = when (userId) {
 
 fun Chat.isSender(userId: ID) = getDirection(userId) == ChatDirection.SEND
 fun Chat.isReceiver(userId: ID) = getDirection(userId) == ChatDirection.RECEIVE
-val LocalChat.isSender get() = isSender(AccountManager.id)
-val LocalChat.isReceiver get() = isReceiver(AccountManager.id)
-val LocalChat.contactId get() = getContactId(AccountManager.id)
-val LocalChat.direction get() = getDirection(AccountManager.id)
+val LocalChat.isSender get() = isSender(AccountManager.user.id)
+val LocalChat.isReceiver get() = isReceiver(AccountManager.user.id)
+val LocalChat.contactId get() = getContactId(AccountManager.user.id)
+val LocalChat.direction get() = getDirection(AccountManager.user.id)
 val LocalChat.sender get() = DataManager.users.findById(senderId) ?: EmptyUser
 val LocalChat.receiver get() = DataManager.users.findById(receiverId) ?: EmptyUser
 

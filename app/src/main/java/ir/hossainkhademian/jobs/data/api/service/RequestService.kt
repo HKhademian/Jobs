@@ -15,8 +15,8 @@ interface RequestService {
   fun list(accessToken: String): Call<List<RequestData>>
 
   @POST("/requests")
-  fun edit(accessToken: String, requestId: ID, typeStr: String, jobId: ID, skillIds: Collection<ID>, detail: String): Call<RequestData>
+  fun edit(accessToken: String, requestId: ID, typeStr: String, jobId: ID, skillIds: List<ID>, detail: String): Call<RequestData>
 
   @PUT("/requests")
-  fun create(accessToken: String, typeStr: String, jobId: ID, skillIds: Collection<ID>, detail: String): Call<RequestData>
+  fun create(accessToken: String, typeStr: String, jobId: ID, skillIds: List<ID>, detail: String): Call<RequestData>
 }

@@ -89,7 +89,7 @@ object Repository {
           chats
             .sortedByDescending { it.time } // sort before filter is a bit slower
             .groupBy { it.contactId }
-            .filterNot { it.key == AccountManager.id }
+            .filterNot { it.key == AccountManager.user.id }
             .map { (contactId, contactChats) ->
               val lastChat = contactChats.first()
               val unseenCount = contactChats.filterUnseen().count()
@@ -105,10 +105,10 @@ object Repository {
 
 
     suspend fun send(contactId: ID, message: String) {
-      if (!AccountManager.isLoggedIn && AccountManager.isFresh)
+      if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
         throw RuntimeException("please login first")
 
-      val items = ApiManager.chats.send(AccountManager.accessToken, contactId, message).await()
+      val items = ApiManager.chats.send(AccountManager.user.accessToken, contactId, message).await()
       if (items.isNotEmpty()) {
         val ids = items.mapId()
         DataManager.chats.merge(items) { ids.contains(it.id) }
@@ -116,10 +116,10 @@ object Repository {
     }
 
     suspend fun seen(senderId: ID) {
-      if (!AccountManager.isLoggedIn && AccountManager.isFresh)
+      if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
         throw RuntimeException("please login first")
 
-      val items = ApiManager.chats.markAsSeen(AccountManager.accessToken, senderId).await()
+      val items = ApiManager.chats.markAsSeen(AccountManager.user.accessToken, senderId).await()
       if (items.isNotEmpty()) {
         val ids = items.mapId()
         DataManager.chats.merge(items) { ids.contains(it.id) }
@@ -147,7 +147,7 @@ object Repository {
     }
 
     suspend fun refresh() {
-      if (!AccountManager.isLoggedIn && AccountManager.isFresh)
+      if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
         throw RuntimeException("please login first")
 
       //val items = ApiManager.requests.list(AccountManager.accessToken).await()
@@ -157,13 +157,13 @@ object Repository {
       DataManager.loadOnlineUserData()
     }
 
-    suspend fun update(requestId: ID, type: RequestType, jobId: ID, skillIds: Collection<ID>, detail: String): LocalRequest {
+    suspend fun update(requestId: ID, type: RequestType, jobId: ID, skillIds: List<ID>, detail: String): LocalRequest {
       val isNew = requestId.isEmpty
 
       val request = if (isNew)
-        ApiManager.requests.create(AccountManager.accessToken, type.key, jobId, skillIds, detail).await()
+        ApiManager.requests.create(AccountManager.user.accessToken, type.key, jobId, skillIds, detail).await()
       else
-        ApiManager.requests.edit(AccountManager.accessToken, requestId, type.key, jobId, skillIds, detail).await()
+        ApiManager.requests.edit(AccountManager.user.accessToken, requestId, type.key, jobId, skillIds, detail).await()
 
       DataManager.requests.merge(request) { it.id == request.id }
       return request

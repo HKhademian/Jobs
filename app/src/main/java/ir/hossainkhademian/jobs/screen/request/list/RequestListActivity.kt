@@ -1,6 +1,8 @@
 package ir.hossainkhademian.jobs.screen.request.list
 
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
+import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
@@ -29,6 +31,8 @@ import kotlinx.android.synthetic.main.item_request_list.view.*
 import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.activity
 import ir.hossainkhademian.util.bundle
+import android.support.v4.view.GravityCompat
+import android.view.Gravity
 
 
 class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestEditListener {
@@ -46,6 +50,22 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
 
     setContentView(R.layout.activity_request_list_holder)
     twoPane = detailContainer != null
+
+    fab?.let { fab ->
+      fab.layoutParams = CoordinatorLayout.LayoutParams(fab.layoutParams as? CoordinatorLayout.LayoutParams).also {
+        it.gravity =
+          if (twoPane) Gravity.BOTTOM or Gravity.START
+          else Gravity.TOP or Gravity.CENTER
+      }
+    }
+    fabDetail?.let { fab ->
+      fab.visibility = View.GONE
+//      fab.layoutParams = CoordinatorLayout.LayoutParams(fab.layoutParams as? CoordinatorLayout.LayoutParams).also {
+//        it.gravity =
+//          if (twoPane) Gravity.BOTTOM or Gravity.END
+//          else Gravity.TOP or Gravity.END
+//      }
+    }
 
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -146,10 +166,10 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
     showRequestDetail(request)
   }
 
-  override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-    menuInflater.inflate(R.menu.request_list, menu)
-    return true
-  }
+  //override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+  //  menuInflater.inflate(R.menu.request_list, menu)
+  //  return true
+  //}
 
   override fun onOptionsItemSelected(item: MenuItem) =
     when (item.itemId) {
@@ -180,13 +200,14 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
 
   /** this is never called in single panel mode */
   override fun onRequestDetailCloseDone(requestId: ID) {
-    //finish()
-//    navigateUpTo(Intent(context, RequestListActivity::class.java))
+    // editing = false
+    // supportFragmentManager.popBackStack()
   }
 
   /** this is never called in single panel mode */
   override fun onRequestEditDone(requestId: ID) {
     editing = false
+    viewModel.postSelectedId(requestId)
     supportFragmentManager.popBackStack()
   }
 

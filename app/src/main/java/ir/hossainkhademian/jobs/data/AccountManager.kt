@@ -1,19 +1,16 @@
 package ir.hossainkhademian.jobs.data
 
-import android.content.Context
 import com.chibatching.kotpref.KotprefModel
 import com.chibatching.kotpref.enumpref.enumValuePref
+import io.reactivex.subjects.BehaviorSubject
 import ir.hossainkhademian.jobs.App
 import ir.hossainkhademian.jobs.data.api.ApiManager
-import ir.hossainkhademian.jobs.data.model.Login
-import ir.hossainkhademian.jobs.data.model.UserRole
-import ir.hossainkhademian.jobs.data.model.isFresh
-import ir.hossainkhademian.jobs.data.model.isLoggedIn
+import ir.hossainkhademian.jobs.data.model.*
 import ru.gildor.coroutines.retrofit.await
 
-object AccountManager : Login by Storage {
+object AccountManager {
   /** this MockApiStorage must be replaced with a secure one */
-  private object Storage : KotprefModel(), Login {
+  private object Storage : KotprefModel(), LocalLogin {
     override var id by stringPref()
     override var title by stringPref()
     override var role by enumValuePref(UserRole.User)
@@ -22,6 +19,10 @@ object AccountManager : Login by Storage {
     override var refreshToken by stringPref()
     override var accessToken = ""
   }
+
+  val user = object : LocalLogin by Storage {}
+  private val subject = BehaviorSubject.create<LocalLogin>()
+  val observable = subject.hide()
 
   internal fun App.initAccountManager() {
     //val context = applicationContext
@@ -37,6 +38,8 @@ object AccountManager : Login by Storage {
     refreshToken = login.refreshToken
     accessToken = login.accessToken
 
+    subject.onNext(user)
+
     Unit
   }
 
@@ -44,9 +47,9 @@ object AccountManager : Login by Storage {
    * get new access token from current login (update token)
    */
   suspend fun refresh(force: Boolean = true, loadData: Boolean = true) {
-    if (!isLoggedIn) return
-    if (!force && isFresh) return
-    val login = ApiManager.accounts.refresh(refreshToken).await()
+    if (!user.isLoggedIn) return
+    if (!force && user.isFresh) return
+    val login = ApiManager.accounts.refresh(user.refreshToken).await()
     save(login)
     //delay(2000)
     if (loadData) DataManager.loadOnlineUserData()
@@ -61,19 +64,24 @@ object AccountManager : Login by Storage {
     DataManager.chats.clear()
     DataManager.users.clear()
     DataManager.requests.clear()
-    //delay(1000)
+    subject.onNext(user)
   }
 
-  suspend fun login(phone: String, password: String, loadData: Boolean = true) {
+  suspend fun login(phone: String, password: String) {
     val login = ApiManager.accounts.login(phone, password).await()
     save(login)
     // if (loadData) DataManager.loadOnlineUserData(context)
   }
 
-  suspend fun register(phone: String, loadData: Boolean = true) {
+  suspend fun register(phone: String) {
     val login = ApiManager.accounts.register(phone).await()
     save(login)
     // if (loadData) DataManager.loadOnlineUserData(context)
+  }
+
+  suspend fun changeTitle(title: String) {
+    val login = ApiManager.accounts.changeTitle(user.refreshToken, title).await()
+    save(login)
   }
 
 

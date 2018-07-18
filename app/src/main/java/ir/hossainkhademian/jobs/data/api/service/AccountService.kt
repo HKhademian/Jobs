@@ -15,4 +15,7 @@ interface AccountService {
 
   @POST("/account/update")
   fun refresh(refreshToken: String): Call<LoginData>
+
+  @POST("/account/change")
+  fun changeTitle(refreshToken: String, title: String): Call<LoginData>
 }

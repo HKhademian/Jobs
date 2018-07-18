@@ -1,6 +1,5 @@
 package ir.hossainkhademian.jobs.data.api
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
@@ -160,7 +159,7 @@ internal object MockApiStorage {
   fun getUserByAccessToken(accessToken: String) =
     users.items.firstOrNull { it.accessToken == accessToken }
 
-  fun fakeWait(errorChance: Int = 5) {
+  fun fakeWait(errorChance: Int = 2) {
     val delay = 0L + random.nextInt(500) + random.nextInt(1500)
     Thread.sleep(delay)
 

@@ -7,9 +7,13 @@ import android.view.MenuItem
 import android.view.View
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
+import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailActivity
+import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailFragment
 import ir.hossainkhademian.jobs.screen.request.list.RequestListActivity
 import ir.hossainkhademian.util.bundle
 import ir.hossainkhademian.util.context
+import ir.hossainkhademian.util.launchActivity
+import ir.hossainkhademian.util.putExtras
 import kotlinx.android.synthetic.main.activity_request_edit.*
 
 class RequestEditActivity : AppCompatActivity(), RequestEditListener {
@@ -54,10 +58,16 @@ class RequestEditActivity : AppCompatActivity(), RequestEditListener {
     }
 
   override fun onRequestEditDone(requestId: ID) {
-//    if (request.isNotEmpty)
-//      launchActivity<RequestEditActivity>(extras = *arrayOf(
-//        RequestEditFragment.ARG_REQUEST_ID to requestId
-//      ))
+    // navigateUpTo(Intent(context, RequestListActivity::class.java))
+
+     launchActivity<RequestDetailActivity>(extras = *arrayOf(RequestDetailFragment.ARG_REQUEST_ID to requestId))
+     finish()
+
+    //navigateUpTo(Intent(context, RequestDetailActivity::class.java).also {
+    //  it.putExtras(bundle(
+    //    RequestDetailFragment.ARG_REQUEST_ID to requestId
+    //  ))
+    //})
   }
 
   override fun onRequestEditCancel(requestId: ID) {

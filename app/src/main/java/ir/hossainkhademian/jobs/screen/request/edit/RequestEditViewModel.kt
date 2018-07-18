@@ -102,12 +102,12 @@ internal class RequestEditViewModel : BaseViewModel() {
       val newRequest = Repository.Requests.update(request.id, type, job.id, skills.mapId(), detail)
 
       launch(UI) {
+        showWaiting.postValue(Event(false))
+        isSubmiting.postValue(false)
         listener?.onRequestEditDone(newRequest.id)
       }
     }.invokeOnCompletion {
       disposableSubmit = null
-      isSubmiting.postValue(false)
-      showWaiting.postValue(Event(false))
     }
   }
 

@@ -42,7 +42,7 @@
     android:adjustViewBounds="true"
     android:contentDescription="@string/des_ic_fanavard"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:srcCompat="@drawable/ic_fanavard" />
+    app:srcCompat="@drawable/ic_social_fanavard" />
 
 
 </android.support.constraint.ConstraintLayout>

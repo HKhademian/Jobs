@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <item
+    android:id="@+id/nav_refresh"
+    android:icon="@drawable/ic_action_refresh"
+    android:title="@string/menu_navigation_refresh"
+    app:itemIconTint="@color/colorPrimaryDark"
+    app:itemTextColor="@color/colorPrimaryDark"/>
+
+  <item
+    android:id="@+id/nav_logout"
+    android:icon="@drawable/ic_action_logout"
+    android:title="@string/menu_navigation_logout"
+    app:itemIconTint="@color/colorPrimary"
+    app:itemTextColor="@color/colorPrimary"/>
+
+  <item
+    android:id="@+id/nav_exit"
+    android:icon="@drawable/ic_action_exit"
+    android:title="@string/menu_navigation_exit"
+    app:itemIconTint="@color/colorAccent"
+    app:itemTextColor="@color/colorAccent"/>
+
+  <item android:title="@string/menu_navigation_test">
+    <menu>
+      <item
+        android:icon="@drawable/ic_menu_gallery"
+        android:title="@string/menu_navigation_test_gallery"
+        app:itemIconTint="#64dd17"
+        app:itemTextColor="#64dd17"/>
+      <item
+        android:icon="@drawable/ic_menu_slideshow"
+        android:title="@string/menu_navigation_test_slideshow"
+        app:itemIconTint="#18ffff"
+        app:itemTextColor="#18ffff"/>
+      <item
+        android:icon="@drawable/ic_menu_manage"
+        android:title="@string/menu_navigation_test_tools"
+        app:itemIconTint="#d500f9"
+        app:itemTextColor="#d500f9"/>
+    </menu>
+  </item>
+
+  <item android:title="@string/menu_navigation_communicate">
+    <menu>
+      <item
+        android:id="@+id/nav_share"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/menu_navigation_communicate_share"
+        app:itemIconTint="#dd2c00"
+        app:itemTextColor="#dd2c00"/>
+      <item
+        android:id="@+id/nav_send"
+        android:icon="@drawable/ic_menu_send"
+        android:title="@string/menu_navigation_communicate_send"
+        app:itemIconTint="#fdd835"
+        app:itemTextColor="#fdd835"/>
+      <item
+        android:id="@+id/nav_developer"
+        android:icon="@drawable/ic_action_star"
+        android:title="@string/menu_navigation_communicate_developer"
+        app:itemIconTint="#1de9b6"
+        app:itemTextColor="#1de9b6"/>
+      <item
+        android:id="@+id/nav_fanavard"
+        android:icon="@drawable/ic_menu_send"
+        android:title="@string/menu_navigation_communicate_fanavard"
+        app:itemIconTint="#6200ea"
+        app:itemTextColor="#6200ea"/>
+    </menu>
+  </item>
+</menu>

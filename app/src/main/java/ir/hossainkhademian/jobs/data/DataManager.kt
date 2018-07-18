@@ -32,7 +32,7 @@ internal object DataManager {
 
   /** update all cached data for user */
   suspend fun loadOnlineUserData() {
-    if (!AccountManager.isFresh) return
+    if (!AccountManager.user.isFresh) return
 
     val calls = arrayListOf<Deferred<*>>()
     var requests = emptyList<RequestData>()
@@ -41,19 +41,19 @@ internal object DataManager {
     var users = emptyList<UserData>()
 
     calls += async {
-      requests = ApiManager.requests.list(AccountManager.accessToken).await()
+      requests = ApiManager.requests.list(AccountManager.user.accessToken).await()
     }
 
     calls += async {
-      chats = ApiManager.chats.list(AccountManager.accessToken).await()
+      chats = ApiManager.chats.list(AccountManager.user.accessToken).await()
     }
 
     calls += async {
-      matches = ApiManager.matches.list(AccountManager.accessToken).await()
+      matches = ApiManager.matches.list(AccountManager.user.accessToken).await()
     }
 
     calls += async {
-      users = ApiManager.users.list(AccountManager.accessToken).await()
+      users = ApiManager.users.list(AccountManager.user.accessToken).await()
     }
 
     calls.map { it.await() }

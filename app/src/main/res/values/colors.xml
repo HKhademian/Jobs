@@ -18,6 +18,11 @@
 
   <color name="color_message_card_send">#fff9c4</color>
   <color name="color_message_card_receive">#b3e5fc</color>
+
+  <color name="color_role_user">@color/colorPrimary</color>
+  <color name="color_role_broker">@color/colorIcons</color>
+  <color name="color_role_admin">@color/colorAccent</color>
+
   <color name="color_request_worker">#64dd17</color>
   <color name="color_request_company">#4fc3f7</color>
 </resources>

@@ -15,20 +15,23 @@
   <string name="title_about">About US</string>
   <string name="title_dashboard">Dashboard</string>
   <string name="title_notifications">Notifications</string>
-  <string name="title_chat_list">Chats</string>
+  <string name="title_chats">Chats</string>
   <string name="title_chat_detail">Chat Detail</string>
   <string name="title_request_list">Request</string>
   <string name="title_request_detail">Request Detail</string>
+  <string name="title_request_edit">Request Edit</string>
   <string name="title_register">Register a new account</string>
   <string name="title_login">Login to account</string>
   <string name="title_loading">Loading data from server</string>
   <string name="title_about_developer">About developer:</string>
   <string name="title_wait">Wait a little</string>
+  <string name="title_requests">Requests</string>
   <string name="subtitle_loading">Please wait …</string>
 
   <string name="des_ic_fanavard">Fanavard Contest Icon</string>
   <string name="des_ic_launcher">Application Icon</string>
   <string name="des_background">Background</string>
+  <string name="des_avatar">User Avatar</string>
 
   <string name="message_loading">please don\'t exit the app while loadings</string>
   <string name="message_register">if you don\'t have account,  
@@ -81,7 +84,20 @@
 
   <string name="navigation_drawer_open">Open navigation drawer</string>
   <string name="navigation_drawer_close">Close navigation drawer</string>
-  <string name="nav_header_title">Android Studio</string>
-  <string name="nav_header_subtitle">android.studio@android.com</string>
-  <string name="nav_header_desc">Navigation header</string>
+
+  <string name="menu_navigation_logout">Logout</string>
+  <string name="menu_navigation_refresh">Refresh Data</string>
+  <string name="menu_navigation_exit">Exit</string>
+  <string name="menu_navigation_test_gallery">Gallery</string>
+  <string name="menu_navigation_test_slideshow">Slideshow</string>
+  <string name="menu_navigation_test_tools">Tools</string>
+  <string name="menu_navigation_communicate_share">Share</string>
+  <string name="menu_navigation_communicate_send">Send</string>
+  <string name="menu_navigation_communicate_developer">Developer</string>
+  <string name="menu_navigation_communicate_fanavard">Fanavard</string>
+  <string name="dialog_user_title_change_title">Please select user\'s new title</string>
+  <string name="dialog_user_title_change_action_change">Change</string>
+  <string name="dialog_user_title_change_action_cancel">Cancel</string>
+  <string name="menu_navigation_test">Test Actions</string>
+  <string name="menu_navigation_communicate">Communicate</string>
 </resources>

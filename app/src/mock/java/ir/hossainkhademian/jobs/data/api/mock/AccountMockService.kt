@@ -45,7 +45,7 @@ object AccountMockService : AccountService {
     //if (last == "0" || last == "1")
     // return Calls.failure(IOException("cannot create admin/broker usersList from App"))
 
-    val user = MockApiStorage.users.items.firstOrNull { it.phone == phone }
+    val user = MockApiStorage.users.items.find { it.phone == phone }
 
     if (user != null)
       return Calls.failure(IOException("User with this phone founds!"))
@@ -129,11 +129,32 @@ object AccountMockService : AccountService {
   override fun refresh(refreshToken: String): Call<LoginData> {
     MockApiStorage.fakeWait()
 
-    val login = MockApiStorage.users.items.firstOrNull { it.refreshToken == refreshToken }
-      ?: return Calls.failure(IOException("cannot update this token"))
+    val login = MockApiStorage.users.items.find { it.refreshToken == refreshToken }
+      ?: return Calls.failure(IOException("cannot find user with this token"))
 
     val user = login.copy(
       accessToken = "${login.id}.$generateID",
+      lastSeen = System.currentTimeMillis()
+    )
+    MockApiStorage.users.update(user)
+
+    return Calls.response(user.toData())
+  }
+
+  override fun changeTitle(refreshToken: String, title: String): Call<LoginData> {
+    MockApiStorage.fakeWait()
+
+    val ttl = title.trim()
+    if (ttl.length < 4)
+      return Calls.failure(IOException("Please use longer title"))
+    if (ttl.length > 20)
+      return Calls.failure(IOException("Please use smaller title"))
+
+    val login = MockApiStorage.users.items.find { it.refreshToken == refreshToken }
+      ?: return Calls.failure(IOException("cannot find user with this token"))
+
+    val user = login.copy(
+      title = ttl,
       lastSeen = System.currentTimeMillis()
     )
     MockApiStorage.users.update(user)

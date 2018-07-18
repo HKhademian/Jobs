@@ -42,7 +42,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="128dp"
 				android:layout_marginBottom="8dp"
-				app:srcCompat="@drawable/ic_brand" />
+				app:srcCompat="@drawable/ic_social_brand" />
 
 			<TextView
 				android:layout_width="match_parent"
@@ -72,7 +72,7 @@
 					android:textDirection="ltr"
 					app:deleteChar=" "
 					app:mask="+98 ### ### ####"
-					app:maskIcon="@drawable/ic_delete_small"
+					app:maskIcon="@drawable/ic_action_delete"
 					app:maskIconColor="@color/colorAccent"
 					app:notMaskedSymbol="#"
 					app:replacementChar=" " />

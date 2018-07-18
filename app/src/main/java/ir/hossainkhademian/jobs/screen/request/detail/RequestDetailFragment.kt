@@ -96,6 +96,7 @@ class RequestDetailFragment : BaseFragment() {
     fabDetail = activity?.findViewById(R.id.fabDetail)
     fabDetail?.let { fabDetail ->
       fabDetail.isEnabled = true
+      fabDetail.visibility = View.VISIBLE
       fabDetail.setImageResource(R.drawable.ic_action_edit)
       fabDetail.setOnClickListener {
         viewModel.edit()
@@ -119,16 +120,16 @@ class RequestDetailFragment : BaseFragment() {
     jobView.job = job
     userView.user = user
     detailView.text = detail
-    detailsEmptyHintView.visibility = if(detail.isEmpty()) View.VISIBLE else View.GONE
+    detailsEmptyHintView.visibility = if (detail.isEmpty()) View.VISIBLE else View.GONE
 
     skillsView.setTags(skills.map { it.title })
-    skillsEmptyHintView.visibility = if(skills.isEmpty()) View.VISIBLE else View.GONE
+    skillsEmptyHintView.visibility = if (skills.isEmpty()) View.VISIBLE else View.GONE
 
     brokerAdapter.items = brokers
-    brokersEmptyHintView.visibility = if(brokers.isEmpty()) View.VISIBLE else View.GONE
+    brokersEmptyHintView.visibility = if (brokers.isEmpty()) View.VISIBLE else View.GONE
 
     matchesAdapter.items = matches
-    matchesEmptyHintView.visibility = if(matches.isEmpty()) View.VISIBLE else View.GONE
+    matchesEmptyHintView.visibility = if (matches.isEmpty()) View.VISIBLE else View.GONE
   }
 
 

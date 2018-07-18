@@ -18,8 +18,11 @@ private fun generateAvatarUrl(id: ID): String? {
 val EmptyUser = UserData(id = emptyID, lastSeen = 0L)
 val User.avatarUrl get() = generateAvatarUrl(id)
 val User.isAdmin get() = role == UserRole.Admin
+val User.isNotAdmin get() = role != UserRole.Admin
 val User.isBroker get() = role == UserRole.Broker
+val User.isNotBroker get() = role != UserRole.Broker
 val User.isUser get() = role == UserRole.User
+val User.isNotUser get() = role != UserRole.User
 
 interface User : IdModel {
   override val id: ID

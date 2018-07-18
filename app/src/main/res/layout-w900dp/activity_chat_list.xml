@@ -9,6 +9,7 @@
   android:divider="?android:attr/dividerHorizontal"
   android:orientation="horizontal"
   android:showDividers="middle"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior"
   tools:context=".screen.chat.list.ChatListActivity">
 
   <include
