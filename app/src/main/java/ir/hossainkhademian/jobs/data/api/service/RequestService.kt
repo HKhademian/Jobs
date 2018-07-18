@@ -3,6 +3,7 @@
 package ir.hossainkhademian.jobs.data.api
 
 import ir.hossainkhademian.jobs.data.model.ID
+import ir.hossainkhademian.jobs.data.model.Request
 import ir.hossainkhademian.jobs.data.model.RequestData
 import retrofit2.Call
 import retrofit2.http.GET
@@ -14,8 +15,8 @@ interface RequestService {
   fun list(accessToken: String): Call<List<RequestData>>
 
   @POST("/requests")
-  fun edit(accessToken: String, id: ID, typeStr: String, detail: String, jobId: ID, skillIds: List<ID>): Call<RequestData>
+  fun edit(accessToken: String, requestId: ID, typeStr: String, jobId: ID, skillIds: Collection<ID>, detail: String): Call<RequestData>
 
   @PUT("/requests")
-  fun create(accessToken: String, id: ID, typeStr: String, detail: String, jobId: ID, skillIds: List<ID>): Call<RequestData>
+  fun create(accessToken: String, typeStr: String, jobId: ID, skillIds: Collection<ID>, detail: String): Call<RequestData>
 }

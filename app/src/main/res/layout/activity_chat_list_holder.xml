@@ -6,7 +6,8 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fitsSystemWindows="true"
-  tools:context=".screen.chat.list.ChatListActivity">
+  tools:context=".screen.chat.list.ChatListActivity"
+  android:background="@color/colorList">
 
   <android.support.design.widget.AppBarLayout
     android:id="@+id/app_bar"
@@ -30,7 +31,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="top|end"
     android:layout_margin="@dimen/fab_margin"
-    app:srcCompat="@drawable/ic_menu_gallery"
+    app:srcCompat="@drawable/ic_action_star"
     android:tint="@color/colorIcons"
     app:backgroundTint="@color/colorAccent"
     app:rippleColor="@color/colorPrimaryText"/>

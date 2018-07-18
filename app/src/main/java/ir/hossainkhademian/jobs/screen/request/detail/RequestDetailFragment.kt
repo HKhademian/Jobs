@@ -1,8 +1,11 @@
 package ir.hossainkhademian.jobs.screen.request.detail
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -36,10 +39,15 @@ class RequestDetailFragment : BaseFragment() {
   private val typeView get() = rootView.typeView as ToggleSwitch
   private val jobView get() = rootView.jobView
   private val skillsView get() = rootView.skillsView
+  private val skillsEmptyHintView get() = rootView.skillsEmptyHintView
   private val userView get() = rootView.userView
   private val detailView get() = rootView.detailView
+  private val detailsEmptyHintView get() = rootView.detailsEmptyHintView
   private val brokersView get() = rootView.brokersView
+  private val brokersEmptyHintView get() = rootView.brokersEmptyHintView
   private val matchesView get() = rootView.matchesView
+  private val matchesEmptyHintView get() = rootView.matchesEmptyHintView
+  private var fabDetail: FloatingActionButton? = null
 
   val context get() = activity!!
   private val brokerAdapter: BrokerAdapter = BrokerAdapter()
@@ -50,41 +58,27 @@ class RequestDetailFragment : BaseFragment() {
     viewModel = getViewModel { RequestDetailViewModel() }
     viewModel.listener = context as? RequestDetailListener
     viewModel.init(arguments?.getString(ARG_REQUEST_ID) ?: emptyID)
+    fabDetail = activity?.findViewById(R.id.fabDetail)
   }
 
   fun setRequestId(requestId: ID) {
     viewModel.requestId = requestId
   }
 
-  @SuppressLint("ClickableViewAccessibility")
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     if (this::rootView.isInitialized)
       return rootView
-
     rootView = inflater.inflate(R.layout.fragment_request_detail, container, false)
 
-    detailView.setOnTouchListener { v, event ->
-      v.parent.requestDisallowInterceptTouchEvent(true)
-      if (event.action and MotionEvent.ACTION_MASK == MotionEvent.ACTION_UP)
-        v.parent.requestDisallowInterceptTouchEvent(false)
-      false
+
+    viewModel.activity.observe(this) {
+      val task = it.getContentIfNotHandled() ?: return@observe
+      task.invoke(context as Activity)
     }
 
-    brokersView.let { recyclerView ->
-      recyclerView.adapter = brokerAdapter
-      recyclerView.itemAnimator = DefaultItemAnimator()
-      recyclerView.layoutManager = LinearLayoutManager(context).apply {
-        orientation = LinearLayoutManager.HORIZONTAL
-      }
-    }
-
-    matchesView.let { recyclerView ->
-      recyclerView.adapter = matchesAdapter
-      recyclerView.itemAnimator = DefaultItemAnimator()
-      recyclerView.layoutManager = LinearLayoutManager(context).apply {
-        orientation = LinearLayoutManager.VERTICAL
-      }
-      recyclerView.itemAnimator = DefaultItemAnimator()
+    viewModel.error.observe(this) {
+      val ex = it.getContentIfNotHandled() ?: return@observe
+      Snackbar.make(rootView, "Error occurs in Request Edit Page:\n${ex.message ?: ex.toString()}\n\nif this happens many times please contact support team.", Snackbar.LENGTH_SHORT).show()
     }
 
     viewModel.request.observe(this) { setRequest(it) }
@@ -93,20 +87,45 @@ class RequestDetailFragment : BaseFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
+    brokersView.adapter = brokerAdapter
+    matchesView.adapter = matchesAdapter
+
+    fabDetail?.let { fabDetail ->
+      fabDetail.isEnabled = true
+      fabDetail.setImageResource(R.drawable.ic_action_edit)
+      fabDetail.setOnClickListener {
+        viewModel.edit()
+      }
+    }
+
     typeView.isEnabled = false
     editAction.setOnClickListener { viewModel.edit() }
     cancelAction.setOnClickListener { viewModel.cancel() }
   }
 
   private fun setRequest(request: LocalRequest) {
-    typeView.setCheckedPosition(if (request.isWorker) 0 else 1)
-    jobView.job = request.job
-    userView.user = request.user
-    detailView.text = request.detail
+    val job = request.job
+    val user = request.user
+    val detail = request.detail
+    val skills = request.skills
+    val brokers = request.brokers
+    val matches = request.matches
 
-    skillsView.setTags(request.skills.map { it.title })
-    brokerAdapter.items = request.brokers
-    matchesAdapter.items = request.matches
+    typeView.setCheckedPosition(if (request.isWorker) 0 else 1)
+    jobView.job = job
+    userView.user = user
+    detailView.text = detail
+    detailsEmptyHintView.visibility = if(detail.isEmpty()) View.VISIBLE else View.GONE
+
+    skillsView.setTags(skills.map { it.title })
+    skillsEmptyHintView.visibility = if(skills.isEmpty()) View.VISIBLE else View.GONE
+
+    brokerAdapter.items = brokers
+    brokersEmptyHintView.visibility = if(brokers.isEmpty()) View.VISIBLE else View.GONE
+
+    matchesAdapter.items = matches
+    matchesEmptyHintView.visibility = if(matches.isEmpty()) View.VISIBLE else View.GONE
   }
 
 
@@ -158,7 +177,7 @@ class RequestDetailFragment : BaseFragment() {
 
     init {
       view.setOnClickListener {
-        viewModel!!.sendChat(item)
+        viewModel.sendChat(item)
       }
     }
 

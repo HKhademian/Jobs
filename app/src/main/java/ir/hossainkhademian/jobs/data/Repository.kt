@@ -62,7 +62,7 @@ object Repository {
         //.debounceAfter(1, 5, TimeUnit.SECONDS)
         .observeOn(Schedulers.computation())
         .map { users ->
-          users.findById(userId) ?: EmptyUser
+          users.findById(userId, EmptyUser)
         }
         .observeOn(AndroidSchedulers.mainThread())
     }
@@ -142,7 +142,7 @@ object Repository {
         // .subscribeOn(Schedulers.io())
         .take(1)
         .observeOn(Schedulers.computation())
-        .getById(requestId)
+        .findById(requestId, EmptyRequest)
         .observeOn(AndroidSchedulers.mainThread())
     }
 
@@ -155,6 +155,18 @@ object Repository {
       //DataManager.requests.merge(items) { ids.contains(it.id) }
 
       DataManager.loadOnlineUserData()
+    }
+
+    suspend fun update(requestId: ID, type: RequestType, jobId: ID, skillIds: Collection<ID>, detail: String): LocalRequest {
+      val isNew = requestId.isEmpty
+
+      val request = if (isNew)
+        ApiManager.requests.create(AccountManager.accessToken, type.key, jobId, skillIds, detail).await()
+      else
+        ApiManager.requests.edit(AccountManager.accessToken, requestId, type.key, jobId, skillIds, detail).await()
+
+      DataManager.requests.merge(request) { it.id == request.id }
+      return request
     }
   }
 }

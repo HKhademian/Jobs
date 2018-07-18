@@ -8,7 +8,7 @@
   android:id="@+id/swipeRefreshLayout"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/colorBack">
+  android:background="@color/colorList">
   <android.support.v7.widget.RecyclerView
     android:id="@+id/recyclerView"
     android:name="ir.hossainkhademian.jobs.screen.request.list.RequestListActivity"
@@ -16,6 +16,7 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:orientation="vertical"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
     tools:listitem="@layout/item_request_list"
     android:layoutAnimation="@anim/layout_animation_fall_down"/>

@@ -15,15 +15,20 @@ import ir.hossainkhademian.jobs.screen.BaseActivity
 import ir.hossainkhademian.jobs.screen.chat.list.ChatListActivity
 import ir.hossainkhademian.jobs.screen.request.list.RequestListActivity
 import ir.hossainkhademian.util.Collections.consume
+import ir.hossainkhademian.util.ViewModels.getViewModel
+import ir.hossainkhademian.util.LiveDatas.observe
+import ir.hossainkhademian.util.activity
 import ir.hossainkhademian.util.context
 import ir.hossainkhademian.util.launchActivity
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 class DashboardActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
   private var currentFragment: Fragment? = null
+  private lateinit var viewModel: DashboardViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    viewModel = getViewModel { DashboardViewModel() }
     setContentView(R.layout.activity_dashboard)
 
     setSupportActionBar(toolbar)
@@ -34,8 +39,19 @@ class DashboardActivity : BaseActivity(), BottomNavigationView.OnNavigationItemS
     bottomNavigation.setOnNavigationItemSelectedListener(this)
     navigationView.setNavigationItemSelectedListener(this)
 
-    initWhatsNew()
+    viewModel.error.observe(this) {
+      val ex = it.getContentIfNotHandled() ?: return@observe
+      Snackbar.make(container,
+        "Error :\n${ex.message ?: ex.toString()}\n\nif it happens many times, contact support",
+        Snackbar.LENGTH_LONG).show()
+    }
 
+    viewModel.activity.observe(this) {
+      val task = it.getContentIfNotHandled() ?: return@observe
+      task.invoke(activity)
+    }
+
+    initWhatsNew()
     showAbout()
   }
 
@@ -65,6 +81,9 @@ class DashboardActivity : BaseActivity(), BottomNavigationView.OnNavigationItemS
       }
       R.id.navigation_chats -> consume(false) {
         showChats()
+      }
+      R.id.nav_logout -> consume(false) {
+        viewModel.logout()
       }
       else -> consume {
         Snackbar.make(container, "Not Implemented yet!", Snackbar.LENGTH_LONG).show()

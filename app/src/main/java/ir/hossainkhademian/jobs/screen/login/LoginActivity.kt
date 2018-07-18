@@ -102,14 +102,14 @@ class LoginActivity : BaseActivity() {
       val result = asyncUI {
         try {
           AccountManager.login(phone, password)
-          true
+          null
         } catch (ex: Exception) {
           ex.printStackTrace()
-          false
+          ex
         }
       }.await()
 
-      if (result) {
+      if (result==null) {
         delay(100) // cool down
         launch(UI) {
           // launchActivity<DashboardActivity>()
@@ -120,7 +120,7 @@ class LoginActivity : BaseActivity() {
       }
 
       launch(UI) {
-        Toast.makeText(activity, "Wrong Phone & Password combination!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, "Wrong Phone & Password combination!\n${result.message}", Toast.LENGTH_SHORT).show()
       }
     }
   }

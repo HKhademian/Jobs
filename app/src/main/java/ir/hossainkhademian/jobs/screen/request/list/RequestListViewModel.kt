@@ -8,10 +8,7 @@ import ir.hossainkhademian.jobs.data.model.emptyID
 import ir.hossainkhademian.jobs.util.BaseViewModel
 import ir.hossainkhademian.util.Event
 import ir.hossainkhademian.util.Observables.toLiveData
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.CoroutineExceptionHandler
-import kotlinx.coroutines.experimental.DisposableHandle
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.*
 
 internal class RequestListViewModel : BaseViewModel() {
   val requests = Repository.Requests.list().toLiveData()
@@ -24,20 +21,20 @@ internal class RequestListViewModel : BaseViewModel() {
     this.selectedId.postValue(selectedId)
   }
 
-  private var disposable: DisposableHandle? = null
+  private var job: Job? = null
   fun refresh() {
     error as MutableLiveData
     isRefreshing as MutableLiveData
 
-    disposable?.dispose()
+    job?.cancel()
 
     isRefreshing.postValue(true)
-    disposable = launch(CommonPool + CoroutineExceptionHandler { _, ex ->
+    job = launch(CommonPool + CoroutineExceptionHandler { _, ex ->
       isRefreshing.postValue(false)
       error.postValue(Event(ex))
+      job = null
     }) {
       Repository.Requests.refresh()
-    }.invokeOnCompletion {
       isRefreshing.postValue(false)
     }
   }

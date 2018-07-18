@@ -18,10 +18,11 @@ object ExitDialog {
     onRate: () -> Unit,
     onExit: () -> Unit
   ) = AlertDialog.Builder(context)
-    .setCancelable(false)
+    .setCancelable(true)
     .setTitle("Are you sure you want to exit?")
     .setMessage("Please rate us if you like this App!")
     .setPositiveButton("Stay") { _, _ -> onStay() }
     .setNeutralButton("Rate") { _, _ -> onRate() }
     .setNegativeButton("Exit") { _, _ -> onExit() }
+    .setOnCancelListener { onStay() }
 }

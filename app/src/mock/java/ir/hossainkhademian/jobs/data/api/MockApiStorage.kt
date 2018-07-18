@@ -1,5 +1,6 @@
 package ir.hossainkhademian.jobs.data.api
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
@@ -10,10 +11,10 @@ import ir.hossainkhademian.jobs.data.api.model.LoginMock
 import ir.hossainkhademian.jobs.data.api.model.MatchMock
 import ir.hossainkhademian.jobs.data.api.model.RequestMock
 import ir.hossainkhademian.jobs.data.api.model.SkillMock
-import ir.hossainkhademian.jobs.data.api.model.UserMock
-import ir.hossainkhademian.jobs.data.api.model.toData
 import ir.hossainkhademian.jobs.data.model.*
+import ir.hossainkhademian.util.Texts
 import java.io.IOException
+import java.lang.ref.WeakReference
 import java.util.*
 
 internal object MockApiStorage {
@@ -25,6 +26,7 @@ internal object MockApiStorage {
   private const val PREF_MATCHES = "mock.matches"
 
   internal lateinit var pref: SharedPreferences
+  internal lateinit var context: WeakReference<Context>
   private val moshi = Moshi.Builder().build()
   private val userAdapter = moshi.adapter(LoginMock::class.java)
   private val jobAdapter = moshi.adapter(JobMock::class.java)
@@ -43,8 +45,10 @@ internal object MockApiStorage {
   val requests = MockStore<RequestMock>(PREF_REQUESTS, requestAdapter, ::initRequests)
   val matches = MockStore<MatchMock>(PREF_MATCHES, matchAdapter, ::initMatches)
 
+
   fun initMockApiStorage(context: Context) {
     pref = context.getSharedPreferences("mock", Context.MODE_PRIVATE)
+    this.context = WeakReference(context)
     load()
   }
 
@@ -176,4 +180,7 @@ internal object MockApiStorage {
 
   fun fakeTime(days: Int = 7, hours: Int = 0, minutes: Int = 0, seconds: Int = 0, milis: Int = 0) =
     System.currentTimeMillis() - fakeDuration(days, hours, minutes, seconds, milis)
+
+  fun notify(title: String, message: String) =
+    context.get()?.let { context -> Texts.fastNotify(context, title, message) }
 }

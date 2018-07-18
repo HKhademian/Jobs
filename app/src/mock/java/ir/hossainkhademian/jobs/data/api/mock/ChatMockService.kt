@@ -18,19 +18,26 @@ object ChatMockService : ChatService {
     val login = MockApiStorage.getUserByAccessToken(accessToken)
       ?: return Calls.failure(IOException("user with this token not found. please relogin"))
 
-    return Calls.response(MockApiStorage.chats.items.filterByContactId(login.id).toData())
+    val chats = when (login.role) {
+      UserRole.Admin -> MockApiStorage.chats.items
+      else -> MockApiStorage.chats.items.filterByContactId(login.id)
+    }
+
+    return Calls.response(chats.toData())
   }
 
   override fun list(accessToken: String, contactId: ID): Call<List<ChatData>> {
-    MockApiStorage.fakeWait()
+    return Calls.failure(IOException("Deprected API"))
 
-    val login = MockApiStorage.getUserByAccessToken(accessToken)
-      ?: return Calls.failure(IOException("user with this token not found. please relogin"))
-
-    MockApiStorage.users.items.findById(contactId)
-      ?: return Calls.failure(IOException("user with that contactId is not found"))
-
-    return Calls.response(MockApiStorage.chats.items.filterByUserContactId(login.id, contactId).toData())
+    //MockApiStorage.fakeWait()
+    //
+    //val login = MockApiStorage.getUserByAccessToken(accessToken)
+    //  ?: return Calls.failure(IOException("user with this token not found. please relogin"))
+    //
+    //MockApiStorage.users.items.findById(contactId)
+    //  ?: return Calls.failure(IOException("user with that contactId is not found"))
+    //
+    //return Calls.response(MockApiStorage.chats.items.filterByUserContactId(login.id, contactId).toData())
   }
 
   override fun send(accessToken: String, contactId: ID, message: String): Call<List<ChatData>> {

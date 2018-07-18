@@ -38,9 +38,8 @@ class RequestDetailActivity : AppCompatActivity(), RequestDetailListener {
     val requestId = intent.getStringExtra(RequestDetailFragment.ARG_REQUEST_ID) ?: emptyID
 
     val tag = RequestDetailFragment::class.java.simpleName
-    val fragment = RequestDetailFragment().apply {
-      arguments = bundle(RequestDetailFragment.ARG_REQUEST_ID to requestId)
-    }
+    val fragment = (supportFragmentManager.findFragmentByTag(tag) as? RequestDetailFragment)?.also { it.setRequestId(requestId) }
+      ?: RequestDetailFragment().also { it.arguments = bundle(RequestDetailFragment.ARG_REQUEST_ID to requestId) }
 
     supportFragmentManager.beginTransaction()
       .replace(R.id.detailContainer, fragment, tag)
@@ -56,20 +55,20 @@ class RequestDetailActivity : AppCompatActivity(), RequestDetailListener {
       else -> super.onOptionsItemSelected(item)
     }
 
-  override fun onRequestDetailEdit(request: Request) {
+  override fun onRequestDetailEdit(requestId: ID) {
     launchActivity<RequestEditActivity>(extras = *arrayOf(
-      RequestEditFragment.ARG_REQUEST_ID to request.id
+      RequestEditFragment.ARG_REQUEST_ID to requestId
     ))
   }
 
-  override fun onRequestDetailChat(request: Request, user: User) {
-    if (user.isNotEmpty)
+  override fun onRequestDetailChat(requestId: ID, userId: ID) {
+    if (userId.isNotEmpty)
       launchActivity<ChatDetailActivity>(extras = *arrayOf(
-        ChatDetailFragment.ARG_CONTACT_ID to user.id
+        ChatDetailFragment.ARG_CONTACT_ID to userId
       ))
   }
 
-  override fun onRequestDetailCloseDone(request: Request) {
+  override fun onRequestDetailCloseDone(requestId: ID) {
     //finish()
     navigateUpTo(Intent(context, RequestListActivity::class.java))
   }

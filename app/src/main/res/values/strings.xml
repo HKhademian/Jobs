@@ -73,4 +73,13 @@
   <string name="nav_header_title">Android Studio</string>
   <string name="nav_header_subtitle">android.studio@android.com</string>
   <string name="nav_header_desc">Navigation header</string>
+  <string name="hint_request_job_select">Please select a Job by clicking \'Select\' button</string>
+  <string name="action_request_edit">Edit Request</string>
+  <string name="action_request_cancel">Archive Request</string>
+  <string name="hint_request_skills_empty">this request has no Skills</string>
+  <string name="hint_request_detail_empty">this request has no Detail</string>
+  <string name="hint_request_brokers_empty">Admins still don\'t specified any brokers for this Request</string>
+  <string name="hint_request_matches_empty">Applied brokers still don\'t match any request to this Request</string>
+  <string name="action_request_ignore">Ignore Changes</string>
+  <string name="action_request_save">Save Request</string>
 </resources>

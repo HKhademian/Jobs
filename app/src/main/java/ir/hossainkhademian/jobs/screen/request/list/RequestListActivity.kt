@@ -10,11 +10,13 @@ import android.widget.Toast
 import com.squareup.picasso.Picasso
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
+import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailActivity
 import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailFragment
 import ir.hossainkhademian.jobs.screen.chat.list.ChatListActivity
 import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailActivity
 import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailFragment
 import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailListener
+import ir.hossainkhademian.jobs.screen.request.edit.RequestEditActivity
 import ir.hossainkhademian.jobs.screen.request.edit.RequestEditFragment
 import ir.hossainkhademian.jobs.screen.request.edit.RequestEditListener
 import ir.hossainkhademian.util.ViewModels.getViewModel
@@ -49,9 +51,8 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     toolbar.title = title
 
-    fab.setOnClickListener { view ->
-      Snackbar.make(view, "Not Implemented yet!", Snackbar.LENGTH_LONG)
-        .setAction("Action", null).show()
+    fab.setOnClickListener {
+      showRequestEdit(emptyID)
     }
 
     recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
@@ -96,7 +97,6 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
       ))
     } else {
       val tag = RequestDetailFragment::class.java.simpleName
-
       val fragment =
         (supportFragmentManager.findFragmentByTag(tag) as? RequestDetailFragment)?.also { it.setRequestId(request.id) }
           ?: RequestDetailFragment().also { it.arguments = bundle(RequestDetailFragment.ARG_REQUEST_ID to request.idStr) }
@@ -105,6 +105,35 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
         .beginTransaction()
         .replace(R.id.detailContainer, fragment, tag)
         .commit()
+    }
+  }
+
+  private fun showRequestEdit(requestId: ID) {
+    if (editing) {
+      Snackbar.make(recyclerView, "Complete your editing please.", Snackbar.LENGTH_SHORT).show()
+      return
+    }
+    viewModel.postSelectedId(requestId)
+
+    if (!twoPane) {
+      launchActivity<RequestEditActivity>(extras = *arrayOf(
+        RequestDetailFragment.ARG_REQUEST_ID to requestId
+      ))
+    } else {
+      val tag = RequestEditFragment::class.java.simpleName
+
+      // rare happens if cache available
+      val fragment =
+        (supportFragmentManager.findFragmentByTag(tag) as? RequestEditFragment)?.also { it.setRequestId(requestId) }
+          ?: RequestEditFragment().also { it.arguments = bundle(RequestEditFragment.ARG_REQUEST_ID to requestId) }
+
+      supportFragmentManager
+        .beginTransaction()
+        .add(R.id.detailContainer, fragment, tag)
+        .addToBackStack("$tag:$requestId")
+        .commit()
+
+      editing = true
     }
   }
 
@@ -132,45 +161,37 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
     }
 
   /** this is never called in single panel mode */
-  override fun onRequestDetailEdit(request: Request) {
-    val tag = RequestEditFragment::class.java.simpleName
-
-    // rare happens if cache available
-    val fragment =
-      (supportFragmentManager.findFragmentByTag(tag) as? RequestEditFragment)?.also { it.setRequestId(request.id) }
-        ?: RequestEditFragment().also { it.arguments = bundle(RequestEditFragment.ARG_REQUEST_ID to request.idStr) }
-
-    supportFragmentManager
-      .beginTransaction()
-      .add(R.id.detailContainer, fragment, tag)
-      .addToBackStack("$tag:${request.id}")
-      .commit()
-
-    editing = true
+  override fun onRequestDetailEdit(requestId: ID) {
+    showRequestEdit(requestId)
   }
 
   /** this is never called in single panel mode */
-  override fun onRequestDetailChat(request: Request, user: User) {
-    if (user.isNotEmpty)
-      launchActivity<ChatListActivity>(extras = *arrayOf(
-        ChatDetailFragment.ARG_CONTACT_ID to user.id
-      ))
+  override fun onRequestDetailChat(requestId: ID, userId: ID) {
+    if (userId.isNotEmpty)
+      if (twoPane)
+        launchActivity<ChatListActivity>(extras = *arrayOf(
+          ChatDetailFragment.ARG_CONTACT_ID to userId
+        ))
+      else // i think it's impossible
+        launchActivity<ChatDetailActivity>(extras = *arrayOf(
+          ChatDetailFragment.ARG_CONTACT_ID to userId
+        ))
   }
 
   /** this is never called in single panel mode */
-  override fun onRequestDetailCloseDone(request: Request) {
+  override fun onRequestDetailCloseDone(requestId: ID) {
     //finish()
 //    navigateUpTo(Intent(context, RequestListActivity::class.java))
   }
 
   /** this is never called in single panel mode */
-  override fun onRequestEditDone(request: Request, type: RequestType, job: Job, skills: Collection<Skill>, detail: String) {
+  override fun onRequestEditDone(requestId: ID) {
     editing = false
     supportFragmentManager.popBackStack()
   }
 
   /** this is never called in single panel mode */
-  override fun onRequestEditCancel(request: Request) {
+  override fun onRequestEditCancel(requestId: ID) {
     editing = false
     supportFragmentManager.popBackStack()
   }

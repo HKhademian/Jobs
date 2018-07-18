@@ -1,146 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<ScrollView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/colorBack"
-  tools:context=".screen.request.edit.RequestEditActivity">
-
+  tools:context=".screen.request.edit.RequestEditActivity"
+  android:overScrollMode="never"
+  android:orientation="vertical"
+  android:fillViewport="true"
+  android:scrollbars="none">
   <LinearLayout
-    android:id="@+id/actionBar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintBottom_toBottomOf="parent"
-    android:background="@color/colorPrimary"
-    android:orientation="horizontal"
-    android:elevation="32dp"
-    android:padding="4dp">
-    <Button
-      android:id="@+id/cancelAction"
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="1"
-      style="@style/Widget.AppCompat.Button.Borderless"
-      android:textColor="@color/colorIcons"
-      android:text="@string/action_cancel"/>
-    <Button
-      android:id="@+id/submitAction"
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="1"
-      style="@style/Widget.AppCompat.Button.Colored"
-      android:text="@string/action_submit"/>
-  </LinearLayout>
-
-  <ScrollView
     android:layout_width="match_parent"
     android:layout_height="0dp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toTopOf="@+id/actionBar"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:overScrollMode="never"
-    android:orientation="vertical"
-    android:fillViewport="true"
-    android:scrollbars="none">
+    android:orientation="vertical">
+    <ir.hossainkhademian.jobs.view.FieldBox
+      android:id="@+id/typeCard"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:text="@string/field_request_type">
+      <include
+        android:id="@+id/typeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        layout="@layout/view_request_type"/>
+    </ir.hossainkhademian.jobs.view.FieldBox>
+
+    <ir.hossainkhademian.jobs.view.FieldBox
+      android:id="@+id/jobCard"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:text="@string/field_request_job"
+      app:action="@string/action_select">
+      <TextView
+        android:id="@+id/jobSelectHintView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_request_job_select"
+        android:lines="1"
+        android:gravity="start|center_vertical"
+        android:padding="4dp"
+        android:textColor="@color/colorAccent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+      <ir.hossainkhademian.jobs.view.JobView
+        android:id="@+id/jobView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        style="@style/CardView.Light.Hidden"/>
+    </ir.hossainkhademian.jobs.view.FieldBox>
+
+    <ir.hossainkhademian.jobs.view.FieldBox
+      android:id="@+id/skillsCard"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:text="@string/field_request_skills"
+      app:action="@string/action_add"
+      app:action2="@string/action_clear">
+      <TextView
+        android:id="@+id/skillsAddHintView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_request_skill_add"
+        android:lines="1"
+        android:gravity="start|center_vertical"
+        android:padding="4dp"
+        android:textColor="@color/colorPrimary"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+      <TextView
+        android:id="@+id/skillsRemoveHintView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_request_skill_remove"
+        android:lines="1"
+        android:gravity="start|center_vertical"
+        android:padding="4dp"
+        android:textColor="@color/colorAccent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+      <me.gujun.android.taggroup.TagGroup
+        android:id="@+id/skillsView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        style="@style/TagGroup.Large"/>
+    </ir.hossainkhademian.jobs.view.FieldBox>
+
+    <ir.hossainkhademian.jobs.view.FieldBox
+      android:id="@+id/detailCard"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:text="@string/field_request_detail"
+      app:action="@string/action_clear">
+      <!-- dummy view to prevent auto focus -->
+      <View
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+      <EditText
+        android:id="@+id/detailView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:singleLine="false"
+        android:minLines="5"
+        android:scrollbars="none"
+        android:scrollHorizontally="false"
+        android:gravity="start|top"
+        android:inputType="textMultiLine|textCapSentences"
+        android:nextFocusUp="@id/detailView"
+        android:nextFocusLeft="@id/detailView"
+        android:nextFocusDown="@id/submitAction"/>
+    </ir.hossainkhademian.jobs.view.FieldBox>
 
     <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:orientation="vertical">
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/typeCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_type">
-        <include
-          android:id="@+id/typeView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          layout="@layout/view_request_type"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/jobCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_job"
-        app:action="@string/action_select">
-        <ir.hossainkhademian.jobs.view.JobView
-          android:id="@+id/jobView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="2dp"
-          style="@style/CardView.Light.Hidden"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/skillsCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_skills"
-        app:action="@string/action_add"
-        app:action2="@string/action_clear">
-        <TextView
-          android:id="@+id/skillsAddHintView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/hint_request_skill_add"
-          android:lines="1"
-          android:gravity="start|center_vertical"
-          android:padding="4dp"
-          android:textColor="@color/colorPrimary"
-          android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
-        <TextView
-          android:id="@+id/skillsRemoveHintView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/hint_request_skill_remove"
-          android:lines="1"
-          android:gravity="start|center_vertical"
-          android:padding="4dp"
-          android:textColor="@color/colorAccent"
-          android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
-        <me.gujun.android.taggroup.TagGroup
-          android:id="@+id/skillsView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="4dp"
-          style="@style/TagGroup.Large"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/detailCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_detail"
-        app:action="@string/action_clear">
-        <!-- dummy view to prevent auto focus -->
-        <View
-          android:focusable="true"
-          android:focusableInTouchMode="true"
-          android:layout_width="0dp"
-          android:layout_height="0dp"/>
-        <EditText
-          android:id="@+id/detailView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="4dp"
-          android:singleLine="false"
-          android:minLines="5"
-          android:lines="5"
-          android:scrollbars="none"
-          android:gravity="start|top"
-          android:inputType="textMultiLine"
-          android:nextFocusUp="@id/detailView"
-          android:nextFocusLeft="@id/detailView"
-          android:nextFocusDown="@id/submitAction"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:padding="12dp">
+      <Button
+        android:id="@+id/cancelAction"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:text="@string/action_request_ignore"/>
+      <Button
+        android:id="@+id/submitAction"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:text="@string/action_request_save"/>
     </LinearLayout>
-  </ScrollView>
-</android.support.constraint.ConstraintLayout>
+
+  </LinearLayout>
+</ScrollView>

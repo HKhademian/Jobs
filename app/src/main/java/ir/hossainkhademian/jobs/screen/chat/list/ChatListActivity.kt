@@ -1,6 +1,7 @@
 package ir.hossainkhademian.jobs.screen.chat.list
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -46,6 +47,11 @@ class ChatListActivity : AppCompatActivity() {
 
     recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
     recyclerView.adapter = adapter
+
+    fab.setOnClickListener { view ->
+      Snackbar.make(view, "Not Implemented yet!", Snackbar.LENGTH_LONG)
+        .setAction("Action", null).show()
+    }
 
     if (savedInstanceState == null) {
       viewModel.init()

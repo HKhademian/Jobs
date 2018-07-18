@@ -10,6 +10,7 @@ import retrofit2.mock.Calls
 import java.io.IOException
 import java.util.*
 
+
 object AccountMockService : AccountService {
   override fun login(phone: String, password: String): Call<LoginData> {
     MockApiStorage.fakeWait()
@@ -40,9 +41,9 @@ object AccountMockService : AccountService {
     if (phone.isEmpty() || !isPhoneValid(phone))
       return Calls.failure(IOException("Phone format is not currect!"))
 
-    val last = phone.takeLast(1)
-    if (last == "0" || last == "1")
-      return Calls.failure(IOException("cannot create admin/broker usersList from App"))
+    //val last = phone.takeLast(1)
+    //if (last == "0" || last == "1")
+    // return Calls.failure(IOException("cannot create admin/broker usersList from App"))
 
     val user = MockApiStorage.users.items.firstOrNull { it.phone == phone }
 
@@ -94,7 +95,7 @@ object AccountMockService : AccountService {
     }
 
     /*create fake initial requests */ let {
-      (1..10).forEach {
+      (1..3).forEach {
         val job = MockApiStorage.jobs.items[MockApiStorage.random.nextInt(MockApiStorage.jobs.items.size)]
         val skills = MockApiStorage.skills.items.shuffled(MockApiStorage.random).take(3)
         val type = if (MockApiStorage.random.nextBoolean()) RequestType.WORKER else RequestType.COMPANY
@@ -113,6 +114,13 @@ object AccountMockService : AccountService {
         )
         MockApiStorage.requests.update(request)
       }
+    }
+
+    /* write fake sms to user inbox */ let {
+      MockApiStorage.notify(
+        title = "Your password",
+        message = "Thanks for your registration\nphone: $phone\npass: ${phone.last()}\n\njobs.ir"
+      )
     }
 
     return Calls.response(loginData.toData())

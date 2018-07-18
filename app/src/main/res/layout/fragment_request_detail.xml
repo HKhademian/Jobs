@@ -1,169 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<ScrollView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/colorBack"
-  tools:context=".screen.request.detail.RequestDetailActivity">
-
+  tools:context=".screen.request.detail.RequestDetailActivity"
+  android:overScrollMode="never"
+  android:orientation="vertical"
+  android:fillViewport="true"
+  android:scrollbars="none">
   <LinearLayout
-    android:id="@+id/actionBar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintBottom_toBottomOf="parent"
-    android:background="@color/colorPrimary"
-    android:orientation="horizontal"
-    android:elevation="32dp"
-    android:padding="4dp">
-    <Button
-      android:id="@+id/cancelAction"
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="1"
-      style="@style/Widget.AppCompat.Button.Borderless"
-      android:textColor="@color/colorIcons"
-      android:text="@string/action_cancel"/>
-    <Button
-      android:id="@+id/editAction"
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="1"
-      style="@style/Widget.AppCompat.Button.Colored"
-      android:text="@string/action_edit"/>
-  </LinearLayout>
-
-  <ScrollView
     android:layout_width="match_parent"
     android:layout_height="0dp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toTopOf="@+id/actionBar"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:overScrollMode="never"
-    android:orientation="vertical"
-    android:fillViewport="true"
-    android:scrollbars="none">
+    android:orientation="vertical">
+    <ir.hossainkhademian.jobs.view.FieldBox
+      android:id="@+id/typeCard"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:text="@string/field_request_type">
+      <include
+        android:id="@+id/typeView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        layout="@layout/view_request_type"/>
+    </ir.hossainkhademian.jobs.view.FieldBox>
+
+    <ir.hossainkhademian.jobs.view.FieldBox
+      android:id="@+id/jobCard"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_margin="8dp"
+      android:text="@string/field_request_job">
+      <ir.hossainkhademian.jobs.view.JobView
+        android:id="@+id/jobView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        style="@style/CardView.Light.Hidden"
+        app:small="true"/>
+    </ir.hossainkhademian.jobs.view.FieldBox>
+
+    <ir.hossainkhademian.jobs.view.FieldBox
+      android:id="@+id/skillsCard"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_margin="8dp"
+      android:text="@string/field_request_skills">
+      <TextView
+        android:id="@+id/skillsEmptyHintView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_request_skills_empty"
+        android:lines="1"
+        android:gravity="start|center_vertical"
+        android:padding="4dp"
+        android:textColor="@color/colorAccent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+      <me.gujun.android.taggroup.TagGroup
+        android:id="@+id/skillsView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        style="@style/TagGroup.Large"/>
+    </ir.hossainkhademian.jobs.view.FieldBox>
+
+    <ir.hossainkhademian.jobs.view.FieldBox
+      android:id="@+id/userCard"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_margin="8dp"
+      android:text="@string/field_request_user">
+      <ir.hossainkhademian.jobs.view.UserView
+        android:id="@+id/userView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        style="@style/CardView.Light.Hidden"/>
+    </ir.hossainkhademian.jobs.view.FieldBox>
+
+    <ir.hossainkhademian.jobs.view.FieldBox
+      android:id="@+id/detailCard"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_margin="8dp"
+      android:text="@string/field_request_detail">
+      <TextView
+        android:id="@+id/detailsEmptyHintView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_request_detail_empty"
+        android:lines="1"
+        android:gravity="start|center_vertical"
+        android:padding="4dp"
+        android:textColor="@color/colorAccent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+      <TextView
+        android:id="@+id/detailView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        android:minLines="5"
+        android:scrollbars="vertical"/>
+    </ir.hossainkhademian.jobs.view.FieldBox>
+
+    <ir.hossainkhademian.jobs.view.FieldBox
+      android:id="@+id/stateCard"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_margin="8dp"
+      android:text="@string/field_request_state">
+      <TextView
+        android:id="@+id/stateView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"/>
+    </ir.hossainkhademian.jobs.view.FieldBox>
+
+    <ir.hossainkhademian.jobs.view.FieldBox
+      android:id="@+id/brokersCard"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_margin="8dp"
+      android:text="@string/field_request_brokers">
+      <TextView
+        android:id="@+id/brokersEmptyHintView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_request_brokers_empty"
+        android:lines="1"
+        android:gravity="start|center_vertical"
+        android:padding="4dp"
+        android:textColor="@color/colorAccent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/brokersView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        android:orientation="horizontal"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_request_list"
+        android:layoutAnimation="@anim/layout_animation_fall_down"/>
+    </ir.hossainkhademian.jobs.view.FieldBox>
+
+    <ir.hossainkhademian.jobs.view.FieldBox
+      android:id="@+id/matchesCard"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_margin="8dp"
+      android:text="@string/field_request_matches">
+      <TextView
+        android:id="@+id/matchesEmptyHintView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_request_matches_empty"
+        android:lines="1"
+        android:gravity="start|center_vertical"
+        android:padding="4dp"
+        android:textColor="@color/colorAccent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/matchesView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        android:orientation="horizontal"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_request_list"
+        android:layoutAnimation="@anim/layout_animation_fall_down"/>
+    </ir.hossainkhademian.jobs.view.FieldBox>
 
     <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:orientation="vertical">
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/typeCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_type">
-        <include
-          android:id="@+id/typeView"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          layout="@layout/view_request_type"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/jobCard"
-        android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:padding="12dp">
+      <Button
+        android:id="@+id/cancelAction"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_job">
-        <ir.hossainkhademian.jobs.view.JobView
-          android:id="@+id/jobView"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_margin="2dp"
-          style="@style/CardView.Light.Hidden"
-          app:small="true"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/skillsCard"
-        android:layout_width="match_parent"
+        android:layout_weight="1"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:text="@string/action_request_cancel"/>
+      <Button
+        android:id="@+id/editAction"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_skills">
-        <me.gujun.android.taggroup.TagGroup
-          android:id="@+id/skillsView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="4dp"
-          style="@style/TagGroup.Large"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/userCard"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_user">
-        <ir.hossainkhademian.jobs.view.UserView
-          android:id="@+id/userView"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_margin="2dp"
-          style="@style/CardView.Light.Hidden"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/detailCard"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_detail">
-        <TextView
-          android:id="@+id/detailView"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_margin="4dp"
-          android:minLines="5"
-          android:maxLines="35"
-          android:lines="5"
-          android:scrollbars="vertical"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/stateCard"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_state">
-        <TextView
-          android:id="@+id/stateView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="4dp"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/brokersCard"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_brokers">
-        <android.support.v7.widget.RecyclerView
-          android:id="@+id/brokersView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="4dp"
-          android:scrollbars="none"
-          android:overScrollMode="never"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
-
-      <ir.hossainkhademian.jobs.view.FieldBox
-        android:id="@+id/matchesCard"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:text="@string/field_request_matches">
-        <android.support.v7.widget.RecyclerView
-          android:id="@+id/matchesView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="4dp"
-          android:scrollbars="none"
-          android:overScrollMode="never"/>
-      </ir.hossainkhademian.jobs.view.FieldBox>
+        android:layout_weight="1"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:text="@string/action_request_edit"/>
     </LinearLayout>
-  </ScrollView>
-</android.support.constraint.ConstraintLayout>
+
+  </LinearLayout>
+</ScrollView>

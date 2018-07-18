@@ -46,6 +46,12 @@
         android:layout_gravity="top"
         android:contentDescription="@string/action_emoji"/>
 
+      <View
+        android:id="@+id/blank"
+        android:focusable="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
+
       <EditText
         android:id="@+id/message_field"
         android:layout_width="0dp"
@@ -58,7 +64,10 @@
         android:imeActionLabel="@string/action_send"
         android:imeOptions="actionSend"
         android:inputType="textMultiLine"
-        android:nextFocusRight="@id/mediaAction"/>
+        android:nextFocusLeft="@id/blank"
+        android:nextFocusUp="@id/blank"
+        android:nextFocusRight="@id/mediaAction"
+        android:nextFocusDown="@id/mediaAction"/>
 
       <ImageView
         android:id="@+id/mediaAction"

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.view.View
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.screen.request.list.RequestListActivity
@@ -18,6 +19,7 @@ class RequestEditActivity : AppCompatActivity(), RequestEditListener {
 
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    fabDetail?.visibility = View.GONE
 
     if (savedInstanceState == null) {
       handleIntent(intent)
@@ -51,14 +53,14 @@ class RequestEditActivity : AppCompatActivity(), RequestEditListener {
       else -> super.onOptionsItemSelected(item)
     }
 
-  override fun onRequestEditDone(request: Request, type: RequestType, job: Job, skills: Collection<Skill>, detail: String) {
+  override fun onRequestEditDone(requestId: ID) {
 //    if (request.isNotEmpty)
 //      launchActivity<RequestEditActivity>(extras = *arrayOf(
 //        RequestEditFragment.ARG_REQUEST_ID to requestId
 //      ))
   }
 
-  override fun onRequestEditCancel(request: Request) {
+  override fun onRequestEditCancel(requestId: ID) {
     //finish()
     navigateUpTo(Intent(context, RequestListActivity::class.java))
   }

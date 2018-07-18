@@ -27,14 +27,14 @@ internal class RequestDetailViewModel : BaseViewModel() {
   }
 
   fun edit() {
-    listener?.onRequestDetailEdit(request.value ?: EmptyRequest)
+    listener?.onRequestDetailEdit(request.value?.id ?: emptyID)
   }
 
   fun sendChat(user: User) {
-    listener?.onRequestDetailChat(request.value ?: EmptyRequest, user)
+    listener?.onRequestDetailChat(request.value?.id ?: emptyID, user.id)
   }
 
   fun cancel() {
-    listener?.onRequestDetailCloseDone(request.value ?: EmptyRequest)
+    listener?.onRequestDetailCloseDone(request.value?.id ?: emptyID)
   }
 }

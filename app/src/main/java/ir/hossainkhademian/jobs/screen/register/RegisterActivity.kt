@@ -14,6 +14,7 @@ import ir.hossainkhademian.jobs.screen.login.LoginActivity
 import ir.hossainkhademian.util.context
 import ir.hossainkhademian.util.launchActivity
 import ir.hossainkhademian.util.Collections.tri
+import ir.hossainkhademian.util.SmsUtil
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -82,14 +83,19 @@ class RegisterActivity : BaseActivity() {
     val activity = this
     launch {
       val result = asyncUI {
-        tri(false) { AccountManager.register(phone); true }
+        try {
+          AccountManager.register(phone); null
+        } catch (ex: Exception) {
+          ex.printStackTrace(); ex
+        }
       }.await()
 
-      if (result) {
-        Thread.sleep(100) // cool down
+      if (result == null) {
+        Thread.sleep(1000) // cool down
         launch(UI) {
           Toast.makeText(activity, "Your password sent to your phone!\n\n" +
             "In development it's your last digit!", Toast.LENGTH_LONG).show()
+
           launchActivity<LoginActivity>(extras = *arrayOf(LoginActivity.EXTRA_PHONE to phone))
           finish()
         }
@@ -97,8 +103,7 @@ class RegisterActivity : BaseActivity() {
       }
 
       launch(UI) {
-        Toast.makeText(activity, "Cannot register with this phone!\n" +
-          "because last digit is 0!", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, "Cannot register with this phone!\n${result.message}", Toast.LENGTH_LONG).show()
       }
     }
   }

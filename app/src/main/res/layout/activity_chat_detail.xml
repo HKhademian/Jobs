@@ -32,16 +32,14 @@
 
   </android.support.design.widget.AppBarLayout>
 
-  <FrameLayout
+  <include
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    layout="@layout/view_detail_background"/>
 
-    <include layout="@layout/view_detail_background"/>
-
-    <FrameLayout
-      android:id="@+id/detailContainer"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
-  </FrameLayout>
+  <FrameLayout
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:id="@+id/detailContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
 </android.support.design.widget.CoordinatorLayout>

@@ -67,6 +67,11 @@ class ObservableMutableList<T>(
     freeze = false
   }
 
+  fun merge(item: T, updateAtLast: Boolean = true, predicate: (T) -> Boolean = { false }) = freeze(updateAtLast) {
+    list.removeAll(predicate)
+    list += item
+  }
+
   fun merge(items: Iterable<T>, updateAtLast: Boolean = true, predicate: (T) -> Boolean = { false }) = freeze(updateAtLast) {
     list.removeAll(predicate)
     list += items

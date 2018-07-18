@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,12 +31,14 @@ class RequestEditFragment : BaseFragment() {
   private val typeCard get() = rootView.typeCard
   private val typeView get() = rootView.typeView as ToggleSwitch
   private val jobCard get() = rootView.jobCard
+  private val jobSelectHintView get() = rootView.jobSelectHintView
   private val jobView get() = rootView.jobView
   private val skillsCard get() = rootView.skillsCard
   private val skillsRemoveHintView get() = rootView.skillsRemoveHintView
   private val skillsView get() = rootView.skillsView
   private val detailCard get() = rootView.detailCard
   private val detailView get() = rootView.detailView
+  private var fabDetail: FloatingActionButton? = null
 
   val clearSkillListener = View.OnClickListener { viewModel.clearSkills() }
   val clearDetailListener = View.OnClickListener { viewModel.clearDetail() }
@@ -44,22 +48,27 @@ class RequestEditFragment : BaseFragment() {
     viewModel = getViewModel { RequestEditViewModel() }
     viewModel.listener = context as? RequestEditListener
     viewModel.init(arguments?.getString(ARG_REQUEST_ID) ?: emptyID)
+    fabDetail = activity?.findViewById(R.id.fabDetail)
   }
 
   fun setRequestId(id: ID) {
     viewModel.requestId = id
   }
 
-  @SuppressLint("ClickableViewAccessibility")
+  //@SuppressLint("ClickableViewAccessibility")
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     if (this::rootView.isInitialized)
       return rootView
-
     rootView = inflater.inflate(R.layout.fragment_request_edit, container, false)
 
     viewModel.activity.observe(this) {
       val task = it.getContentIfNotHandled() ?: return@observe
       task.invoke(context as Activity)
+    }
+
+    viewModel.error.observe(this) {
+      val ex = it.getContentIfNotHandled() ?: return@observe
+      Snackbar.make(rootView, "Error occurs in Request Edit Page:\n${ex.message ?: ex.toString()}\n\nif this happens many times please contact support team.", Snackbar.LENGTH_SHORT).show()
     }
 
     viewModel.request.observe(this, EmptyRequest) {
@@ -72,6 +81,8 @@ class RequestEditFragment : BaseFragment() {
 
     viewModel.job.observe(this, EmptyJob) {
       jobView.job = it
+      jobView.visibility = if (it.isNotEmpty) View.VISIBLE else View.GONE
+      jobSelectHintView.visibility = if (it.isEmpty) View.VISIBLE else View.GONE
     }
 
     viewModel.skills.observe(this, emptySet()) {
@@ -91,11 +102,22 @@ class RequestEditFragment : BaseFragment() {
       detailCard.onActionClickListener = if (it.isEmpty()) null else clearDetailListener
     }
 
+    viewModel.isSubmiting.observe(this, false) { isSubmiting ->
+      rootView.isEnabled = !isSubmiting
+      fabDetail?.isEnabled = !isSubmiting
+    }
+
     return rootView
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
+    fabDetail?.let { fabDetail ->
+      fabDetail.visibility = View.VISIBLE
+      fabDetail.setImageResource(R.drawable.ic_action_save)
+      fabDetail.setOnClickListener { viewModel.submit() }
+    }
 
     submitAction.setOnClickListener { viewModel.submit() }
     cancelAction.setOnClickListener { viewModel.cancel() }

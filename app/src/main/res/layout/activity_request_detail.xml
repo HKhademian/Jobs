@@ -22,16 +22,26 @@
 
   </android.support.design.widget.AppBarLayout>
 
-  <FrameLayout
+  <include
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    layout="@layout/view_detail_background"/>
 
-    <include layout="@layout/view_detail_background"/>
+  <FrameLayout
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:id="@+id/detailContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
 
-    <FrameLayout
-      android:id="@+id/detailContainer"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
-  </FrameLayout>
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/fabDetail"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="top|end"
+    android:layout_margin="@dimen/fab_margin"
+    app:srcCompat="@drawable/ic_action_add"
+    android:tint="@color/colorIcons"
+    app:backgroundTint="@color/colorAccent"
+    app:rippleColor="@color/colorPrimaryDark"
+    app:fabSize="normal"/>
 </android.support.design.widget.CoordinatorLayout>

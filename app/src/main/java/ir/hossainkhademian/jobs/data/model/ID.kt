@@ -30,11 +30,13 @@ interface IdModel {
 fun <T : IdModel> Iterable<T>.mapId() = map { it.id }
 fun <T : IdModel> Iterable<T>.getById(id: ID) = first { it.id == id }
 fun <T : IdModel> Iterable<T>.findById(id: ID) = find { it.id == id }
+fun <T : IdModel> Iterable<T>.findById(id: ID, default: T) = find { it.id == id } ?: default
 fun <T : IdModel> Iterable<T>.filterById(id: ID) = filter { it.id == id }
 fun <T : IdModel> Iterable<T>.filterById(ids: Collection<ID>) = filter { ids.contains(it.id) }
 
 fun <T : IdModel, C : Iterable<T>> Observable<C>.mapId() = map { it.mapId() }
 fun <T : IdModel, C : Iterable<T>> Observable<C>.getById(id: ID) = map { it.getById(id) }
 fun <T : IdModel, C : Iterable<T>> Observable<C>.findById(id: ID) = map { it.findById(id) }
+fun <T : IdModel, C : Iterable<T>> Observable<C>.findById(id: ID, default: T) = map { it.findById(id, default) }
 fun <T : IdModel, C : Iterable<T>> Observable<C>.filterById(id: ID) = map { it.filterById(id) }
 fun <T : IdModel, C : Iterable<T>> Observable<C>.filterById(ids: Collection<ID>) = map { it.filterById(ids) }

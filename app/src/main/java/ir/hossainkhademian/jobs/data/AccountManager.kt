@@ -56,7 +56,7 @@ object AccountManager : Login by Storage {
    * exit from current session
    * maybe call server later
    */
-  suspend fun logout(context: Context) {
+  suspend fun logout() {
     Storage.clear()
     DataManager.chats.clear()
     DataManager.users.clear()
