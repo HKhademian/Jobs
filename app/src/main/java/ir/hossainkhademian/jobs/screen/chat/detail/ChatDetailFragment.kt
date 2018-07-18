@@ -6,8 +6,6 @@ import android.content.ClipboardManager
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -42,8 +40,12 @@ class ChatDetailFragment : BaseFragment() {
   override fun onAttach(context: Context?) {
     super.onAttach(context)
     viewModel = getViewModel { ChatDetailViewModel() }
-    viewModel.init(arguments?.getString(ARG_ID) ?: emptyID)
     viewModel.listener = context as? ChatDetailListener
+    viewModel.init(arguments?.getString(ARG_ID) ?: emptyID)
+  }
+
+  fun setContactId(contactId: ID) {
+    viewModel.contactId = contactId
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

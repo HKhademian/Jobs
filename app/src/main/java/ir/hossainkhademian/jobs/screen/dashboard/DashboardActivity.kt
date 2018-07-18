@@ -7,12 +7,15 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
+import android.widget.Toast
 import ir.hossainkhademian.jobs.R
+import ir.hossainkhademian.jobs.dialog.ExitDialog
 import ir.hossainkhademian.jobs.dialog.WhatsNewDialog
 import ir.hossainkhademian.jobs.screen.BaseActivity
 import ir.hossainkhademian.jobs.screen.chat.list.ChatListActivity
 import ir.hossainkhademian.jobs.screen.request.list.RequestListActivity
 import ir.hossainkhademian.util.Collections.consume
+import ir.hossainkhademian.util.context
 import ir.hossainkhademian.util.launchActivity
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
@@ -34,6 +37,22 @@ class DashboardActivity : BaseActivity(), BottomNavigationView.OnNavigationItemS
     initWhatsNew()
 
     showAbout()
+  }
+
+  override fun onBackPressed() {
+    if (supportFragmentManager.backStackEntryCount > 0)
+      supportFragmentManager.popBackStack()
+    else ExitDialog.show(context,
+      onStay = {
+
+      },
+      onRate = {
+        Toast.makeText(context, "Not Implemented yet!", Toast.LENGTH_SHORT).show()
+        super.onBackPressed()
+      },
+      onExit = {
+        super.onBackPressed()
+      })
   }
 
   override fun onNavigationItemSelected(item: MenuItem) =

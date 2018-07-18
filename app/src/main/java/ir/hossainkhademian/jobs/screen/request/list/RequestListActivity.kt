@@ -1,24 +1,21 @@
 package ir.hossainkhademian.jobs.screen.request.list
 
-import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.*
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import com.squareup.picasso.Picasso
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
+import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailFragment
+import ir.hossainkhademian.jobs.screen.chat.list.ChatListActivity
 import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailActivity
 import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailFragment
 import ir.hossainkhademian.jobs.screen.request.detail.RequestDetailListener
-import ir.hossainkhademian.jobs.screen.request.edit.RequestEditActivity
+import ir.hossainkhademian.jobs.screen.request.edit.RequestEditFragment
 import ir.hossainkhademian.jobs.screen.request.edit.RequestEditListener
 import ir.hossainkhademian.util.ViewModels.getViewModel
 import ir.hossainkhademian.util.context
@@ -38,10 +35,12 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
   private lateinit var viewModel: RequestListViewModel
 
   private val adapter = RequestAdapter()
+  private var editing = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     viewModel = getViewModel { RequestListViewModel() }
+    viewModel.init()
 
     setContentView(R.layout.activity_request_list_holder)
     twoPane = detailContainer != null
@@ -50,12 +49,18 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     toolbar.title = title
 
-//    fab.setOnClickListener { view ->
-//      Snackbar.make(view, "Not Implemented yet!", Snackbar.LENGTH_LONG)
-//        .setAction("Action", null).show()
-//    }
+    fab.setOnClickListener { view ->
+      Snackbar.make(view, "Not Implemented yet!", Snackbar.LENGTH_LONG)
+        .setAction("Action", null).show()
+    }
 
-    setupRecyclerView()
+    recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+    recyclerView.adapter = adapter
+
+    swipeRefreshLayout.setOnRefreshListener {
+      Toast.makeText(activity, "Refreshing", Toast.LENGTH_SHORT).show()
+      viewModel.refresh()
+    }
 
     viewModel.error.observe(this) {
       val ex = it.getContentIfNotHandled() ?: return@observe
@@ -74,8 +79,47 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
 
     viewModel.isRefreshing.observe(this, false) { isRefreshing ->
       swipeRefreshLayout.isRefreshing = isRefreshing
-      Toast.makeText(activity!!, "isRefreshing:$isRefreshing", Toast.LENGTH_SHORT).show()
+      Toast.makeText(activity, "isRefreshing:$isRefreshing", Toast.LENGTH_SHORT).show()
     }
+  }
+
+  private fun showRequestDetail(request: Request) {
+    if (editing) {
+      Snackbar.make(recyclerView, "Complete your editing please.", Snackbar.LENGTH_SHORT).show()
+      return
+    }
+    viewModel.postSelectedId(request.id)
+
+    if (!twoPane) {
+      launchActivity<RequestDetailActivity>(extras = *arrayOf(
+        RequestDetailFragment.ARG_REQUEST_ID to request.idStr
+      ))
+    } else {
+      val tag = RequestDetailFragment::class.java.simpleName
+
+      val fragment =
+        (supportFragmentManager.findFragmentByTag(tag) as? RequestDetailFragment)?.also { it.setRequestId(request.id) }
+          ?: RequestDetailFragment().also { it.arguments = bundle(RequestDetailFragment.ARG_REQUEST_ID to request.idStr) }
+
+      supportFragmentManager
+        .beginTransaction()
+        .replace(R.id.detailContainer, fragment, tag)
+        .commit()
+    }
+  }
+
+  override fun onBackPressed() {
+    editing = false
+    super.onBackPressed()
+  }
+
+  private fun onItemSelected(request: Request) {
+    showRequestDetail(request)
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    menuInflater.inflate(R.menu.request_list, menu)
+    return true
   }
 
   override fun onOptionsItemSelected(item: MenuItem) =
@@ -87,74 +131,50 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
       else -> super.onOptionsItemSelected(item)
     }
 
+  /** this is never called in single panel mode */
   override fun onRequestDetailEdit(request: Request) {
-//    launchActivity<RequestEditActivity>(extras = *arrayOf(
-//      RequestEditFragment.ARG_REQUEST_ID to request.id
-//    ))
+    val tag = RequestEditFragment::class.java.simpleName
+
+    // rare happens if cache available
+    val fragment =
+      (supportFragmentManager.findFragmentByTag(tag) as? RequestEditFragment)?.also { it.setRequestId(request.id) }
+        ?: RequestEditFragment().also { it.arguments = bundle(RequestEditFragment.ARG_REQUEST_ID to request.idStr) }
+
+    supportFragmentManager
+      .beginTransaction()
+      .add(R.id.detailContainer, fragment, tag)
+      .addToBackStack("$tag:${request.id}")
+      .commit()
+
+    editing = true
   }
 
+  /** this is never called in single panel mode */
   override fun onRequestDetailChat(request: Request, user: User) {
-//    if(user.isNotEmpty)
-//      launchActivity<ChatListActivity>(extras = *arrayOf(
-//        ChatDetailFragment.ARG_CONTACT_ID to user.id,
-//        ChatDetailFragment.ARG_SINGLE_PANEL to true
-//      ))
+    if (user.isNotEmpty)
+      launchActivity<ChatListActivity>(extras = *arrayOf(
+        ChatDetailFragment.ARG_CONTACT_ID to user.id
+      ))
   }
 
-  override fun onRequestDetailCancel(request: Request) {
+  /** this is never called in single panel mode */
+  override fun onRequestDetailCloseDone(request: Request) {
     //finish()
 //    navigateUpTo(Intent(context, RequestListActivity::class.java))
   }
 
-  override fun onRequestEditSubmit(request: Request, type: RequestType, job: Job, skills: Collection<Skill>, detail: String) {
-//    if (request.isNotEmpty)
-//      launchActivity<RequestEditActivity>(extras = *arrayOf(
-//        RequestEditFragment.ARG_REQUEST_ID to requestId
-//      ))
+  /** this is never called in single panel mode */
+  override fun onRequestEditDone(request: Request, type: RequestType, job: Job, skills: Collection<Skill>, detail: String) {
+    editing = false
+    supportFragmentManager.popBackStack()
   }
 
+  /** this is never called in single panel mode */
   override fun onRequestEditCancel(request: Request) {
-    //finish()
-    //navigateUpTo(Intent(context, RequestListActivity::class.java))
+    editing = false
+    supportFragmentManager.popBackStack()
   }
 
-  private fun setupRecyclerView() {
-    recyclerView.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.VERTICAL }
-    recyclerView.itemAnimator = DefaultItemAnimator()
-    recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-    recyclerView.adapter = adapter
-
-    swipeRefreshLayout.setOnRefreshListener {
-      Toast.makeText(activity!!, "Refreshing", Toast.LENGTH_SHORT).show()
-      viewModel.refresh()
-    }
-  }
-
-  private fun onItemSelected(item: LocalRequest) {
-    viewModel.postSelectedId(item.id)
-    showRequestDetail(item)
-    viewModel.postSelectedId(item.id)
-  }
-
-  private fun showRequestDetail(item: LocalRequest) {
-    if (twoPane) {
-      val fragment = RequestDetailFragment().apply {
-        arguments = bundle(
-          RequestDetailFragment.ARG_REQUEST_TITLE to item.title,
-          RequestDetailFragment.ARG_REQUEST_ID to item.idStr
-        )
-      }
-      supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.detailContainer, fragment)
-        .commit()
-    } else {
-      launchActivity<RequestDetailActivity>(extras = *arrayOf(
-        RequestDetailFragment.ARG_REQUEST_TITLE to item.title,
-        RequestDetailFragment.ARG_REQUEST_ID to item.idStr
-      ))
-    }
-  }
 
   private inner class RequestAdapter(items: List<LocalRequest> = emptyList(), selectedId: ID = emptyID) : RecyclerView.Adapter<ViewHolder>() {
     var items = items
@@ -210,7 +230,7 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
     private fun showItem(item: LocalRequest, selected: Boolean) {
       val imageUrl = item.avatarUrl
 
-      view.setBackgroundColor(if (twoPane && selected) Color.parseColor("#33666666") else 0)
+      view.setBackgroundColor(if (twoPane && selected) context.resources.getColor(R.color.colorSelector) else 0)
 
       avatarView.borderColor = view.context.resources.getColor(
         if (item.isWorker) R.color.color_request_worker

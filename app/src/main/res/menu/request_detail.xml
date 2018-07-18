@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  <group android:id="@+id/nav_admin">
+    <item android:id="@+id/nav_admin_broker" android:title="Brokers">
+      <menu>
+        <item
+          android:id="@+id/nav_admin_broker_add"
+          android:icon="@drawable/ic_menu_manage"
+          android:title="Add Broker"/>
+        <item
+          android:id="@+id/nav_admin_broker_remove"
+          android:icon="@drawable/ic_menu_send"
+          android:title="Remove Broker"/>
+      </menu>
+    </item>
+
+    <item
+      android:id="@+id/nav_admin_skill_remove"
+      android:icon="@drawable/ic_menu_camera"
+      android:title="Remove a Skill"/>
+  </group>
+
+  <item
+    android:id="@+id/nav_request_add"
+    android:icon="@drawable/ic_menu_gallery"
+    android:title="Add New Request"
+    app:showAsAction="always"/>
+</menu>

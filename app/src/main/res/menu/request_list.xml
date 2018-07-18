@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <group android:id="@+id/nav_admin">
+    <item android:id="@+id/nav_admin_job" android:title="Jobs">
+      <menu>
+        <item
+          android:id="@+id/nav_admin_job_list"
+          android:icon="@drawable/ic_menu_manage"
+          android:title="List Jobs"/>
+        <item
+          android:id="@+id/nav_admin_job_add"
+          android:icon="@drawable/ic_menu_send"
+          android:title="Add new Job"/>
+        <item
+          android:id="@+id/nav_admin_job_edit"
+          android:icon="@drawable/ic_menu_share"
+          android:title="Edit a Job"/>
+        <item
+          android:id="@+id/nav_admin_job_remove"
+          android:icon="@drawable/ic_menu_camera"
+          android:title="Remove a Job"/>
+      </menu>
+    </item>
+
+    <item android:id="@+id/nav_admin_skill" android:title="Skills">
+      <menu>
+        <item
+          android:id="@+id/nav_admin_skill_list"
+          android:icon="@drawable/ic_menu_manage"
+          android:title="List Skills"/>
+        <item
+          android:id="@+id/nav_admin_skill_add"
+          android:icon="@drawable/ic_menu_send"
+          android:title="Add new Skill"/>
+        <item
+          android:id="@+id/nav_admin_skill_edit"
+          android:icon="@drawable/ic_menu_share"
+          android:title="Edit a Skill"/>
+        <item
+          android:id="@+id/nav_admin_skill_remove"
+          android:icon="@drawable/ic_menu_camera"
+          android:title="Remove a Skill"/>
+      </menu>
+    </item>
+  </group>
+
+  <item
+    android:id="@+id/nav_request_add"
+    android:icon="@drawable/ic_menu_gallery"
+    android:title="Add New Request"/>
+</menu>

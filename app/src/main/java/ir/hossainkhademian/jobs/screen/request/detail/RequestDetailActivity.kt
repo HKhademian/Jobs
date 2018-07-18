@@ -25,16 +25,26 @@ class RequestDetailActivity : AppCompatActivity(), RequestDetailListener {
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     if (savedInstanceState == null) {
-      val requestId = intent.getStringExtra(RequestDetailFragment.ARG_REQUEST_ID) ?: emptyID
-
-      val fragment = RequestDetailFragment().apply {
-        arguments = bundle(RequestDetailFragment.ARG_REQUEST_ID to requestId)
-      }
-
-      supportFragmentManager.beginTransaction()
-        .replace(R.id.detailContainer, fragment)
-        .commit()
+      handleIntent(intent)
     }
+  }
+
+  override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
+    intent?.let { handleIntent(it) }
+  }
+
+  private fun handleIntent(intent: Intent) {
+    val requestId = intent.getStringExtra(RequestDetailFragment.ARG_REQUEST_ID) ?: emptyID
+
+    val tag = RequestDetailFragment::class.java.simpleName
+    val fragment = RequestDetailFragment().apply {
+      arguments = bundle(RequestDetailFragment.ARG_REQUEST_ID to requestId)
+    }
+
+    supportFragmentManager.beginTransaction()
+      .replace(R.id.detailContainer, fragment, tag)
+      .commit()
   }
 
   override fun onOptionsItemSelected(item: MenuItem) =
@@ -59,7 +69,7 @@ class RequestDetailActivity : AppCompatActivity(), RequestDetailListener {
       ))
   }
 
-  override fun onRequestDetailCancel(request: Request) {
+  override fun onRequestDetailCloseDone(request: Request) {
     //finish()
     navigateUpTo(Intent(context, RequestListActivity::class.java))
   }

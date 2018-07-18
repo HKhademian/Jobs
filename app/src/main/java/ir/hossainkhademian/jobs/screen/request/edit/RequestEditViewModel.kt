@@ -48,24 +48,26 @@ internal class RequestEditViewModel : BaseViewModel() {
       }
     }
 
-  fun init() {
+  fun init(requestId: ID = emptyID) {
     request as MutableLiveData
     type as MutableLiveData
     job as MutableLiveData
     detail as MutableLiveData
     skills as MutableLiveData
 
-    request.value = EmptyRequest
+    // request.value = EmptyRequest
     type.value = RequestType.WORKER
     job.value = EmptyJob
     skills.value = mutableSetOf()
     detail.value = ""
+
+    this.requestId = requestId
   }
 
   fun submit() {
     val skillSet = skills.value ?: emptySet()
 
-    listener?.onRequestEditSubmit(
+    listener?.onRequestEditDone(
       request.value ?: EmptyRequest,
       type.value ?: RequestType.WORKER,
       job.value ?: EmptyJob,

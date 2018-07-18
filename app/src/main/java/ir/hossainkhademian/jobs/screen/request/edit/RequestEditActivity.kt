@@ -20,16 +20,26 @@ class RequestEditActivity : AppCompatActivity(), RequestEditListener {
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     if (savedInstanceState == null) {
-      val requestId = intent.getStringExtra(RequestEditFragment.ARG_REQUEST_ID) ?: emptyID
-
-      val fragment = RequestEditFragment().apply {
-        arguments = bundle(RequestEditFragment.ARG_REQUEST_ID to requestId)
-      }
-
-      supportFragmentManager.beginTransaction()
-        .replace(R.id.detailContainer, fragment)
-        .commit()
+      handleIntent(intent)
     }
+  }
+
+  override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
+    intent?.let { handleIntent(it) }
+  }
+
+  private fun handleIntent(intent: Intent) {
+    val requestId = intent.getStringExtra(RequestEditFragment.ARG_REQUEST_ID) ?: emptyID
+
+    val tag = RequestEditFragment::class.java.simpleName
+    val fragment =
+      (supportFragmentManager.findFragmentByTag(tag) as? RequestEditFragment)?.also { it.setRequestId(requestId) }
+        ?: RequestEditFragment().also { it.arguments = bundle(RequestEditFragment.ARG_REQUEST_ID to requestId) }
+
+    supportFragmentManager.beginTransaction()
+      .replace(R.id.detailContainer, fragment, tag)
+      .commit()
   }
 
   override fun onOptionsItemSelected(item: MenuItem) =
@@ -41,7 +51,7 @@ class RequestEditActivity : AppCompatActivity(), RequestEditListener {
       else -> super.onOptionsItemSelected(item)
     }
 
-  override fun onRequestEditSubmit(request: Request, type: RequestType, job: Job, skills: Collection<Skill>, detail: String) {
+  override fun onRequestEditDone(request: Request, type: RequestType, job: Job, skills: Collection<Skill>, detail: String) {
 //    if (request.isNotEmpty)
 //      launchActivity<RequestEditActivity>(extras = *arrayOf(
 //        RequestEditFragment.ARG_REQUEST_ID to requestId

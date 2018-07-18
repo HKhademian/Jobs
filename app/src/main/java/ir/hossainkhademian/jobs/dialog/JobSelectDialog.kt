@@ -64,7 +64,9 @@ object JobSelectDialog {
       val isSelected = isItemSelected(item.id, selectedId)
 
       view.jobView.job = item
-      view.jobView.setCardBackgroundColor(if (isSelected) Color.parseColor("#33666666") else 0)
+      view.jobView.setCardBackgroundColor(
+        if (isSelected) context.resources.getColor(R.color.colorSelector)
+        else context.resources.getColor(R.color.colorIcons))
 
       return view
     }

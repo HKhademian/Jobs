@@ -60,17 +60,13 @@ class ChatDetailActivity : AppCompatActivity(), ChatDetailListener {
     }
 
     if (savedInstanceState == null) {
-      val contactId = intent.getStringExtra(ChatDetailFragment.ARG_CONTACT_ID) ?: emptyID
-      viewModel.init(contactId)
-
-      val fragment = ChatDetailFragment().apply {
-        arguments = bundle(ChatDetailFragment.ARG_CONTACT_ID to contactId)
-      }
-
-      supportFragmentManager.beginTransaction()
-        .replace(R.id.detailContainer, fragment)
-        .commit()
+      handleIntent(intent)
     }
+  }
+
+  override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
+    intent?.let { handleIntent(it) }
   }
 
   override fun onOptionsItemSelected(item: MenuItem) =
@@ -81,4 +77,18 @@ class ChatDetailActivity : AppCompatActivity(), ChatDetailListener {
       }
       else -> super.onOptionsItemSelected(item)
     }
+
+  private fun handleIntent(intent: Intent) {
+    val contactId = intent.getStringExtra(ChatDetailFragment.ARG_CONTACT_ID) ?: emptyID
+    viewModel.init(contactId)
+
+    val tag = ChatDetailFragment::class.java.simpleName
+    val fragment =
+      (supportFragmentManager.findFragmentByTag(tag) as? ChatDetailFragment)?.also { it.setContactId(contactId) }
+        ?: ChatDetailFragment().also { it.arguments = bundle(ChatDetailFragment.ARG_CONTACT_ID to contactId) }
+
+    supportFragmentManager.beginTransaction()
+      .replace(R.id.detailContainer, fragment, tag)
+      .commit()
+  }
 }

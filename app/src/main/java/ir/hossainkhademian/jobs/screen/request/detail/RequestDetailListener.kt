@@ -5,5 +5,5 @@ import ir.hossainkhademian.jobs.data.model.*
 internal interface RequestDetailListener {
   fun onRequestDetailEdit(request: Request)
   fun onRequestDetailChat(request: Request, user: User)
-  fun onRequestDetailCancel(request: Request)
+  fun onRequestDetailCloseDone(request: Request)
 }

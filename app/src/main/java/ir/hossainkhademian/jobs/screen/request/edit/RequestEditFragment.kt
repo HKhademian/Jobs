@@ -36,40 +36,26 @@ class RequestEditFragment : BaseFragment() {
   private val detailCard get() = rootView.detailCard
   private val detailView get() = rootView.detailView
 
+  val clearSkillListener = View.OnClickListener { viewModel.clearSkills() }
+  val clearDetailListener = View.OnClickListener { viewModel.clearDetail() }
+
   override fun onAttach(context: Context?) {
     super.onAttach(context)
     viewModel = getViewModel { RequestEditViewModel() }
-    viewModel.init()
-    viewModel.requestId = arguments?.getString(ARG_REQUEST_ID) ?: emptyID
     viewModel.listener = context as? RequestEditListener
+    viewModel.init(arguments?.getString(ARG_REQUEST_ID) ?: emptyID)
+  }
+
+  fun setRequestId(id: ID) {
+    viewModel.requestId = id
   }
 
   @SuppressLint("ClickableViewAccessibility")
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    if (this::rootView.isInitialized)
+      return rootView
+
     rootView = inflater.inflate(R.layout.fragment_request_edit, container, false)
-
-    submitAction.setOnClickListener { viewModel.submit() }
-    cancelAction.setOnClickListener { viewModel.cancel() }
-
-    jobCard.onActionClickListener = View.OnClickListener { viewModel.selectJob() }
-
-    val clearSkillAction = View.OnClickListener { viewModel.clearSkills() }
-    skillsCard.onAction1ClickListener = View.OnClickListener { viewModel.addSkill() }
-    skillsCard.onAction2ClickListener = clearSkillAction
-    skillsView.setOnTagClickListener { viewModel.removeSkill(it) }
-
-    val clearDetailAction = View.OnClickListener { viewModel.clearDetail() }
-    detailCard.onActionClickListener = clearDetailAction
-//    detailView.setOnTouchListener { v, event ->
-//      v.parent.requestDisallowInterceptTouchEvent(true)
-//      if (event.action and MotionEvent.ACTION_MASK == MotionEvent.ACTION_UP)
-//        v.parent.requestDisallowInterceptTouchEvent(false)
-//      false
-//    }
-    detailView.addTextChangedListener(TextWatchers.TextWatcher {
-      viewModel.onDetailChanged(detailView.text.toString())
-    })
-
 
     viewModel.activity.observe(this) {
       val task = it.getContentIfNotHandled() ?: return@observe
@@ -90,7 +76,7 @@ class RequestEditFragment : BaseFragment() {
 
     viewModel.skills.observe(this, emptySet()) {
       skillsView.setTags(it.map { it.title })
-      skillsCard.onAction2ClickListener = if (it.isEmpty()) null else clearSkillAction
+      skillsCard.onAction2ClickListener = if (it.isEmpty()) null else clearSkillListener
       skillsRemoveHintView.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
     }
 
@@ -102,9 +88,33 @@ class RequestEditFragment : BaseFragment() {
         detailView.clearFocus()
         activity?.hideKeyboard()
       }
-      detailCard.onActionClickListener = if (it.isEmpty()) null else clearDetailAction
+      detailCard.onActionClickListener = if (it.isEmpty()) null else clearDetailListener
     }
 
     return rootView
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+
+    submitAction.setOnClickListener { viewModel.submit() }
+    cancelAction.setOnClickListener { viewModel.cancel() }
+
+    jobCard.onActionClickListener = View.OnClickListener { viewModel.selectJob() }
+
+    skillsCard.onAction1ClickListener = View.OnClickListener { viewModel.addSkill() }
+    skillsCard.onAction2ClickListener = clearSkillListener
+    skillsView.setOnTagClickListener { viewModel.removeSkill(it) }
+
+    detailCard.onActionClickListener = clearDetailListener
+//    detailView.setOnTouchListener { v, event ->
+//      v.parent.requestDisallowInterceptTouchEvent(true)
+//      if (event.action and MotionEvent.ACTION_MASK == MotionEvent.ACTION_UP)
+//        v.parent.requestDisallowInterceptTouchEvent(false)
+//      false
+//    }
+    detailView.addTextChangedListener(TextWatchers.TextWatcher {
+      viewModel.onDetailChanged(detailView.text.toString())
+    })
   }
 }

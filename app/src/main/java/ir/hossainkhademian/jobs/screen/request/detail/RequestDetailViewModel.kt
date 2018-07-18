@@ -2,12 +2,10 @@ package ir.hossainkhademian.jobs.screen.request.detail
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import io.reactivex.disposables.Disposable
 import ir.hossainkhademian.jobs.data.Repository
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.util.BaseViewModel
-import ir.hossainkhademian.util.Event
 
 internal class RequestDetailViewModel : BaseViewModel() {
   val request: LiveData<LocalRequest> = MutableLiveData()
@@ -24,8 +22,8 @@ internal class RequestDetailViewModel : BaseViewModel() {
         }
     }
 
-  fun init() {
-    requestId = emptyID
+  fun init(requestId: ID = emptyID) {
+    this.requestId = requestId
   }
 
   fun edit() {
@@ -37,6 +35,6 @@ internal class RequestDetailViewModel : BaseViewModel() {
   }
 
   fun cancel() {
-    listener?.onRequestDetailCancel(request.value ?: EmptyRequest)
+    listener?.onRequestDetailCloseDone(request.value ?: EmptyRequest)
   }
 }

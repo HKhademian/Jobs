@@ -54,7 +54,7 @@
     <activity
       android:name=".screen.chat.detail.ChatDetailActivity"
       android:label="@string/title_chat_detail"
-      android:launchMode="singleInstance"
+      android:launchMode="singleTop"
       android:parentActivityName=".screen.chat.list.ChatListActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
@@ -72,7 +72,7 @@
     <activity
       android:name=".screen.request.detail.RequestDetailActivity"
       android:label="@string/title_request_detail"
-      android:launchMode="singleInstance"
+      android:launchMode="singleTop"
       android:parentActivityName=".screen.request.list.RequestListActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
@@ -81,7 +81,7 @@
     <activity
       android:name=".screen.request.edit.RequestEditActivity"
       android:label="@string/title_request_detail"
-      android:launchMode="singleInstance"
+      android:launchMode="singleTop"
       android:parentActivityName=".screen.request.list.RequestListActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"

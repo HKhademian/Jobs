@@ -14,10 +14,10 @@ internal class ChatListViewModel : BaseViewModel() {
   val userChats = Repository.Chats.listUserChats().toLiveData()
   val selectedId: LiveData<ID> = MutableLiveData()
 
-  fun init() {
+  fun init(selectedId: ID = emptyID) {
     this.selectedId as MutableLiveData
 
-    this.selectedId.postValue(emptyID)
+    this.selectedId.postValue(selectedId)
   }
 
   fun postSelectedId(id: ID) {

@@ -27,7 +27,6 @@ import kotlinx.android.synthetic.main.item_request_broker.view.*
 class RequestDetailFragment : BaseFragment() {
   companion object {
     const val ARG_REQUEST_ID = ARG_ID
-    const val ARG_REQUEST_TITLE = ARG_TITLE
   }
 
   private lateinit var viewModel: RequestDetailViewModel
@@ -49,21 +48,20 @@ class RequestDetailFragment : BaseFragment() {
   override fun onAttach(context: Context?) {
     super.onAttach(context)
     viewModel = getViewModel { RequestDetailViewModel() }
-    viewModel.init()
-    viewModel.requestId = arguments?.getString(ARG_REQUEST_ID) ?: emptyID
     viewModel.listener = context as? RequestDetailListener
-    arguments?.getString(ARG_TITLE)?.let {
-      listToolbar?.title = it
-      toolbar?.title = it
-    }
+    viewModel.init(arguments?.getString(ARG_REQUEST_ID) ?: emptyID)
+  }
+
+  fun setRequestId(requestId: ID) {
+    viewModel.requestId = requestId
   }
 
   @SuppressLint("ClickableViewAccessibility")
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    if (this::rootView.isInitialized)
+      return rootView
+
     rootView = inflater.inflate(R.layout.fragment_request_detail, container, false)
-    typeView.isEnabled = false
-    editAction.setOnClickListener { viewModel.edit() }
-    cancelAction.setOnClickListener { viewModel.cancel() }
 
     detailView.setOnTouchListener { v, event ->
       v.parent.requestDisallowInterceptTouchEvent(true)
@@ -91,6 +89,13 @@ class RequestDetailFragment : BaseFragment() {
 
     viewModel.request.observe(this) { setRequest(it) }
     return rootView
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    typeView.isEnabled = false
+    editAction.setOnClickListener { viewModel.edit() }
+    cancelAction.setOnClickListener { viewModel.cancel() }
   }
 
   private fun setRequest(request: LocalRequest) {

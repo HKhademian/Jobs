@@ -1,12 +1,9 @@
 package ir.hossainkhademian.jobs.screen.chat.list
 
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -17,7 +14,6 @@ import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailActivity
 import ir.hossainkhademian.jobs.screen.chat.detail.ChatDetailFragment
-import ir.hossainkhademian.util.Collections
 import ir.hossainkhademian.util.Collections.consume
 import ir.hossainkhademian.util.ViewModels.getViewModel
 import ir.hossainkhademian.util.LiveDatas.observe
@@ -66,22 +62,21 @@ class ChatListActivity : AppCompatActivity() {
     }
   }
 
-  private fun sendMessageTo(userId: ID) {
-    if (userId.isEmpty) return
-    if (twoPane) {
-      val fragment = ChatDetailFragment().apply {
-        arguments = bundleOf(
-          ChatDetailFragment.ARG_CONTACT_ID to userId
-        )
-      }
+  private fun sendMessageTo(contactId: ID) {
+    if (!twoPane) {
+      launchActivity<ChatDetailActivity>(extras = *arrayOf(
+        ChatDetailFragment.ARG_CONTACT_ID to contactId
+      ))
+    } else {
+      val tag = ChatDetailFragment::class.java.simpleName
+      val fragment =
+        (supportFragmentManager.findFragmentByTag(tag) as? ChatDetailFragment)?.also { it.setContactId(contactId) }
+          ?: ChatDetailFragment().also { it.arguments = bundleOf(ChatDetailFragment.ARG_CONTACT_ID to contactId) }
+
       supportFragmentManager
         .beginTransaction()
-        .replace(R.id.detailContainer, fragment)
+        .replace(R.id.detailContainer, fragment, tag)
         .commit()
-    } else {
-      launchActivity<ChatDetailActivity>(extras = *arrayOf(
-        ChatDetailFragment.ARG_CONTACT_ID to userId
-      ))
     }
   }
 
@@ -95,10 +90,10 @@ class ChatListActivity : AppCompatActivity() {
 
   private fun onItemSelected(item: UserChat) {
     val user = item.user
-    sendMessageTo(user.idStr)
+    if (user.isEmpty) return
     viewModel.postSelectedId(item.user.id)
+    sendMessageTo(user.idStr)
   }
-
 
   private inner class UserChatAdapter(items: List<UserChat> = emptyList(), selectedId: ID = emptyID) : RecyclerView.Adapter<UserChatViewHolder>() {
     var items = items
@@ -156,7 +151,7 @@ class ChatListActivity : AppCompatActivity() {
       val badge = item.badge
       val imageUrl = user.avatarUrl
 
-      view.setBackgroundColor(if (twoPane && selected) Color.parseColor("#33666666") else 0)
+      view.setBackgroundColor(if (twoPane && selected) context.resources.getColor(R.color.colorSelector) else 0)
 
       Picasso.get().load(imageUrl).placeholder(R.drawable.ic_avatar).into(avatarView)
 

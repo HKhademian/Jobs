@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import ir.hossainkhademian.jobs.data.Repository
 import ir.hossainkhademian.jobs.data.model.ID
+import ir.hossainkhademian.jobs.data.model.emptyID
 import ir.hossainkhademian.jobs.util.BaseViewModel
 import ir.hossainkhademian.util.Event
 import ir.hossainkhademian.util.Observables.toLiveData
@@ -16,6 +17,12 @@ internal class RequestListViewModel : BaseViewModel() {
   val requests = Repository.Requests.list().toLiveData()
   val selectedId: LiveData<ID> = MutableLiveData()
   val isRefreshing: LiveData<Boolean> = MutableLiveData()
+
+  fun init(selectedId: ID = emptyID) {
+    this.selectedId as MutableLiveData
+
+    this.selectedId.postValue(selectedId)
+  }
 
   private var disposable: DisposableHandle? = null
   fun refresh() {

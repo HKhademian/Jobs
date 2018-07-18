@@ -4,9 +4,11 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   tools:context=".screen.request.list.RequestListActivity"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior"
   android:id="@+id/swipeRefreshLayout"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:background="@color/colorBack">
   <android.support.v7.widget.RecyclerView
     android:id="@+id/recyclerView"
     android:name="ir.hossainkhademian.jobs.screen.request.list.RequestListActivity"
@@ -16,6 +18,5 @@
     android:layout_marginRight="16dp"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
     tools:listitem="@layout/item_request_list"
-    android:layoutAnimation="@anim/layout_animation_fall_down"
-  />
+    android:layoutAnimation="@anim/layout_animation_fall_down"/>
 </android.support.v4.widget.SwipeRefreshLayout>

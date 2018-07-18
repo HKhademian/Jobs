@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<merge
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   tools:context=".screen.chat.list.ChatListActivity">
+
+  <include
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    layout="@layout/view_detail_background"/>
+
   <include
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    layout="@layout/fragment_chat_list"  />
-</FrameLayout>
+    layout="@layout/fragment_chat_list"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</merge>
