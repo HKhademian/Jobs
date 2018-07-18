@@ -41,11 +41,12 @@ android {
       applicationIdSuffix ".debug"
       versionNameSuffix "-debug"
       debuggable true
+      minifyEnabled false
     }
     release {
       buildConfigField "String", "HOST", "\"http://jobs.ir/api/\""
 
-      minifyEnabled false
+      minifyEnabled true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
@@ -57,6 +58,8 @@ android {
     // exclude 'META-INF/LICENSE.txt'
     // exclude 'META-INF/NOTICE.txt'
     // exclude 'META-INF/main.kotlin_module'
+    // merge '**/LICENSE.txt'
+    // merge '**/NOTICE.txt'
   }
 }
 
@@ -71,11 +74,17 @@ dependencies {
   implementation "org.jetbrains.anko:anko-appcompat-v7-coroutines:$anko_version"
   implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.23.4'
 
-  /* Kotlin Coroutines extras */
+  /*
+   * https://github.com/gildor/kotlin-coroutines-retrofit
+   * Kotlin Coroutines extras
+   */
   // implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0'
   implementation 'ru.gildor.coroutines:kotlin-coroutines-retrofit:0.11.0'
 
-  /* Kotlin easy shared preferences */
+  /*
+   * https://github.com/chibatching/Kotpref
+   * Kotlin easy shared preferences
+   */
   implementation 'com.chibatching.kotpref:kotpref:2.5.0'
   implementation 'com.chibatching.kotpref:enum-support:2.5.0'
 
@@ -135,10 +144,16 @@ dependencies {
   // implementation 'com.google.dagger:dagger:2.13'
   // kapt 'com.google.dagger:dagger-compiler:2.13'
 
-  /* Mask EditText */
+  /*
+   * https://github.com/pinball83/Masked-Edittext
+   * Mask EditText
+   */
   implementation 'com.github.pinball83:masked-edittext:1.0.4'
 
-  /* Circular Image */
+  /*
+   * https://github.com/hdodenhof/CircleImageView
+   * Circular Image
+   */
   implementation "de.hdodenhof:circleimageview:$civ_version"
 
   /* Badge View */
@@ -147,25 +162,40 @@ dependencies {
   /* MarkDown support */
   // implementation "in.uncod.android.bypass:bypass:$bypass_version"
 
-  /* lorem ipsum generator */
-  mockImplementation 'com.thedeanda:lorem:2.1'
+  /*
+   * https://github.com/mdeanda/lorem
+   * lorem ipsum generator
+   */
+  mockImplementation('com.thedeanda:lorem:2.1') {
+    exclude group: 'org.jetbrains.kotlin'
+  }
 
   /* Chuck : OkHttp3 monitor */
   // debugImplementation 'com.readystatesoftware.chuck:library:1.1.0'
   // releaseImplementation 'com.readystatesoftware.chuck:library-no-op:1.1.0'
 
-  /* Joda time and relative times */
+  /*
+   * https://github.com/dlew/joda-time-android
+   * https://github.com/JodaOrg/joda-time
+   * Joda time and relative times
+   */
   implementation 'net.danlew:android.joda:2.9.9.4'
   // implementation 'com.github.curioustechizen.android-ago:library:1.4.0'
 
-  /* Emoji support */
+  /*
+   * https://github.com/vdurmont/emoji-java
+   * Emoji support
+   */
   implementation 'com.vdurmont:emoji-java:4.0.0'
 
-  /* ToggleView: https://github.com/llollox/Android-Toggle-Switch */
+  /*
+   * https://github.com/llollox/Android-Toggle-Switch
+   * ToggleView
+   */
   implementation 'com.llollox:androidtoggleswitch:2.0.1'
 
   /*
-  * Skills view - Tag View
+  * Tag View
   * https://github.com/2dxgujun/AndroidTagGroup
   */
   implementation 'me.gujun.android.taggroup:library:1.4@aar'
