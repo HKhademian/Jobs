@@ -6,12 +6,14 @@ import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
+import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.llollox.androidtoggleswitch.widgets.ToggleSwitch
 import ir.hossainkhademian.jobs.R
 import ir.hossainkhademian.jobs.data.model.*
+import ir.hossainkhademian.jobs.dialog.WaitDialog
 import ir.hossainkhademian.jobs.screen.BaseFragment
 import ir.hossainkhademian.util.LiveDatas.observe
 import ir.hossainkhademian.util.TextWatchers
@@ -47,7 +49,6 @@ class RequestEditFragment : BaseFragment() {
     super.onAttach(context)
     viewModel = getViewModel { RequestEditViewModel() }
     viewModel.listener = context as? RequestEditListener
-    viewModel.init(arguments?.getString(ARG_REQUEST_ID) ?: emptyID)
     fabDetail = activity?.findViewById(R.id.fabDetail)
   }
 
@@ -57,8 +58,13 @@ class RequestEditFragment : BaseFragment() {
 
   //@SuppressLint("ClickableViewAccessibility")
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    if (savedInstanceState == null) {
+      viewModel.init(arguments?.getString(ARG_REQUEST_ID) ?: emptyID)
+    }
+
     if (this::rootView.isInitialized)
       return rootView
+
     rootView = inflater.inflate(R.layout.fragment_request_edit, container, false)
 
     viewModel.activity.observe(this) {
@@ -102,9 +108,18 @@ class RequestEditFragment : BaseFragment() {
       detailCard.onActionClickListener = if (it.isEmpty()) null else clearDetailListener
     }
 
-    viewModel.isSubmiting.observe(this, false) { isSubmiting ->
-      rootView.isEnabled = !isSubmiting
-      fabDetail?.isEnabled = !isSubmiting
+    viewModel.showWaiting.observe(this) { it ->
+      val showWaiting = it.getContentIfNotHandled() ?: return@observe
+      activity?.let { activity ->
+        if (showWaiting) WaitDialog.show(activity)
+        else WaitDialog.dismiss(activity)
+      }
+    }
+
+    viewModel.isSavable.observe(this, false) { isSavable ->
+      fabDetail?.isEnabled = isSavable
+      fabDetail?.visibility = if (isSavable) View.VISIBLE else View.GONE
+      submitAction.isEnabled = isSavable
     }
 
     return rootView
@@ -112,7 +127,7 @@ class RequestEditFragment : BaseFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
+    fabDetail = activity?.findViewById(R.id.fabDetail)
     fabDetail?.let { fabDetail ->
       fabDetail.visibility = View.VISIBLE
       fabDetail.setImageResource(R.drawable.ic_action_save)
@@ -129,12 +144,6 @@ class RequestEditFragment : BaseFragment() {
     skillsView.setOnTagClickListener { viewModel.removeSkill(it) }
 
     detailCard.onActionClickListener = clearDetailListener
-//    detailView.setOnTouchListener { v, event ->
-//      v.parent.requestDisallowInterceptTouchEvent(true)
-//      if (event.action and MotionEvent.ACTION_MASK == MotionEvent.ACTION_UP)
-//        v.parent.requestDisallowInterceptTouchEvent(false)
-//      false
-//    }
     detailView.addTextChangedListener(TextWatchers.TextWatcher {
       viewModel.onDetailChanged(detailView.text.toString())
     })

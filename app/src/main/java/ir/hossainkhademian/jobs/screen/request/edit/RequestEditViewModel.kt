@@ -9,6 +9,9 @@ import ir.hossainkhademian.jobs.data.model.*
 import ir.hossainkhademian.jobs.dialog.JobSelectDialog
 import ir.hossainkhademian.jobs.dialog.SkillSelectDialog
 import ir.hossainkhademian.jobs.util.BaseViewModel
+import ir.hossainkhademian.util.Event
+import ir.hossainkhademian.util.LiveDatas.zip
+import ir.hossainkhademian.util.LiveDatas.map
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.CoroutineExceptionHandler
 import kotlinx.coroutines.experimental.DisposableHandle
@@ -22,7 +25,13 @@ internal class RequestEditViewModel : BaseViewModel() {
   val detail: LiveData<String> = MutableLiveData()
   val skills: LiveData<Set<Skill>> = MutableLiveData()
   val isSubmiting: LiveData<Boolean> = MutableLiveData()
-  val isSavable: LiveData<Boolean> = MutableLiveData()
+  val isSavable: LiveData<Boolean> = zip(job, detail, skills, isSubmiting).map { (job_detail, skills_isSubmiting) ->
+    val (job, detail) = job_detail
+    val (skills, isSubmiting) = skills_isSubmiting
+    job.isNotEmpty and detail.isNotEmpty && skills.isNotEmpty() && skills.count() <= 5 && !isSubmiting
+  }
+  val showWaiting: LiveData<Event<Boolean>> = MutableLiveData()
+
 
   private var jobSelectDialog: AlertDialog? = null
   private var skillsSelectDialog: AlertDialog? = null
@@ -65,7 +74,7 @@ internal class RequestEditViewModel : BaseViewModel() {
     skills as MutableLiveData
     isSubmiting as MutableLiveData
 
-    // request.value = EmptyRequest
+    request.value = EmptyRequest
     type.value = RequestType.WORKER
     job.value = EmptyJob
     skills.value = mutableSetOf()
@@ -76,7 +85,9 @@ internal class RequestEditViewModel : BaseViewModel() {
   }
 
   fun submit() {
+    if (isSavable.value != true) return
     isSubmiting as MutableLiveData
+    showWaiting as MutableLiveData
 
     val request = request.value ?: EmptyRequest
     val type = type.value ?: RequestType.WORKER
@@ -85,6 +96,7 @@ internal class RequestEditViewModel : BaseViewModel() {
     val detail = detail.value ?: ""
 
     isSubmiting.postValue(true)
+    showWaiting.postValue(Event(true))
     disposableSubmit?.dispose()
     disposableSubmit = launch(CommonPool + CoroutineExceptionHandler { _, ex -> postError(ex) }) {
       val newRequest = Repository.Requests.update(request.id, type, job.id, skills.mapId(), detail)
@@ -95,6 +107,7 @@ internal class RequestEditViewModel : BaseViewModel() {
     }.invokeOnCompletion {
       disposableSubmit = null
       isSubmiting.postValue(false)
+      showWaiting.postValue(Event(false))
     }
   }
 

@@ -19,7 +19,7 @@ class RequestEditActivity : AppCompatActivity(), RequestEditListener {
 
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    fabDetail?.visibility = View.GONE
+    //fabDetail?.visibility = View.GONE
 
     if (savedInstanceState == null) {
       handleIntent(intent)

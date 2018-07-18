@@ -27,12 +27,14 @@ object RequestMockService : RequestService {
 
   override fun edit(accessToken: String, requestId: ID, typeStr: String, jobId: ID, skillIds: Collection<ID>, detail: String): Call<RequestData> {
     MockApiStorage.fakeWait()
+    Thread.sleep(10000)
 
     return Calls.failure(IOException("not implemented yet!"))
   }
 
   override fun create(accessToken: String, typeStr: String, jobId: ID, skillIds: Collection<ID>, detail: String): Call<RequestData> {
     MockApiStorage.fakeWait()
+    Thread.sleep(10000)
 
     return Calls.failure(IOException("not implemented yet!"))
   }

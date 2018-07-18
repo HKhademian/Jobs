@@ -57,7 +57,6 @@ class RequestDetailFragment : BaseFragment() {
     super.onAttach(context)
     viewModel = getViewModel { RequestDetailViewModel() }
     viewModel.listener = context as? RequestDetailListener
-    viewModel.init(arguments?.getString(ARG_REQUEST_ID) ?: emptyID)
     fabDetail = activity?.findViewById(R.id.fabDetail)
   }
 
@@ -66,6 +65,10 @@ class RequestDetailFragment : BaseFragment() {
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    if (savedInstanceState == null) {
+      viewModel.init(arguments?.getString(ARG_REQUEST_ID) ?: emptyID)
+    }
+
     if (this::rootView.isInitialized)
       return rootView
     rootView = inflater.inflate(R.layout.fragment_request_detail, container, false)
@@ -87,10 +90,10 @@ class RequestDetailFragment : BaseFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
     brokersView.adapter = brokerAdapter
     matchesView.adapter = matchesAdapter
 
+    fabDetail = activity?.findViewById(R.id.fabDetail)
     fabDetail?.let { fabDetail ->
       fabDetail.isEnabled = true
       fabDetail.setImageResource(R.drawable.ic_action_edit)
