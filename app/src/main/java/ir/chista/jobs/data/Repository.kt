@@ -23,6 +23,7 @@ import ir.chista.util.Observables
 import ir.chista.util.Observables.debounceAfter
 import ir.chista.util.Observables.throttleWithTimeoutAfter
 import ru.gildor.coroutines.retrofit.await
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 object Repository {
@@ -105,6 +106,11 @@ object Repository {
 
 
     suspend fun send(contactId: ID, message: String) {
+      if (DataManager.mode == DataManager.Mode.Offline)
+        throw IOException("you are in offline mode")
+      if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
+        throw IOException("please login first")
+
       if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
         throw RuntimeException("please login first")
 
@@ -116,6 +122,11 @@ object Repository {
     }
 
     suspend fun seen(senderId: ID) {
+      if (DataManager.mode == DataManager.Mode.Offline)
+        throw IOException("you are in offline mode")
+      if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
+        throw IOException("please login first")
+
       if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
         throw RuntimeException("please login first")
 
@@ -147,17 +158,24 @@ object Repository {
     }
 
     suspend fun refresh() {
+      if (DataManager.mode == DataManager.Mode.Offline)
+        throw IOException("you are in offline mode")
       if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
-        throw RuntimeException("please login first")
+        throw IOException("please login first")
 
       //val items = ApiManager.requests.list(AccountManager.accessToken).await()
       //val ids = items.mapId()
       //DataManager.requests.merge(items) { ids.contains(it.id) }
 
-      DataManager.loadOnlineUserData()
+      DataManager.loadOnlineData()
     }
 
     suspend fun update(requestId: ID, type: RequestType, jobId: ID, skillIds: List<ID>, detail: String): LocalRequest {
+      if (DataManager.mode == DataManager.Mode.Offline)
+        throw IOException("you are in offline mode")
+      if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
+        throw IOException("please login first")
+
       val isNew = requestId.isEmpty
 
       val request = if (isNew)

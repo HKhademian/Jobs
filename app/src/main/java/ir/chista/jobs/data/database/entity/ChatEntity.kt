@@ -23,33 +23,23 @@ internal class ChatEntity(
   @Ignore
   override val seen = !unseen
 
-//
-//  class UserWithChatsEntity : UserWithChats {
-//    @Embedded
-//    override lateinit var user: UserEntity
-//
-//    @Relation(parentColumn = "id", entityColumn = "contactId", entity = ChatEntity::class)
-//    override lateinit var userChats: List<ChatEntity>
-//  }
-
   @android.arch.persistence.room.Dao
   interface Dao : BaseDao<ChatEntity> {
     @Query("SELECT * FROM `Chat` ORDER BY `time`")
-    fun list(): LiveData<List<ChatEntity>>
+    fun list(): List<ChatEntity>
 
-    @Query("SELECT `id` FROM `Chat` ORDER BY `time`")
-    fun listIds(): LiveData<List<ID>>
-
-    @Query("SELECT * FROM `Chat` WHERE `id` = :id ORDER BY `time`")
-    fun getById(id: ID): LiveData<List<ChatEntity>>
-
-    @Query("SELECT * FROM `Chat` WHERE `senderId` = :userId OR `receiverId` = :userId ORDER BY `time`")
-    fun listByContact(userId: ID): LiveData<List<ChatEntity>>
-
-    @Query("SELECT DISTINCT `senderId` AND `receiverId` FROM `Chat` ORDER BY `time`")
-    fun listUniqueContactIds(): LiveData<List<ID>>
-
-//    @Query("SELECT * FROM `User`")
-//    fun listUserChats(): LiveData<List<UserWithChatsEntity>>
+    @Query("DELETE FROM `Chat` WHERE 1")
+    fun clear(): Unit
   }
 }
+
+internal fun Chat.toEntity() = ChatEntity(
+  id = id,
+  senderId = senderId,
+  receiverId = receiverId,
+  message = message,
+  unseen = unseen,
+  time = time
+)
+
+internal fun <T : Chat> Collection<T>.toEntity() = map { it.toEntity() }

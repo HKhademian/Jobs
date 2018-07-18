@@ -4,25 +4,26 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Update
+import android.database.sqlite.SQLiteDatabase
 
 @Dao
 interface BaseDao<in T : BaseEntity> {
-  @Insert
+  @Insert(onConflict = SQLiteDatabase.CONFLICT_REPLACE)
   fun insert(item: T): Long
 
-  @Insert
+  @Insert(onConflict = SQLiteDatabase.CONFLICT_REPLACE)
   fun insertAll(vararg items: T): List<Long>
 
-  @Insert
+  @Insert(onConflict = SQLiteDatabase.CONFLICT_REPLACE)
   fun insertAll(items: List<T>): List<Long>
 
-  @Update
+  @Update(onConflict = SQLiteDatabase.CONFLICT_REPLACE)
   fun update(item: T): Int
 
-  @Update
+  @Update(onConflict = SQLiteDatabase.CONFLICT_REPLACE)
   fun updateAll(vararg items: T): Int
 
-  @Update
+  @Update(onConflict = SQLiteDatabase.CONFLICT_REPLACE)
   fun updateAll(items: List<T>): Int
 
   @Delete

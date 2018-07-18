@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.support.v7.app.AlertDialog
 import io.reactivex.disposables.Disposable
+import ir.chista.jobs.data.DataManager
 import ir.chista.jobs.data.Repository
 import ir.chista.jobs.data.model.*
 import ir.chista.jobs.dialog.JobSelectDialog
@@ -12,6 +13,7 @@ import ir.chista.jobs.util.BaseViewModel
 import ir.chista.util.Event
 import ir.chista.util.LiveDatas.zip
 import ir.chista.util.LiveDatas.map
+import ir.chista.util.Observables.toLiveData
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.CoroutineExceptionHandler
 import kotlinx.coroutines.experimental.DisposableHandle
@@ -19,18 +21,20 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
 internal class RequestEditViewModel : BaseViewModel() {
+  val dataMode = DataManager.modeObservable.toLiveData()
   val request: LiveData<LocalRequest> = MutableLiveData()
   val type: LiveData<RequestType> = MutableLiveData()
   val job: LiveData<Job> = MutableLiveData()
   val detail: LiveData<String> = MutableLiveData()
   val skills: LiveData<Set<Skill>> = MutableLiveData()
+  val showWaiting: LiveData<Event<Boolean>> = MutableLiveData()
   val isSubmiting: LiveData<Boolean> = MutableLiveData()
-  val isSavable: LiveData<Boolean> = zip(job, detail, skills, isSubmiting).map { (job_detail, skills_isSubmiting) ->
+
+  val isSavable: LiveData<Boolean> = zip(dataMode, zip(job, detail, skills, isSubmiting).map { (job_detail, skills_isSubmiting) ->
     val (job, detail) = job_detail
     val (skills, isSubmiting) = skills_isSubmiting
     job.isNotEmpty and detail.isNotEmpty && skills.isNotEmpty() && skills.count() <= 5 && !isSubmiting
-  }
-  val showWaiting: LiveData<Event<Boolean>> = MutableLiveData()
+  }).map { (mode, isSavable) -> isSavable && mode == DataManager.Mode.Online }
 
 
   private var jobSelectDialog: AlertDialog? = null

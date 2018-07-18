@@ -45,9 +45,17 @@ class LoadingActivity : BaseActivity() {
   }
 
   private fun loadDatabase(retries: Int) {
-    Toast.makeText(context, "Not Implemented yet!", Toast.LENGTH_SHORT).show()
-
-    loadServer(retries)
+    launch(CommonPool + CoroutineExceptionHandler { _, e ->
+      launch(UI) { onLoadError(e, retries) }
+    }) {
+      DataManager.loadOfflineData()
+      delay(100) // a sweet wait
+    }.invokeOnCompletion { e ->
+      launch(UI) {
+        if (e != null)
+        else onLoadComplete()
+      }
+    }
   }
 
   private fun modifyServer(retries: Int) {
@@ -57,7 +65,9 @@ class LoadingActivity : BaseActivity() {
   }
 
   private fun exit(retries: Int) {
-    finish()
+    Toast.makeText(context, "try men!", Toast.LENGTH_SHORT).show()
+    loadServer(retries)
+    // finish()
   }
 
   private fun onLoadError(e: Throwable, retries: Int) {

@@ -4,23 +4,26 @@ import android.arch.lifecycle.*
 import com.vdurmont.emoji.EmojiParser
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.internal.disposables.DisposableContainer
-import io.reactivex.rxkotlin.plusAssign
+import ir.chista.jobs.data.DataManager
 import ir.chista.jobs.data.Repository
 import ir.chista.jobs.data.model.*
 import ir.chista.jobs.util.BaseViewModel
 import ir.chista.util.LiveDatas
 import ir.chista.util.LiveDatas.map
+import ir.chista.util.Observables.toLiveData
 import kotlinx.coroutines.experimental.*
 
 internal class ChatDetailViewModel : BaseViewModel() {
+  val dataMode: LiveData<DataManager.Mode> = DataManager.modeObservable.toLiveData()
+
   val contact: LiveData<LocalUser> = MutableLiveData()
   val chats: LiveData<List<LocalChat>> = MutableLiveData()
   val messageField: LiveData<String> = MutableLiveData()
   val isSending: LiveData<Boolean> = MutableLiveData()
-  val sendEnabled = LiveDatas.zip(messageField, isSending)
-    .map { (message, isSending) -> message.isNotBlank() && !isSending }
+  val sendEnabled = LiveDatas.zip(messageField, isSending, dataMode)
+    .map { (message, isSending, dataMode) ->
+      message.isNotBlank() and !isSending and (dataMode == DataManager.Mode.Online)
+    }
 
   var listener: ChatDetailListener? = null
 
@@ -39,7 +42,8 @@ internal class ChatDetailViewModel : BaseViewModel() {
         },
         Repository.Chats.listsByContact(contactId).subscribe {
           chats.postValue(it ?: emptyList())
-          markAsSeen()
+          if (dataMode.value == DataManager.Mode.Online)
+            markAsSeen()
         }
       )
     }

@@ -90,15 +90,21 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
         Snackbar.LENGTH_LONG).show()
     }
 
-    viewModel.requests.observe(this, emptyList()) { items ->
+    viewModel.requests.observe(this) { items ->
       adapter.items = items
     }
 
-    viewModel.selectedId.observe(this, emptyID) { selectedId ->
+    viewModel.isEditable.observe(this) { isEditable ->
+      swipeRefreshLayout.isEnabled = isEditable
+      fab.isEnabled = isEditable
+      fab.visibility = if (isEditable) View.VISIBLE else View.GONE
+    }
+
+    viewModel.selectedId.observe(this) { selectedId ->
       adapter.selectedId = selectedId
     }
 
-    viewModel.isRefreshing.observe(this, false) { isRefreshing ->
+    viewModel.isRefreshing.observe(this) { isRefreshing ->
       swipeRefreshLayout.isRefreshing = isRefreshing
       Toast.makeText(activity, "isRefreshing:$isRefreshing", Toast.LENGTH_SHORT).show()
     }

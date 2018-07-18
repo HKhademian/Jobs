@@ -51,8 +51,7 @@ object AccountManager {
     if (!force && user.isFresh) return
     val login = ApiManager.accounts.refresh(user.refreshToken).await()
     save(login)
-    //delay(2000)
-    if (loadData) DataManager.loadOnlineUserData()
+    if (loadData) DataManager.loadOnlineData()
   }
 
   /**

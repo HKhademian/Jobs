@@ -3,12 +3,18 @@ package ir.chista.jobs.screen.request.detail
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import io.reactivex.disposables.Disposable
+import ir.chista.jobs.data.DataManager
 import ir.chista.jobs.data.Repository
 import ir.chista.jobs.data.model.*
 import ir.chista.jobs.util.BaseViewModel
+import ir.chista.util.Observables.toLiveData
+import ir.chista.util.LiveDatas.map
 
 internal class RequestDetailViewModel : BaseViewModel() {
+  val dataMode = DataManager.modeObservable.toLiveData()
   val request: LiveData<LocalRequest> = MutableLiveData()
+  val isEditable = dataMode.map { mode -> mode == DataManager.Mode.Online }
+
   var listener: RequestDetailListener? = null
   private var disposable: Disposable? = null
 

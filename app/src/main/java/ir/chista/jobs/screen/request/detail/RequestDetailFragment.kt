@@ -69,6 +69,12 @@ class RequestDetailFragment : BaseFragment() {
       return rootView
     rootView = inflater.inflate(R.layout.fragment_request_detail, container, false)
 
+    brokersView.adapter = brokerAdapter
+    matchesView.adapter = matchesAdapter
+
+    typeView.isEnabled = false
+    editAction.setOnClickListener { viewModel.edit() }
+    cancelAction.setOnClickListener { viewModel.cancel() }
 
     viewModel.activity.observe(this) {
       val task = it.getContentIfNotHandled() ?: return@observe
@@ -80,14 +86,18 @@ class RequestDetailFragment : BaseFragment() {
       Snackbar.make(rootView, "Error occurs in Request Edit Page:\n${ex.message ?: ex.toString()}\n\nif this happens many times please contact support team.", Snackbar.LENGTH_SHORT).show()
     }
 
+    viewModel.isEditable.observe(this) { isEditable ->
+      editAction.isEnabled = isEditable
+      fabDetail?.isEnabled = isEditable
+      fabDetail?.visibility = if (isEditable) View.VISIBLE else View.GONE
+    }
+
     viewModel.request.observe(this) { setRequest(it) }
     return rootView
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    brokersView.adapter = brokerAdapter
-    matchesView.adapter = matchesAdapter
 
     fabDetail = activity?.findViewById(R.id.fabDetail)
     fabDetail?.let { fabDetail ->
@@ -98,10 +108,6 @@ class RequestDetailFragment : BaseFragment() {
         viewModel.edit()
       }
     }
-
-    typeView.isEnabled = false
-    editAction.setOnClickListener { viewModel.edit() }
-    cancelAction.setOnClickListener { viewModel.cancel() }
   }
 
   private fun setRequest(request: LocalRequest) {
