@@ -34,14 +34,15 @@ class DashboardNavigationFragment : BaseFragment() {
   private lateinit var viewModel: DashboardViewModel
   private var navigationListener: WeakReference<NavigationView.OnNavigationItemSelectedListener>? = null
 
+  @Suppress("WhenWithOnlyElse")
   private val navListener = NavigationView.OnNavigationItemSelectedListener {
     val listener = navigationListener?.get()
     when (it.itemId) {
-      R.id.nav_refresh -> consume { viewModel.refresh() }
+       R.id.nav_refresh -> consume { viewModel.refresh() }
 
-      R.id.nav_logout -> consume { viewModel.logout() }
+       R.id.nav_logout -> consume { viewModel.logout() }
 
-      R.id.nav_exit -> consume { viewModel.exit() }
+       R.id.nav_exit -> consume { viewModel.exit() }
 
       else -> listener?.onNavigationItemSelected(it) ?: false
     }

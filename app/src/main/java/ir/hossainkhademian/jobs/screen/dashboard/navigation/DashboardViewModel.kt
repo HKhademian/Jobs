@@ -40,6 +40,7 @@ class DashboardViewModel : BaseViewModel() {
   fun logout() {
     listener?.get()?.onNavigationClose()
     postActivityTask { activity ->
+
       LogoutDialog.show(activity, {}, {
         val phone = phone.value ?: ""
         launch {
@@ -52,6 +53,7 @@ class DashboardViewModel : BaseViewModel() {
           }
         }
       })
+
     }
   }
 
@@ -68,9 +70,6 @@ class DashboardViewModel : BaseViewModel() {
 
   fun exit() {
     listener?.get()?.onNavigationClose()
-
-    postActivityTask { activity ->
-      activity.onBackPressed()
-    }
+    listener?.get()?.onNavigationExit()
   }
 }

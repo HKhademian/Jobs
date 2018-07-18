@@ -15,6 +15,7 @@ import ir.hossainkhademian.jobs.dialog.WhatsNewDialog
 import ir.hossainkhademian.jobs.screen.BaseActivity
 import ir.hossainkhademian.jobs.screen.chat.list.ChatListActivity
 import ir.hossainkhademian.jobs.screen.dashboard.about.AboutFragment
+import ir.hossainkhademian.jobs.screen.dashboard.home.HomeFragment
 import ir.hossainkhademian.jobs.screen.dashboard.navigation.DashboardNavigationFragment
 import ir.hossainkhademian.jobs.screen.dashboard.navigation.DashboardNavigationListener
 import ir.hossainkhademian.jobs.screen.request.list.RequestListActivity
@@ -47,7 +48,7 @@ class DashboardActivity : BaseActivity(),
 
       drawer_layout.openDrawer(Gravity.START)
 
-      setFragment<TestFragment>()
+      setFragment<HomeFragment>()
       initWhatsNew()
     }
   }
@@ -56,13 +57,17 @@ class DashboardActivity : BaseActivity(),
     when {
       drawer_layout.isDrawerOpen(Gravity.START) -> drawer_layout.closeDrawer(Gravity.START)
 
-      supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
+      // supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
 
-      else -> onNavigationClose()
+      else -> onNavigationExit()
     }
   }
 
   override fun onNavigationClose() {
+    drawer_layout.closeDrawer(Gravity.START)
+  }
+
+  override fun onNavigationExit() {
     ExitDialog.show(context,
       onStay = { },
       onRate = {
@@ -73,29 +78,34 @@ class DashboardActivity : BaseActivity(),
       })
   }
 
-  override fun onNavigationExit() {
-    drawer_layout.closeDrawer(Gravity.START)
-  }
-
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     onNavigationClose()
+
     return when (item.itemId) {
       R.id.navigation_dashboard -> consume {
-        setFragment<TestFragment>()
+        setFragment<HomeFragment>()
       }
       R.id.navigation_about -> consume {
         addFragment<AboutFragment>()
       }
-      R.id.navigation_requests -> consume(false) {
+      R.id.navigation_chats -> consume(false) {
         launchActivity<ChatListActivity>()
       }
-      R.id.navigation_chats -> consume(false) {
+      R.id.navigation_requests -> consume(false) {
         launchActivity<RequestListActivity>()
       }
 
-      R.id.nav_exit -> consume(true) {
-        onNavigationExit()
-      }
+    //ViewModel implemented
+    //R.id.nav_logout -> consume(true) {
+    //  onNavigationExit()
+    //}
+    //R.id.nav_refresh -> consume(true) {
+    //  onNavigationExit()
+    //}
+    //R.id.nav_exit -> consume(true) {
+    //  onNavigationExit()
+    //}
+
     //R.id.nav_share -> consume(true) {
     //}
     //R.id.nav_send-> consume(true) {
@@ -106,7 +116,7 @@ class DashboardActivity : BaseActivity(),
     //}
 
       else -> consume(false) {
-        Snackbar.make(container, "Not Implemented yet!", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(container, "Not Implemented yet!", Snackbar.LENGTH_SHORT).show()
       }
     }
   }
@@ -126,6 +136,7 @@ class DashboardActivity : BaseActivity(),
   private fun addFragment(fragment: Fragment, tag: String) {
     supportFragmentManager.beginTransaction()
       .add(R.id.fragment, fragment, tag)
+      .addToBackStack(tag)
       .commit()
   }
 
@@ -142,8 +153,8 @@ class DashboardActivity : BaseActivity(),
   private inline fun <reified T : Fragment> getFragment(init: T.() -> Unit = {}): Pair<String, T> {
     val tag = T::class.java.simpleName
     val fragment =
-      supportFragmentManager.findFragmentByTag(tag) as? T
-        ?: T::class.java.newInstance()!!
+     /* supportFragmentManager.findFragmentByTag(tag) as? T
+        ?: */ T::class.java.newInstance()!!
     fragment.apply(init)
     return tag to fragment
   }

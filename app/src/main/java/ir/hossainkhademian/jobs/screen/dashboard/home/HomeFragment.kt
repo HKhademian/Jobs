@@ -1,4 +1,4 @@
-package ir.hossainkhademian.jobs.screen.dashboard
+package ir.hossainkhademian.jobs.screen.dashboard.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import ir.hossainkhademian.jobs.data.AccountManager
 import ir.hossainkhademian.jobs.screen.BaseFragment
 import kotlinx.android.synthetic.main.fragment_test.view.*
 
-class TestFragment : BaseFragment() {
+class HomeFragment : BaseFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     //val rootView  = inflater.inflate(R.layout.fragment_test, container, false)
     //val userView = rootView.userView
