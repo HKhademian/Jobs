@@ -16,7 +16,7 @@
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:orientation="vertical">
-    <ir.hossainkhademian.jobs.view.FieldBox
+    <ir.chista.jobs.view.FieldBox
       android:id="@+id/typeCard"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -30,9 +30,9 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         layout="@layout/view_request_type"/>
-    </ir.hossainkhademian.jobs.view.FieldBox>
+    </ir.chista.jobs.view.FieldBox>
 
-    <ir.hossainkhademian.jobs.view.FieldBox
+    <ir.chista.jobs.view.FieldBox
       android:id="@+id/jobCard"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -49,15 +49,15 @@
         android:padding="4dp"
         android:textColor="@color/colorAccent"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
-      <ir.hossainkhademian.jobs.view.JobView
+      <ir.chista.jobs.view.JobView
         android:id="@+id/jobView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         style="@style/CardView.Light.Hidden"/>
-    </ir.hossainkhademian.jobs.view.FieldBox>
+    </ir.chista.jobs.view.FieldBox>
 
-    <ir.hossainkhademian.jobs.view.FieldBox
+    <ir.chista.jobs.view.FieldBox
       android:id="@+id/skillsCard"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -91,9 +91,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         style="@style/TagGroup.Large"/>
-    </ir.hossainkhademian.jobs.view.FieldBox>
+    </ir.chista.jobs.view.FieldBox>
 
-    <ir.hossainkhademian.jobs.view.FieldBox
+    <ir.chista.jobs.view.FieldBox
       android:id="@+id/detailCard"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
         android:nextFocusUp="@id/detailView"
         android:nextFocusLeft="@id/detailView"
         android:nextFocusDown="@id/submitAction"/>
-    </ir.hossainkhademian.jobs.view.FieldBox>
+    </ir.chista.jobs.view.FieldBox>
 
     <LinearLayout
       android:layout_width="match_parent"

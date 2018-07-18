@@ -19,7 +19,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       app:popupTheme="@style/AppTheme.PopupOverlay">
-      <ir.hossainkhademian.jobs.view.UserView
+      <ir.chista.jobs.view.UserView
         android:id="@+id/userView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

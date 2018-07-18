@@ -9,7 +9,7 @@ android {
   flavorDimensions 'server'
 
   defaultConfig {
-    applicationId 'ir.hossainkhademian.jobs'
+    applicationId 'ir.jobs.jobs'
     minSdkVersion 16
     targetSdkVersion 28
     versionCode 2

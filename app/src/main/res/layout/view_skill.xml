@@ -5,7 +5,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:parentTag="ir.hossainkhademian.jobs.view.JobView">
+  tools:parentTag="ir.chista.jobs.view.JobView">
 
   <LinearLayout
     android:layout_width="match_parent"

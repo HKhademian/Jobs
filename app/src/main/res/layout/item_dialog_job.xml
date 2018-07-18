@@ -4,7 +4,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
-  <ir.hossainkhademian.jobs.view.JobView
+  <ir.chista.jobs.view.JobView
     android:id="@+id/jobView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
