@@ -5,13 +5,16 @@ package ir.chista.jobs.data.api
 import ir.chista.jobs.data.model.ID
 import ir.chista.jobs.data.model.MatchData
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.PUT
+import retrofit2.http.*
 
 interface MatchService {
   @GET("/matches")
-  fun list(accessToken: String): Call<List<MatchData>>
+  fun list(@Header("accessToken") accessToken: String): Call<List<MatchData>>
 
+  @FormUrlEncoded
   @PUT("/matches")
-  fun addMatch(accessToken: String, workerRequestId: ID, companyRequestId: ID, note: String): Call<Unit>
+  fun addMatch(@Header("accessToken") accessToken: String,
+               @Field("workerRequestId")workerRequestId: ID,
+               @Field("companyRequestId") companyRequestId: ID,
+               @Field("note") note: String): Call<Unit>
 }

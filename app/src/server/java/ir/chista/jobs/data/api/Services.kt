@@ -1,9 +1,8 @@
-package ir.hossainkhademian.jobs.data.api
+package ir.chista.jobs.data.api
 
-import android.content.Context
-import ir.hossainkhademian.jobs.App
-import ir.hossainkhademian.jobs.BuildConfig
-import ir.hossainkhademian.util.Interceptors
+import ir.chista.jobs.App
+import ir.chista.jobs.BuildConfig
+import ir.chista.util.Interceptors
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,6 +23,7 @@ internal object Services {
   lateinit var request: RequestService; private set
   lateinit var chat: ChatService; private set
   lateinit var user: UserService; private set
+  lateinit var match: MatchService; private set
 
   private fun create(retrofit: Retrofit) {
     account = retrofit.create(AccountService::class.java)
@@ -32,6 +32,7 @@ internal object Services {
     request = retrofit.create(RequestService::class.java)
     chat = retrofit.create(ChatService::class.java)
     user = retrofit.create(UserService::class.java)
+    match = retrofit.create(MatchService::class.java)
   }
 
   fun App.initServices() {

@@ -62,8 +62,8 @@ open class ChatData(
   @Json(name = "time") override val time: Long = System.currentTimeMillis()
 ) : LocalChat {
   @Suppress("LeakingThis")
+  @Transient
   override val seen: Boolean = !unseen
-
 }
 
 fun Chat.toData() = when (this) {

@@ -4,18 +4,23 @@ package ir.chista.jobs.data.api
 
 import ir.chista.jobs.data.model.LoginData
 import retrofit2.Call
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface AccountService {
+  @FormUrlEncoded
   @POST("/account/login")
-  fun login(phone: String, password: String): Call<LoginData>
+  fun login(@Field("phone") phone: String,
+            @Field("password") password: String): Call<LoginData>
 
+  @FormUrlEncoded
   @POST("/account/register")
-  fun register(phone: String): Call<LoginData>
+  fun register(@Field("phone") phone: String): Call<LoginData>
 
   @POST("/account/update")
-  fun refresh(refreshToken: String): Call<LoginData>
+  fun refresh(@Header("refreshToken") refreshToken: String): Call<LoginData>
 
+  @FormUrlEncoded
   @POST("/account/change")
-  fun changeTitle(refreshToken: String, title: String): Call<LoginData>
+  fun changeTitle(@Header("accessToken") accessToken: String,
+                  @Field("title") title: String): Call<LoginData>
 }
