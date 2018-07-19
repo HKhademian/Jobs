@@ -60,7 +60,7 @@ object RequestMockService : RequestService {
     }
 
     val newRequest = request.copy(
-      jobId = if (login.isAdmin) jobId else request.id,
+      jobId = if (login.isAdmin) jobId else request.jobId,
       skillIds = skillIds,
       detail = detail
     )

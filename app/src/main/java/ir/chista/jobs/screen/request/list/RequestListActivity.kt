@@ -121,8 +121,8 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
     val taps = mutableListOf<TapTarget>()
 
     if (fab != null)
-      taps += TapTarget.forView(fab, getString(R.string.tap_requestList_fab_title), getString(R.string.tap_requestList_fab_des)).transparentTarget(true).cancelable(false)
-    taps += TapTarget.forView(recyclerView, getString(R.string.tap_requestList_title), getString(R.string.tap_requestList_des)).transparentTarget(true).cancelable(false)
+      taps += TapTarget.forView(fab, getString(R.string.tap_requestList_fab_title), getString(R.string.tap_requestList_fab_des)).transparentTarget(true)//.cancelable(false)
+    taps += TapTarget.forView(recyclerView, getString(R.string.tap_requestList_title), getString(R.string.tap_requestList_des)).transparentTarget(true)//.cancelable(false)
 
     navigationLocked = true
     TapTargetSequence(this).targets(taps)

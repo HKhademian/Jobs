@@ -38,7 +38,6 @@ class RequestEditFragment : BaseFragment() {
   private val skillsView get() = rootView.skillsView
   private val detailCard get() = rootView.detailCard
   private val detailView get() = rootView.detailView
-  private var fabDetail: FloatingActionButton? = null
 
   val clearSkillListener = View.OnClickListener { viewModel.clearSkills() }
   val clearDetailListener = View.OnClickListener { viewModel.clearDetail() }
@@ -47,7 +46,6 @@ class RequestEditFragment : BaseFragment() {
     super.onAttach(context)
     viewModel = viewModel { RequestEditViewModel() }
     viewModel.listener = context as? RequestEditListener
-    fabDetail = activity?.findViewById(R.id.fabDetail)
   }
 
   fun setRequestId(id: ID) {
@@ -115,8 +113,10 @@ class RequestEditFragment : BaseFragment() {
     }
 
     viewModel.isSavable.observe(this, false) { isSavable ->
-      fabDetail?.isEnabled = isSavable
-      fabDetail?.visibility = if (isSavable) View.VISIBLE else View.GONE
+      activity?.findViewById<FloatingActionButton>(R.id.fabDetail) ?.let { fabDetail ->
+        fabDetail.isEnabled = isSavable
+        fabDetail.visibility = if (isSavable) View.VISIBLE else View.GONE
+      }
       submitAction.isEnabled = isSavable
     }
 
@@ -125,8 +125,7 @@ class RequestEditFragment : BaseFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    fabDetail = activity?.findViewById(R.id.fabDetail)
-    fabDetail?.let { fabDetail ->
+    activity?.findViewById<FloatingActionButton>(R.id.fabDetail) ?.let { fabDetail ->
       fabDetail.visibility = View.VISIBLE
       fabDetail.setImageResource(R.drawable.ic_action_save)
       fabDetail.setOnClickListener { viewModel.submit() }

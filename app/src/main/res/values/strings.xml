@@ -1,7 +1,7 @@
 <resources>
   <string name="app_name">Jobs</string>
   <string name="app_description">This app made for Fanavard App Developer contest, any way Enjoy it ☻ !</string>
-  <string name="app_developer">Hossain Khademian</string>
+  <string name="app_developer">Hossain Khademian and SaeedKhademian</string>
   <string name="leak_canary_display_activity_label">Jobs Leaks</string>
 
   <string name="prompt_phone">Phone</string>

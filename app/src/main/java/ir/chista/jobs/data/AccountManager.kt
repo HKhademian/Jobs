@@ -66,22 +66,22 @@ object AccountManager {
    */
   suspend fun logout() {
     Storage.clear()
+    Taps.clear()
     DataManager.chats.clear()
     DataManager.users.clear()
     DataManager.requests.clear()
+    DataManager.matches.clear()
     subject.onNext(user)
   }
 
   suspend fun login(phone: String, password: String) {
     val login = ApiManager.accounts.login(phone, password).await()
     save(login)
-    // if (loadData) DataManager.loadOnlineUserData(context)
   }
 
   suspend fun register(phone: String, title: String) {
     val login = ApiManager.accounts.register(phone, title).await()
     save(login)
-    // if (loadData) DataManager.loadOnlineUserData(context)
   }
 
   suspend fun changeTitle(title: String) {
@@ -89,10 +89,6 @@ object AccountManager {
     save(login)
   }
 
-
   fun isPhoneValid(phone: String): Boolean =
     phone.matches(Regex("""\+98[0-9]{10}"""))
-
-  fun isPasswordValid(password: String): Boolean =
-    true
 }

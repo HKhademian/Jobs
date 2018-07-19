@@ -122,11 +122,11 @@ class DashboardNavigationFragment : BaseFragment() {
   private fun showTapTarget(activity: Activity) = with(activity) {
     viewModel.listener?.get()?.onNavigationLock(true)
     TapTargetSequence(this).targets(
-      TapTarget.forView(avatarView, getString(R.string.tap_avatar_title), getString(R.string.tap_avatar_des)).transparentTarget(true).cancelable(false),
-      TapTarget.forView(titleView, getString(R.string.tap_title_title), getString(R.string.tap_title_des)).transparentTarget(true).cancelable(false),
-      TapTarget.forView(subtitleView, getString(R.string.tap_subtitle_title), getString(R.string.tap_subtitle_des)).transparentTarget(true).cancelable(false),
-      TapTarget.forView(editAction, getString(R.string.tap_edit_title), getString(R.string.tap_edit_des)).transparentTarget(true).cancelable(false),
-      TapTarget.forView(logoutAction, getString(R.string.tap_logout_title), getString(R.string.tap_logout_des)).transparentTarget(true).cancelable(false)
+      TapTarget.forView(avatarView, getString(R.string.tap_avatar_title), getString(R.string.tap_avatar_des)).transparentTarget(true),//.cancelable(false),
+      TapTarget.forView(titleView, getString(R.string.tap_title_title), getString(R.string.tap_title_des)).transparentTarget(true),//.cancelable(false),
+      TapTarget.forView(subtitleView, getString(R.string.tap_subtitle_title), getString(R.string.tap_subtitle_des)).transparentTarget(true),//.cancelable(false),
+      TapTarget.forView(editAction, getString(R.string.tap_edit_title), getString(R.string.tap_edit_des)).transparentTarget(true),//.cancelable(false),
+      TapTarget.forView(logoutAction, getString(R.string.tap_logout_title), getString(R.string.tap_logout_des)).transparentTarget(true)//.cancelable(false)
     )
       .listener(object : TapTargetSequence.Listener {
         override fun onSequenceCanceled(lastTarget: TapTarget?) {

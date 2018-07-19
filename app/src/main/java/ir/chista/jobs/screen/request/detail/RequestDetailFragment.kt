@@ -45,7 +45,6 @@ class RequestDetailFragment : BaseFragment() {
   private val brokersEmptyHintView get() = rootView.brokersEmptyHintView
   private val matchesView get() = rootView.matchesView
   private val matchesEmptyHintView get() = rootView.matchesEmptyHintView
-  private var fabDetail: FloatingActionButton? = null
 
   val context get() = activity!!
   private val brokerAdapter: BrokerAdapter = BrokerAdapter()
@@ -55,7 +54,6 @@ class RequestDetailFragment : BaseFragment() {
     super.onAttach(context)
     viewModel = viewModel { RequestDetailViewModel() }
     viewModel.listener = context as? RequestDetailListener
-    fabDetail = activity?.findViewById(R.id.fabDetail)
   }
 
   fun setRequestId(requestId: ID) {
@@ -91,8 +89,10 @@ class RequestDetailFragment : BaseFragment() {
 
     viewModel.isEditable.observe(this) { isEditable ->
       editAction.isEnabled = isEditable
-      fabDetail?.isEnabled = isEditable
-      fabDetail?.visibility = if (isEditable) View.VISIBLE else View.GONE
+      activity?.findViewById<FloatingActionButton>(R.id.fabDetail)?.let { fabDetail ->
+        fabDetail.isEnabled = isEditable
+        fabDetail.visibility = if (isEditable) View.VISIBLE else View.GONE
+      }
     }
 
     viewModel.isBrokerEditable.observe(this) { isBrokerEditable ->
@@ -107,8 +107,7 @@ class RequestDetailFragment : BaseFragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    fabDetail = activity?.findViewById(R.id.fabDetail)
-    fabDetail?.let { fabDetail ->
+    activity?.findViewById<FloatingActionButton>(R.id.fabDetail)?.let { fabDetail ->
       fabDetail.isEnabled = true
       fabDetail.visibility = View.VISIBLE
       fabDetail.setImageResource(R.drawable.ic_action_edit)

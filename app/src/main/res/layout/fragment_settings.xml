@@ -43,6 +43,22 @@
       />
     </ir.chista.jobs.view.FieldBox>
 
+    <android.support.v7.widget.CardView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      app:cardCornerRadius="6dp"
+      app:cardBackgroundColor="@color/colorAccent">
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorIcons"
+        android:text="These cards are to fill the blanks"/>
+    </android.support.v7.widget.CardView>
+
     <ir.chista.jobs.view.FieldBox
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

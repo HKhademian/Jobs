@@ -129,8 +129,8 @@ class DashboardActivity : BaseActivity(),
     drawer_layout.closeDrawer(Gravity.START)
     navigationLocked = true
     TapTargetSequence(this).targets(
-      TapTarget.forToolbarNavigationIcon(toolbar, getString(R.string.tap_dashboard_drawer_title), getString(R.string.tap_dashboard_drawer_des)).transparentTarget(true).cancelable(false),
-      TapTarget.forView(bottomNavigation, getString(R.string.tap_dashboard_bottom_title), getString(R.string.tap_dashboard_bottom_des)).transparentTarget(true).cancelable(false)
+      TapTarget.forToolbarNavigationIcon(toolbar, getString(R.string.tap_dashboard_drawer_title), getString(R.string.tap_dashboard_drawer_des)).transparentTarget(true),//.cancelable(false),
+      TapTarget.forView(bottomNavigation, getString(R.string.tap_dashboard_bottom_title), getString(R.string.tap_dashboard_bottom_des)).transparentTarget(true)//.cancelable(false)
     )
       .listener(object : TapTargetSequence.Listener {
         override fun onSequenceCanceled(lastTarget: TapTarget?) {
