@@ -67,7 +67,7 @@
         android:nextFocusLeft="@id/blank"
         android:nextFocusUp="@id/blank"
         android:nextFocusRight="@id/mediaAction"
-        android:nextFocusDown="@id/mediaAction"/>
+        android:nextFocusDown="@id/mediaAction" android:text="\n\n\n\n"/>
 
       <ImageView
         android:id="@+id/mediaAction"
@@ -101,19 +101,17 @@
 
   <ImageButton
     android:id="@+id/sendAction"
-    android:layout_width="56dp"
-    android:layout_height="56dp"
-    android:layout_marginBottom="2dp"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:layout_marginBottom="8dp"
     android:layout_marginStart="2dp"
     android:layout_marginLeft="2dp"
     android:layout_marginRight="4dp"
     android:layout_marginEnd="4dp"
-    android:layout_marginTop="0dp"
     android:layout_gravity="top"
     app:layout_constraintStart_toEndOf="@id/chat_bar"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="@id/chat_bar"
-    android:padding="4dp"
+    app:layout_constraintBottom_toBottomOf="parent"
     app:srcCompat="@drawable/ic_action_send"
     android:tint="@color/colorIcons"
     android:background="@drawable/round_button_primary"

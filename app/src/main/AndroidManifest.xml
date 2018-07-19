@@ -28,6 +28,14 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme.NoActionBar">
     <activity
+      android:name=".screen.splash.SplashActivity"
+      android:launchMode="singleTop">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+    <activity
       android:name=".screen.register.RegisterActivity"
       android:launchMode="singleTask"/>
     <activity
@@ -39,15 +47,6 @@
     <activity
       android:name=".screen.dashboard.DashboardActivity"
       android:launchMode="singleTask"/>
-    <activity
-      android:name=".screen.splash.SplashActivity"
-      android:launchMode="singleTask">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity>
     <activity
       android:name=".screen.chat.list.ChatListActivity"
       android:label="@string/title_chats"
