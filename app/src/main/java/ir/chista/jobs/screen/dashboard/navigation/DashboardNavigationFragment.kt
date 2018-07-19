@@ -135,8 +135,9 @@ class DashboardNavigationFragment : BaseFragment() {
         }
 
         override fun onSequenceFinish() {
-          viewModel.listener?.get()?.onNavigationLock(false)
           AccountManager.Taps.navigationDone = true
+          viewModel.listener?.get()?.onNavigationLock(false)
+          viewModel.listener?.get()?.onNavigationTapDone()
         }
 
         override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) = Unit // hmmm!
