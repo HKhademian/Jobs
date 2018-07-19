@@ -2,6 +2,7 @@ package ir.chista.jobs.dialog
 
 import android.content.Context
 import android.support.v7.app.AlertDialog
+import ir.chista.jobs.R
 
 object ExitDialog {
   fun show(
@@ -19,10 +20,10 @@ object ExitDialog {
     onExit: () -> Unit
   ) = AlertDialog.Builder(context)
     .setCancelable(true)
-    .setTitle("Are you sure you want to exit?")
-    .setMessage("Please rate us if you like this App!")
-    .setPositiveButton("Stay") { _, _ -> onStay() }
-    .setNeutralButton("Rate") { _, _ -> onRate() }
-    .setNegativeButton("Exit") { _, _ -> onExit() }
+    .setTitle(R.string.dialog_exit_title)
+    .setMessage(R.string.dialog_exit_message)
+    .setPositiveButton(R.string.dialog_exit_action_stay) { _, _ -> onStay() }
+    .setNeutralButton(R.string.dialog_exit_action_rate) { _, _ -> onRate() }
+    .setNegativeButton(R.string.dialog_exit_action_exit) { _, _ -> onExit() }
     .setOnCancelListener { onStay() }
 }

@@ -22,8 +22,7 @@ import java.lang.ref.WeakReference
 class DashboardViewModel : BaseViewModel() {
   val user: LiveData<LocalLogin> = AccountManager.observable.toLiveData()
   val title = user.map { if (it.isNotEmpty) it.title else "Unknown User" }
-  val phone = user.map { if (it.isNotEmpty) it.phone else "Unknown phone number" }
-  val role = user.map { if (it.isNotEmpty) it.role else UserRole.User }
+  val subtitle = user.map { if (it.isNotEmpty) "${it.role.key}: ${it.phone}" else "Unknow" }
 
   var listener: WeakReference<DashboardNavigationListener>? = null
 
@@ -42,7 +41,7 @@ class DashboardViewModel : BaseViewModel() {
     postActivityTask { activity ->
 
       LogoutDialog.show(activity, {}, {
-        val phone = phone.value ?: ""
+        val phone = user.value?.phone ?: ""
         launch {
           AccountManager.logout()
           launch(UI) {

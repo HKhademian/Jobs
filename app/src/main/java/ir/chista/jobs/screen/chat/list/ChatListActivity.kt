@@ -20,6 +20,7 @@ import ir.chista.util.ViewModels.getViewModel
 import ir.chista.util.LiveDatas.observe
 import ir.chista.util.context
 import ir.chista.util.Texts.getRelativeTime
+import ir.chista.util.bundle
 import ir.chista.util.launchActivity
 import kotlinx.android.synthetic.main.activity_chat_list_holder.*
 import kotlinx.android.synthetic.main.activity_chat_list.*
@@ -77,7 +78,7 @@ class ChatListActivity : AppCompatActivity() {
       val tag = ChatDetailFragment::class.java.simpleName
       val fragment =
         (supportFragmentManager.findFragmentByTag(tag) as? ChatDetailFragment)?.also { it.setContactId(contactId) }
-          ?: ChatDetailFragment().also { it.arguments = bundleOf(ChatDetailFragment.ARG_CONTACT_ID to contactId) }
+          ?: ChatDetailFragment().also { it.arguments = bundle(ChatDetailFragment.ARG_CONTACT_ID to contactId) }
 
       supportFragmentManager
         .beginTransaction()

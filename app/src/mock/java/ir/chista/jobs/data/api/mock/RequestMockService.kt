@@ -106,4 +106,48 @@ object RequestMockService : RequestService {
     return Calls.response(newRequest.toData())
   }
 
+  override fun addBroker(accessToken: String, requestId: ID, brokerId: ID): Call<RequestData> {
+    val login = MockApiStorage.getUserByAccessToken(accessToken)
+      ?: return Calls.failure(IOException("user with this token not found. please relogin"))
+
+    if (login.isNotAdmin)
+      return Calls.failure(IOException("only admins can change it"))
+
+    val request = MockApiStorage.requests.items.findById(requestId)
+      ?: return Calls.failure(IOException("no request with this id found"))
+
+    val broker = MockApiStorage.users.items.findById(brokerId)
+      ?: return Calls.failure(IOException("no user with this id found"))
+
+    if (broker.isNotBroker)
+      return Calls.failure(IOException("you can only add broker users"))
+
+    val newRequest = request.copy(
+      brokerIds = request.brokerIds + brokerId
+    )
+    MockApiStorage.requests.update(newRequest)
+
+    return Calls.response(newRequest.toData())
+  }
+
+  override fun removeBroker(accessToken: String, requestId: ID, brokerId: ID): Call<RequestData> {
+    val login = MockApiStorage.getUserByAccessToken(accessToken)
+      ?: return Calls.failure(IOException("user with this token not found. please relogin"))
+
+    if (login.isNotAdmin)
+      return Calls.failure(IOException("only admins can change it"))
+
+    val request = MockApiStorage.requests.items.findById(requestId)
+      ?: return Calls.failure(IOException("no request with this id found"))
+
+    if (!request.brokerIds.contains(brokerId))
+      return Calls.failure(IOException("there is no broker id with this id in request's brokers"))
+
+    val newRequest = request.copy(
+      brokerIds = request.brokerIds - brokerId
+    )
+    MockApiStorage.requests.update(newRequest)
+
+    return Calls.response(newRequest.toData())
+  }
 }

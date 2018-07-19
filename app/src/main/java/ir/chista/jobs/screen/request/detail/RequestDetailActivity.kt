@@ -2,6 +2,7 @@ package ir.chista.jobs.screen.request.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import ir.chista.jobs.R
@@ -69,7 +70,8 @@ class RequestDetailActivity : AppCompatActivity(), RequestDetailListener {
   }
 
   override fun onRequestDetailCloseDone(requestId: ID) {
-    //finish()
+    Snackbar.make(toolbar, "Not Implemented!", Snackbar.LENGTH_SHORT).show()
     navigateUpTo(Intent(context, RequestListActivity::class.java))
+    //finish()
   }
 }

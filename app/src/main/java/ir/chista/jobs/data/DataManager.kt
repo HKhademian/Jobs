@@ -2,7 +2,7 @@ package ir.chista.jobs.data
 
 import ir.chista.jobs.App
 import ir.chista.jobs.data.api.ApiManager
-import ir.chista.jobs.data.database.DatabaseRepository
+import ir.chista.jobs.data.database.DatabaseManager
 import ir.chista.jobs.data.database.toEntity
 import ir.chista.jobs.data.model.*
 import ir.chista.util.ObservableData
@@ -53,43 +53,43 @@ internal object DataManager {
     calls += async {
       val items = ApiManager.jobs.list().await()
       this@DataManager.jobs.replace(items)
-      DatabaseRepository.jobDao.clear()
-      DatabaseRepository.jobDao.insertAll(items.toEntity())
+      DatabaseManager.jobDao.clear()
+      DatabaseManager.jobDao.insertAll(items.toEntity())
     }
 
     calls += async {
       val items = ApiManager.skills.list().await()
       this@DataManager.skills.replace(items)
-      DatabaseRepository.skillDao.clear()
-      DatabaseRepository.skillDao.insertAll(items.toEntity())
+      DatabaseManager.skillDao.clear()
+      DatabaseManager.skillDao.insertAll(items.toEntity())
     }
 
     calls += async {
       val items = ApiManager.requests.list(AccountManager.user.accessToken).await()
       this@DataManager.requests.replace(items)
-      DatabaseRepository.requestDao.clear()
-      DatabaseRepository.requestDao.insertAll(items.toEntity())
+      DatabaseManager.requestDao.clear()
+      DatabaseManager.requestDao.insertAll(items.toEntity())
     }
 
     calls += async {
       val items = ApiManager.chats.list(AccountManager.user.accessToken).await()
       this@DataManager.chats.replace(items)
-      DatabaseRepository.chatDao.clear()
-      DatabaseRepository.chatDao.insertAll(items.toEntity())
+      DatabaseManager.chatDao.clear()
+      DatabaseManager.chatDao.insertAll(items.toEntity())
     }
 
     calls += async {
       val items = ApiManager.matches.list(AccountManager.user.accessToken).await()
       this@DataManager.matches.replace(items)
-      DatabaseRepository.matchDao.clear()
-      DatabaseRepository.matchDao.insertAll(items.toEntity())
+      DatabaseManager.matchDao.clear()
+      DatabaseManager.matchDao.insertAll(items.toEntity())
     }
 
     calls += async {
       val items = ApiManager.users.list(AccountManager.user.accessToken).await()
       this@DataManager.users.replace(items)
-      DatabaseRepository.userDao.clear()
-      DatabaseRepository.userDao.insertAll(items.toEntity())
+      DatabaseManager.userDao.clear()
+      DatabaseManager.userDao.insertAll(items.toEntity())
     }
 
     calls.map { it.await() }
@@ -100,32 +100,32 @@ internal object DataManager {
     val calls = arrayListOf<Deferred<*>>()
 
     calls += async {
-      val items = DatabaseRepository.jobDao.list()
+      val items = DatabaseManager.jobDao.list()
       this@DataManager.jobs.replace(items)
     }
 
     calls += async {
-      val items = DatabaseRepository.skillDao.list()
+      val items = DatabaseManager.skillDao.list()
       this@DataManager.skills.replace(items)
     }
 
     calls += async {
-      val items = DatabaseRepository.chatDao.list()
+      val items = DatabaseManager.chatDao.list()
       this@DataManager.chats.replace(items)
     }
 
     calls += async {
-      val items = DatabaseRepository.requestDao.list()
+      val items = DatabaseManager.requestDao.list()
       this@DataManager.requests.replace(items)
     }
 
     calls += async {
-      val items = DatabaseRepository.matchDao.list()
+      val items = DatabaseManager.matchDao.list()
       this@DataManager.matches.replace(items)
     }
 
     calls += async {
-      val items = DatabaseRepository.userDao.list()
+      val items = DatabaseManager.userDao.list()
       this@DataManager.users.replace(items)
     }
 

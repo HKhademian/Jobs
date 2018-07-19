@@ -36,11 +36,11 @@ class DashboardNavigationFragment : BaseFragment() {
   private val navListener = NavigationView.OnNavigationItemSelectedListener {
     val listener = navigationListener?.get()
     when (it.itemId) {
-       R.id.nav_refresh -> consume { viewModel.refresh() }
+      R.id.nav_refresh -> consume { viewModel.refresh() }
 
-       R.id.nav_logout -> consume { viewModel.logout() }
+      R.id.nav_logout -> consume { viewModel.logout() }
 
-       R.id.nav_exit -> consume { viewModel.exit() }
+      R.id.nav_exit -> consume { viewModel.exit() }
 
       else -> listener?.onNavigationItemSelected(it) ?: false
     }
@@ -84,12 +84,12 @@ class DashboardNavigationFragment : BaseFragment() {
       titleView.text = it
     }
 
-    viewModel.phone.observe(this) {
+    viewModel.subtitle.observe(this) {
       subtitleView.text = it
     }
 
-    viewModel.role.observe(this) {
-      avatarView.circleBackgroundColor = activity?.resources?.getColor(when (it) {
+    viewModel.user.observe(this) {
+      avatarView.circleBackgroundColor = activity?.resources?.getColor(when (it.role) {
         UserRole.User -> R.color.color_role_user
         UserRole.Broker -> R.color.color_role_broker
         UserRole.Admin -> R.color.color_role_admin

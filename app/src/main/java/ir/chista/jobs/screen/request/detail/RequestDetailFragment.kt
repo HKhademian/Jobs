@@ -39,7 +39,9 @@ class RequestDetailFragment : BaseFragment() {
   private val userView get() = rootView.userView
   private val detailView get() = rootView.detailView
   private val detailsEmptyHintView get() = rootView.detailsEmptyHintView
+  private val brokersCard get() = rootView.brokersCard
   private val brokersView get() = rootView.brokersView
+  private val brokersRemoveHintView get() = rootView.brokersRemoveHintView
   private val brokersEmptyHintView get() = rootView.brokersEmptyHintView
   private val matchesView get() = rootView.matchesView
   private val matchesEmptyHintView get() = rootView.matchesEmptyHintView
@@ -75,6 +77,7 @@ class RequestDetailFragment : BaseFragment() {
     typeView.isEnabled = false
     editAction.setOnClickListener { viewModel.edit() }
     cancelAction.setOnClickListener { viewModel.cancel() }
+    brokersCard.onActionClickListener = View.OnClickListener { if (viewModel.isBrokerEditable.value == true) viewModel.addBroker() }
 
     viewModel.activity.observe(this) {
       val task = it.getContentIfNotHandled() ?: return@observe
@@ -90,6 +93,11 @@ class RequestDetailFragment : BaseFragment() {
       editAction.isEnabled = isEditable
       fabDetail?.isEnabled = isEditable
       fabDetail?.visibility = if (isEditable) View.VISIBLE else View.GONE
+    }
+
+    viewModel.isBrokerEditable.observe(this) { isBrokerEditable ->
+      brokersCard.setActionId(if (isBrokerEditable) R.string.action_add else 0)
+      brokersRemoveHintView?.visibility = if (isBrokerEditable) View.VISIBLE else View.GONE
     }
 
     viewModel.request.observe(this) { setRequest(it) }
@@ -183,7 +191,13 @@ class RequestDetailFragment : BaseFragment() {
 
     init {
       view.setOnClickListener {
-        viewModel.sendChat(item)
+        viewModel.sendChat(item.id)
+      }
+      view.setOnLongClickListener {
+        if (viewModel.isBrokerEditable.value == true) {
+          viewModel.removeBroker(item.id)
+          true
+        } else false
       }
     }
 

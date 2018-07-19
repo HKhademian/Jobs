@@ -56,11 +56,12 @@ class FieldBox : CardView {
       titleView.text = value
     }
 
+  fun setActionId(actionId: Int) = apply { action = if (actionId <= 0) "" else context.resources.getString(actionId) }
   var action: String
     get() = action1
     set(value) = let { action1 = value }
 
-
+  fun setAction1Id(action1Id: Int) = apply { action1 = if (action1Id <= 0) "" else context.resources.getString(action1Id) }
   var action1: String
     get() = action1View.text.toString()
     set(value) {
@@ -68,6 +69,7 @@ class FieldBox : CardView {
       action1View.visibility = if (value.isEmpty()) View.GONE else View.VISIBLE // use space to not gone
     }
 
+  fun setAction2Id(action2Id: Int) = apply { action2 = if (action2Id <= 0) "" else context.resources.getString(action2Id) }
   var action2: String
     get() = action2View.text.toString()
     set(value) {
@@ -75,6 +77,7 @@ class FieldBox : CardView {
       action2View.visibility = if (value.isEmpty()) View.GONE else View.VISIBLE // use space to not gone
     }
 
+  fun setAction3Id(action3Id: Int) = apply { action3 = if (action3Id <= 0) "" else context.resources.getString(action3Id) }
   var action3: String
     get() = action3View.text.toString()
     set(value) {

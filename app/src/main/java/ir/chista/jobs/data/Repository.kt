@@ -17,14 +17,13 @@ import ir.chista.jobs.data.AccountManager.initAccountManager
 import ir.chista.jobs.data.DataManager.initDataManager
 import ir.chista.jobs.data.api.ApiManager
 import ir.chista.jobs.data.api.ApiManager.initApiManager
-import ir.chista.jobs.data.database.DatabaseRepository.initDatabaseManager
+import ir.chista.jobs.data.database.DatabaseManager
+import ir.chista.jobs.data.database.DatabaseManager.initDatabaseManager
+import ir.chista.jobs.data.database.toEntity
 import ir.chista.jobs.data.model.*
 import ir.chista.util.Observables
-import ir.chista.util.Observables.debounceAfter
-import ir.chista.util.Observables.throttleWithTimeoutAfter
 import ru.gildor.coroutines.retrofit.await
 import java.io.IOException
-import java.util.concurrent.TimeUnit
 
 object Repository {
   fun App.initRepository() {
@@ -111,13 +110,11 @@ object Repository {
       if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
         throw IOException("please login first")
 
-      if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
-        throw RuntimeException("please login first")
-
       val items = ApiManager.chats.send(AccountManager.user.accessToken, contactId, message).await()
       if (items.isNotEmpty()) {
         val ids = items.mapId()
         DataManager.chats.merge(items) { ids.contains(it.id) }
+        DatabaseManager.chatDao.insertAll(items.toEntity())
       }
     }
 
@@ -127,13 +124,11 @@ object Repository {
       if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
         throw IOException("please login first")
 
-      if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
-        throw RuntimeException("please login first")
-
       val items = ApiManager.chats.markAsSeen(AccountManager.user.accessToken, senderId).await()
       if (items.isNotEmpty()) {
         val ids = items.mapId()
         DataManager.chats.merge(items) { ids.contains(it.id) }
+        DatabaseManager.chatDao.insertAll(items.toEntity())
       }
     }
   }
@@ -184,7 +179,46 @@ object Repository {
         ApiManager.requests.edit(AccountManager.user.accessToken, requestId, type.key, jobId, skillIds, detail).await()
 
       DataManager.requests.merge(request) { it.id == request.id }
+      DatabaseManager.requestDao.insertAll(request.toEntity())
       return request
+    }
+
+    suspend fun removeBroker(requestId: ID, brokerId: ID) {
+      if (DataManager.mode == DataManager.Mode.Offline)
+        throw IOException("you are in offline mode")
+      if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
+        throw IOException("please login first")
+
+      if (AccountManager.user.isNotAdmin)
+        throw RuntimeException("only admins can remove brokers from requests")
+
+      val item = ApiManager.requests.removeBroker(AccountManager.user.accessToken, requestId, brokerId).await()
+      DataManager.requests.merge(item) { it.id == item.id }
+      DatabaseManager.requestDao.insert(item.toEntity())
+    }
+
+    suspend fun addBroker(requestId: ID, brokerId: ID) {
+      if (DataManager.mode == DataManager.Mode.Offline)
+        throw IOException("you are in offline mode")
+      if (!AccountManager.user.isLoggedIn && AccountManager.user.isFresh)
+        throw IOException("please login first")
+      if (AccountManager.user.isNotAdmin)
+        throw RuntimeException("only admins can remove brokers from requests")
+
+      val item = ApiManager.requests.addBroker(AccountManager.user.accessToken, requestId, brokerId).await()
+      DataManager.requests.merge(item) { it.id == item.id }
+      DatabaseManager.requestDao.insert(item.toEntity())
+    }
+  }
+
+  object Users {
+    fun listBrokers(): Observable<List<LocalUser>> {
+      return DataManager.users.observable
+        // .subscribeOn(Schedulers.io())
+        //.debounceAfter(1, 5, TimeUnit.SECONDS)
+        .observeOn(Schedulers.computation())
+        .map { users -> users.filterIsBroker() }
+        .observeOn(AndroidSchedulers.mainThread())
     }
   }
 }

@@ -90,15 +90,6 @@
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"/>
 
-      <TextView
-        android:id="@+id/developer_desc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:gravity="start"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/colorPrimaryDark"/>
-
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -143,6 +134,32 @@
           android:layout_margin="8dp"
           app:srcCompat="@drawable/ic_social_stackoverflow"/>
       </LinearLayout>
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <ImageView
+          android:id="@+id/social_jobinja_action"
+          android:layout_width="128dp"
+          android:layout_height="64dp"
+          android:layout_margin="8dp"
+          app:srcCompat="@drawable/ic_social_jobinja"/>
+        <ImageView
+          android:id="@+id/social_karboom_action"
+          android:layout_width="128dp"
+          android:layout_height="64dp"
+          android:layout_margin="8dp"
+          app:srcCompat="@drawable/ic_social_karboom"/>
+      </LinearLayout>
+
+      <TextView
+        android:id="@+id/developer_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:gravity="start"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorPrimaryDark"/>
     </LinearLayout>
   </LinearLayout>
 </ScrollView>

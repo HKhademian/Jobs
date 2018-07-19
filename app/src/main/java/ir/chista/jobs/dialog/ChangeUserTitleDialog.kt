@@ -6,7 +6,7 @@ import android.widget.EditText
 import ir.chista.jobs.R
 import ir.chista.jobs.data.AccountManager
 import android.text.InputType
-import org.jetbrains.anko.singleLine
+//import org.jetbrains.anko.singleLine
 
 
 object ChangeUserTitleDialog {
@@ -25,7 +25,7 @@ object ChangeUserTitleDialog {
     EditText(context).also { editText ->
       editText.setText(AccountManager.user.title)
       editText.inputType = InputType.TYPE_CLASS_TEXT
-      editText.singleLine = true
+      //editText.singleLine = true
     }.let { editText ->
       AlertDialog.Builder(context)
         .setCancelable(true)

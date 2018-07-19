@@ -130,6 +130,16 @@
       android:layout_margin="8dp"
       android:text="@string/field_request_brokers">
       <TextView
+        android:id="@+id/brokersRemoveHintView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_request_brokers_remove"
+        android:lines="1"
+        android:gravity="start|center_vertical"
+        android:padding="4dp"
+        android:textColor="@color/colorPrimary"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+      <TextView
         android:id="@+id/brokersEmptyHintView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

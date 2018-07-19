@@ -3,7 +3,7 @@ package ir.chista.jobs.data.database
 import android.arch.persistence.room.Room
 import ir.chista.jobs.App
 
-internal object DatabaseRepository {
+internal object DatabaseManager {
   internal lateinit var db: AppDatabase
     private set
 

@@ -18,6 +18,7 @@ import ir.chista.jobs.screen.dashboard.about.AboutFragment
 import ir.chista.jobs.screen.dashboard.home.HomeFragment
 import ir.chista.jobs.screen.dashboard.navigation.DashboardNavigationFragment
 import ir.chista.jobs.screen.dashboard.navigation.DashboardNavigationListener
+import ir.chista.jobs.screen.dashboard.settings.SettingsFragment
 import ir.chista.jobs.screen.request.list.RequestListActivity
 import ir.chista.util.Collections.consume
 import ir.chista.util.context
@@ -57,7 +58,7 @@ class DashboardActivity : BaseActivity(),
     when {
       drawer_layout.isDrawerOpen(Gravity.START) -> drawer_layout.closeDrawer(Gravity.START)
 
-      // supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
+    // supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
 
       else -> onNavigationExit()
     }
@@ -93,6 +94,10 @@ class DashboardActivity : BaseActivity(),
       }
       R.id.navigation_requests -> consume(false) {
         launchActivity<RequestListActivity>()
+      }
+
+      R.id.nav_settings -> consume(false) {
+        addFragment<SettingsFragment>()
       }
 
     //ViewModel implemented
@@ -153,8 +158,8 @@ class DashboardActivity : BaseActivity(),
   private inline fun <reified T : Fragment> getFragment(init: T.() -> Unit = {}): Pair<String, T> {
     val tag = T::class.java.simpleName
     val fragment =
-     /* supportFragmentManager.findFragmentByTag(tag) as? T
-        ?: */ T::class.java.newInstance()!!
+      /* supportFragmentManager.findFragmentByTag(tag) as? T
+         ?: */ T::class.java.newInstance()!!
     fragment.apply(init)
     return tag to fragment
   }

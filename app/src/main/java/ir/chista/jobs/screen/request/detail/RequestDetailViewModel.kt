@@ -3,17 +3,27 @@ package ir.chista.jobs.screen.request.detail
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import io.reactivex.disposables.Disposable
+import ir.chista.jobs.data.AccountManager
 import ir.chista.jobs.data.DataManager
 import ir.chista.jobs.data.Repository
 import ir.chista.jobs.data.model.*
+import ir.chista.jobs.dialog.BrokerRemoveDialog
+import ir.chista.jobs.dialog.BrokerSelectDialog
 import ir.chista.jobs.util.BaseViewModel
 import ir.chista.util.Observables.toLiveData
 import ir.chista.util.LiveDatas.map
+import ir.chista.util.LiveDatas.zip
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.CoroutineExceptionHandler
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 internal class RequestDetailViewModel : BaseViewModel() {
+  val account = AccountManager.observable.toLiveData()
   val dataMode = DataManager.modeObservable.toLiveData()
   val request: LiveData<LocalRequest> = MutableLiveData()
   val isEditable = dataMode.map { mode -> mode == DataManager.Mode.Online }
+  val isBrokerEditable = zip(account, dataMode).map { (account, mode) -> account.isAdmin && mode == DataManager.Mode.Online }
 
   var listener: RequestDetailListener? = null
   private var disposable: Disposable? = null
@@ -36,8 +46,47 @@ internal class RequestDetailViewModel : BaseViewModel() {
     listener?.onRequestDetailEdit(request.value?.id ?: emptyID)
   }
 
-  fun sendChat(user: User) {
-    listener?.onRequestDetailChat(request.value?.id ?: emptyID, user.id)
+  fun sendChat(userId: ID) {
+    listener?.onRequestDetailChat(request.value?.id ?: emptyID, userId)
+  }
+
+  fun removeBroker(brokerId: ID) {
+    if (brokerId.isEmpty) return
+    if (dataMode.value != DataManager.Mode.Online) return
+    if (AccountManager.user.isNotAdmin) return
+
+    request as MutableLiveData
+
+    postActivityTask { activity ->
+      BrokerRemoveDialog.show(activity, {}, {
+
+        launch(CommonPool + CoroutineExceptionHandler { _, ex -> postError(ex) }) {
+          Repository.Requests.removeBroker(requestId, brokerId)
+
+          requestId = requestId
+        }
+
+      })
+    }
+  }
+
+  fun addBroker() {
+    if (dataMode.value != DataManager.Mode.Online) return
+    if (AccountManager.user.isNotAdmin) return
+
+    request as MutableLiveData
+
+    postActivityTask { activity ->
+      BrokerSelectDialog.show(activity, request.value?.brokerIds ?: emptyList()) { user ->
+
+        launch(CommonPool + CoroutineExceptionHandler { _, ex -> postError(ex) }) {
+          Repository.Requests.addBroker(requestId, user.id)
+
+          requestId = requestId
+        }
+
+      }
+    }
   }
 
   fun cancel() {

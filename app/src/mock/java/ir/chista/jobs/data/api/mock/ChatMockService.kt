@@ -18,8 +18,9 @@ object ChatMockService : ChatService {
     val login = MockApiStorage.getUserByAccessToken(accessToken)
       ?: return Calls.failure(IOException("user with this token not found. please relogin"))
 
+    @Suppress("WhenWithOnlyElse")
     val chats = when (login.role) {
-      UserRole.Admin -> MockApiStorage.chats.items
+      //UserRole.Admin -> MockApiStorage.chats.items
       else -> MockApiStorage.chats.items.filterByContactId(login.id)
     }
 

@@ -206,7 +206,9 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
 
   /** this is never called in single panel mode */
   override fun onRequestDetailCloseDone(requestId: ID) {
-    // editing = false
+    Snackbar.make(toolbar, "Not Implemented!", Snackbar.LENGTH_SHORT).show()
+
+// editing = false
     // supportFragmentManager.popBackStack()
   }
 
