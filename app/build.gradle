@@ -5,9 +5,16 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.akaita.android.easylauncher'
 
 android {
+  signingConfigs {
+    jobs {
+      keyAlias 'Jobs'
+      keyPassword '123456789'
+      storeFile file('C:/Users/Hossain/Project/Work/Mobile/Jobs/keystore.jks')
+      storePassword '123456789'
+    }
+  }
   compileSdkVersion 28
   flavorDimensions 'server'
-
   defaultConfig {
     applicationId 'ir.jobs.jobs'
     minSdkVersion 16
@@ -15,17 +22,22 @@ android {
     versionCode 2
     versionName '0.1.2'
     testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-
-    multiDexEnabled true
+//    multiDexEnabled true
     vectorDrawables.useSupportLibrary = true
+    resConfigs "en", "fa"
+    lintOptions {
+      // checkReleaseBuilds false
+      // Or, if you prefer, you can continue to check for errors in release builds,
+      // but continue the build even when errors are found:
+      abortOnError false
+    }
+    signingConfig signingConfigs.jobs
   }
-
   productFlavors {
     mock {
       dimension 'server'
       applicationIdSuffix ".mock"
       versionNameSuffix "-mock"
-
       buildConfigField "Boolean", "MOCK", "true"
     }
     server {
@@ -33,7 +45,6 @@ android {
       buildConfigField "Boolean", "MOCK", "false"
     }
   }
-
   buildTypes {
     debug {
       buildConfigField "String", "HOST", "\"http://localhost:3000/api/\""
@@ -46,11 +57,10 @@ android {
     release {
       buildConfigField "String", "HOST", "\"http://jobs.ir/api/\""
 
-      minifyEnabled true
+      minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
-
   packagingOptions {
     // exclude 'META-INF/DEPENDENCIES'
     // exclude 'META-INF/NOTICE'
@@ -68,11 +78,7 @@ dependencies {
 
   /* Kotlin & anko ui */
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-//  implementation "org.jetbrains.anko:anko-sdk25:$anko_version"
-//  implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
-  implementation "org.jetbrains.anko:anko-sdk25-coroutines:$anko_version"
-//  implementation "org.jetbrains.anko:anko-appcompat-v7-coroutines:$anko_version"
-  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.23.4'
+  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.23.4'
 
   /*
    * https://github.com/gildor/kotlin-coroutines-retrofit
@@ -212,6 +218,7 @@ dependencies {
    * https://github.com/InflationX/Calligraphy
    * https://github.com/InflationX/ViewPump
    */
+
   //  implementation 'io.github.inflationx:calligraphy3:3.0.0'
   //  implementation 'io.github.inflationx:viewpump:1.0.0'
 }

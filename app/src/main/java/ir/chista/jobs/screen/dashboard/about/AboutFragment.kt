@@ -21,6 +21,7 @@ class AboutFragment : BaseFragment() {
     const val SOCIAL_GITHUB_URL = "https://github.com/HKhademian"
     const val SOCIAL_KARBOOM_URL = "https://karboom.io/cv/wnjzeo"
     const val SOCIAL_JOBINJA = "https://jobinja.ir/user/HossainKhademian"
+    const val SOCIAL_LINKEDIN = "https://www.linkedin.com/in/hossein-khademian-7b39b0bb"
     const val PROFILE_URL = "$SOCIAL_GITHUB_URL.png?size=460"
     // const val PROFILE_URL = "https://avatars1.githubusercontent.com/u/2716791?s=460&v=4"
   }
@@ -51,6 +52,9 @@ class AboutFragment : BaseFragment() {
     }
     rootView.social_jobinja_action.setOnClickListener {
       startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SOCIAL_JOBINJA)))
+    }
+    rootView.social_linkedin_action.setOnClickListener {
+      startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SOCIAL_LINKEDIN)))
     }
 
     return rootView

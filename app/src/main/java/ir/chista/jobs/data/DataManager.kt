@@ -23,7 +23,7 @@ internal object DataManager {
   internal val chats = ObservableMutableList<LocalChat>()
   internal val matches = ObservableMutableList<LocalMatch>()
 
-  internal fun App.initDataManager() {
+  fun App.initDataManager() {
   }
 
   /** update all cached data */

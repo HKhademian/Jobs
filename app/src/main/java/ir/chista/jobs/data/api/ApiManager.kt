@@ -4,7 +4,7 @@ import ir.chista.jobs.App
 import ir.chista.jobs.data.api.Services.initServices
 
 internal object ApiManager {
-  internal fun App.initApiManager() {
+  fun App.initApiManager() {
     initServices()
   }
 

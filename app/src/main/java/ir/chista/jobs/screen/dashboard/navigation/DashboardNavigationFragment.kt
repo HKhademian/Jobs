@@ -29,7 +29,7 @@ class DashboardNavigationFragment : BaseFragment() {
   private val titleView get() = navigationHeader.titleView
   private val subtitleView get() = navigationHeader.subtitleView
 
-  private lateinit var viewModel: DashboardViewModel
+  private lateinit var viewModel: DashboardNavigationViewModel
   private var navigationListener: WeakReference<NavigationView.OnNavigationItemSelectedListener>? = null
 
   @Suppress("WhenWithOnlyElse")
@@ -48,7 +48,7 @@ class DashboardNavigationFragment : BaseFragment() {
 
   override fun onAttach(context: Context?) {
     super.onAttach(context)
-    viewModel = getViewModel { DashboardViewModel() }
+    viewModel = getViewModel { DashboardNavigationViewModel() }
     viewModel.listener = (context as? DashboardNavigationListener)?.let { WeakReference(it) }
     navigationListener = (context as? NavigationView.OnNavigationItemSelectedListener)?.let { WeakReference(it) }
   }

@@ -2,8 +2,10 @@ package ir.chista.jobs.screen.loading
 
 import android.os.Bundle
 import android.widget.Toast
+import ir.chista.jobs.App
 import ir.chista.jobs.R
 import ir.chista.jobs.data.DataManager
+import ir.chista.jobs.data.Repository.initRepository
 import ir.chista.jobs.dialog.LoadingErrorDialog
 import ir.chista.jobs.util.BaseActivity
 import ir.chista.jobs.screen.dashboard.DashboardActivity

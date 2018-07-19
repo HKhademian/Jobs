@@ -3,33 +3,57 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <item
-    android:id="@+id/nav_settings"
-    android:icon="@drawable/ic_action_settings"
-    android:title="@string/menu_navigation_settings"
-    app:itemIconTint="@color/colorPrimaryDark"
-    app:itemTextColor="@color/colorPrimaryDark"/>
+  <item android:title="@string/menu_navigation" android:visible="false">
+    <menu>
+      <group android:checkableBehavior="single">
+        <item
+          android:id="@+id/navigation_home"
+          android:icon="@drawable/ic_menu_home"
+          android:title="@string/menu_navigation_home"
+          app:itemIconTint="@color/colorPrimaryDark"
+          app:itemTextColor="@color/colorPrimaryDark"/>
 
-  <item
-    android:id="@+id/nav_refresh"
-    android:icon="@drawable/ic_action_refresh"
-    android:title="@string/menu_navigation_refresh"
-    app:itemIconTint="@color/colorPrimaryDark"
-    app:itemTextColor="@color/colorPrimaryDark"/>
+        <item
+          android:id="@+id/navigation_settings"
+          android:icon="@drawable/ic_menu_settings"
+          android:title="@string/menu_navigation_settings"
+          app:itemIconTint="@color/colorPrimaryDark"
+          app:itemTextColor="@color/colorPrimaryDark"/>
 
-  <item
-    android:id="@+id/nav_logout"
-    android:icon="@drawable/ic_action_logout"
-    android:title="@string/menu_navigation_logout"
-    app:itemIconTint="@color/colorPrimary"
-    app:itemTextColor="@color/colorPrimary"/>
+        <item
+          android:id="@+id/navigation_about"
+          android:icon="@drawable/ic_menu_about"
+          android:title="@string/menu_navigation_about"
+          app:itemIconTint="@color/colorPrimaryDark"
+          app:itemTextColor="@color/colorPrimaryDark"/>
+      </group>
+    </menu>
+  </item>
 
-  <item
-    android:id="@+id/nav_exit"
-    android:icon="@drawable/ic_action_exit"
-    android:title="@string/menu_navigation_exit"
-    app:itemIconTint="@color/colorAccent"
-    app:itemTextColor="@color/colorAccent"/>
+  <item android:title="@string/menu_navigation_action">
+    <menu>
+      <item
+        android:id="@+id/nav_refresh"
+        android:icon="@drawable/ic_menu_refresh"
+        android:title="@string/menu_navigation_refresh"
+        app:itemIconTint="@color/colorPrimaryDark"
+        app:itemTextColor="@color/colorPrimaryDark"/>
+
+      <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/ic_action_logout"
+        android:title="@string/menu_navigation_logout"
+        app:itemIconTint="@color/colorPrimary"
+        app:itemTextColor="@color/colorPrimary"/>
+
+      <item
+        android:id="@+id/nav_exit"
+        android:icon="@drawable/ic_menu_exit"
+        android:title="@string/menu_navigation_exit"
+        app:itemIconTint="@color/colorAccent"
+        app:itemTextColor="@color/colorAccent"/>
+    </menu>
+  </item>
 
   <item android:title="@string/menu_navigation_test">
     <menu>

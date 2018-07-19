@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.Gravity
 import android.view.MenuItem
@@ -24,11 +25,54 @@ import ir.chista.util.Collections.consume
 import ir.chista.util.context
 import ir.chista.util.launchActivity
 import kotlinx.android.synthetic.main.activity_dashboard.*
+import android.support.v4.view.ViewPager
+
 
 class DashboardActivity : BaseActivity(),
   BottomNavigationView.OnNavigationItemSelectedListener,
   NavigationView.OnNavigationItemSelectedListener,
   DashboardNavigationListener {
+
+  private lateinit var viewPagerAdapter: ViewPagerAdapter
+  private val viewPagerListener = object : ViewPager.OnPageChangeListener {
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
+    override fun onPageScrollStateChanged(position: Int) = Unit
+
+    override fun onPageSelected(position: Int) {
+      val selectedItemId = when (position) {
+        0 -> R.id.navigation_home
+        1 -> R.id.navigation_settings
+        2 -> R.id.navigation_about
+        else -> null
+      }
+      if (selectedItemId != null) {
+        // navigationView.setCheckedItem(selectedItemId)
+        if (bottomNavigation.selectedItemId != selectedItemId)
+          bottomNavigation.selectedItemId = selectedItemId
+      }
+    }
+  }
+
+  private val bottomNavigationListener = BottomNavigationView.OnNavigationItemSelectedListener {
+    return@OnNavigationItemSelectedListener when (it.itemId) {
+      R.id.navigation_home -> consume(true) {
+        viewPager.currentItem = 0
+      }
+      R.id.navigation_settings -> consume(true) {
+        viewPager.currentItem = 1
+      }
+      R.id.navigation_about -> consume(true) {
+        viewPager.currentItem = 2
+      }
+      R.id.navigation_chats -> consume(false) {
+        launchActivity<ChatListActivity>()
+      }
+      R.id.navigation_requests -> consume(false) {
+        launchActivity<RequestListActivity>()
+      }
+      else -> false
+    }
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -39,7 +83,11 @@ class DashboardActivity : BaseActivity(),
     drawer_layout.addDrawerListener(toggle)
     toggle.syncState()
 
-    bottomNavigation.setOnNavigationItemSelectedListener(this)
+    viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
+
+    viewPager.adapter = viewPagerAdapter
+    viewPager.addOnPageChangeListener(viewPagerListener)
+    bottomNavigation.setOnNavigationItemSelectedListener(bottomNavigationListener)
 
     if (savedInstanceState == null) {
       val navigation = DashboardNavigationFragment()
@@ -49,7 +97,7 @@ class DashboardActivity : BaseActivity(),
 
       drawer_layout.openDrawer(Gravity.START)
 
-      setFragment<HomeFragment>()
+      bottomNavigation.selectedItemId = R.id.navigation_home
       initWhatsNew()
     }
   }
@@ -58,7 +106,9 @@ class DashboardActivity : BaseActivity(),
     when {
       drawer_layout.isDrawerOpen(Gravity.START) -> drawer_layout.closeDrawer(Gravity.START)
 
-    // supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
+      supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStackImmediate()
+
+      viewPager.currentItem != 0 -> viewPager.currentItem = 0
 
       else -> onNavigationExit()
     }
@@ -83,22 +133,6 @@ class DashboardActivity : BaseActivity(),
     onNavigationClose()
 
     return when (item.itemId) {
-      R.id.navigation_dashboard -> consume {
-        setFragment<HomeFragment>()
-      }
-      R.id.navigation_about -> consume {
-        addFragment<AboutFragment>()
-      }
-      R.id.navigation_chats -> consume(false) {
-        launchActivity<ChatListActivity>()
-      }
-      R.id.navigation_requests -> consume(false) {
-        launchActivity<RequestListActivity>()
-      }
-
-      R.id.nav_settings -> consume(false) {
-        addFragment<SettingsFragment>()
-      }
 
     //ViewModel implemented
     //R.id.nav_logout -> consume(true) {
@@ -132,36 +166,21 @@ class DashboardActivity : BaseActivity(),
       .presentAutomatically(this)
   }
 
-  private fun setFragment(fragment: Fragment, tag: String) {
-    supportFragmentManager.beginTransaction()
-      .replace(R.id.fragment, fragment, tag)
-      .commit()
-  }
+  private inner class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+    override fun getCount() = 3
 
-  private fun addFragment(fragment: Fragment, tag: String) {
-    supportFragmentManager.beginTransaction()
-      .add(R.id.fragment, fragment, tag)
-      .addToBackStack(tag)
-      .commit()
-  }
+    override fun getItem(position: Int) = when (position) {
+      0 -> HomeFragment()
+      1 -> SettingsFragment()
+      2 -> AboutFragment()
+      else -> null
+    }
 
-  private inline fun <reified T : Fragment> setFragment(init: T.() -> Unit = {}) {
-    val (tag, fragment) = getFragment(init)
-    setFragment(fragment, tag)
+    override fun getPageTitle(position: Int) = context.resources.getString(when (position) {
+      0 -> R.string.title_screen_home
+      1 -> R.string.title_settings
+      2 -> R.string.title_screen_about
+      else -> R.string.app_name
+    })
   }
-
-  private inline fun <reified T : Fragment> addFragment(init: T.() -> Unit = {}) {
-    val (tag, fragment) = getFragment(init)
-    addFragment(fragment, tag)
-  }
-
-  private inline fun <reified T : Fragment> getFragment(init: T.() -> Unit = {}): Pair<String, T> {
-    val tag = T::class.java.simpleName
-    val fragment =
-      /* supportFragmentManager.findFragmentByTag(tag) as? T
-         ?: */ T::class.java.newInstance()!!
-    fragment.apply(init)
-    return tag to fragment
-  }
-
 }

@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
-import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class RegisterActivity : BaseActivity() {
   companion object {
@@ -46,16 +45,16 @@ class RegisterActivity : BaseActivity() {
       launchActivity<LoginActivity>(extras = *arrayOf(LoginActivity.EXTRA_PHONE to "+98${phone_field.unmaskedText}"))
     }
 
-    register_button.onClick {
+    register_button.setOnClickListener {
       phone_field.error = null
       val phone = "+98${phone_field.unmaskedText}"
       if (phone.length <= 3) {
         phone_field.error = getText(R.string.error_field_required)
-        return@onClick
+        return@setOnClickListener
       }
       if (!isPhoneValid(phone)) {
         phone_field.error = getText(R.string.error_invalid_phone)
-        return@onClick
+        return@setOnClickListener
       }
       register(phone)
     }

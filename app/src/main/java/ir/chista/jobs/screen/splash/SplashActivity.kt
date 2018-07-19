@@ -2,8 +2,10 @@ package ir.chista.jobs.screen.splash
 
 import android.os.Bundle
 import android.os.Handler
+import ir.chista.jobs.App
 import ir.chista.jobs.R
 import ir.chista.jobs.data.AccountManager
+import ir.chista.jobs.data.Repository.initRepository
 import ir.chista.jobs.data.model.isLoggedIn
 import ir.chista.jobs.util.BaseActivity
 import ir.chista.jobs.screen.loading.LoadingActivity

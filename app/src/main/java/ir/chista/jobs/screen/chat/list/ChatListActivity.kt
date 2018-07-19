@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.activity_chat_list_holder.*
 import kotlinx.android.synthetic.main.activity_chat_list.*
 import kotlinx.android.synthetic.main.fragment_chat_list.*
 import kotlinx.android.synthetic.main.item_chat_list.view.*
-import org.jetbrains.anko.bundleOf
 
 
 class ChatListActivity : AppCompatActivity() {

@@ -18,7 +18,6 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
-import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class LoginActivity : BaseActivity() {
   companion object {
@@ -52,7 +51,7 @@ class LoginActivity : BaseActivity() {
       launchActivity<RegisterActivity>(extras = *arrayOf(RegisterActivity.EXTRA_PHONE to "+98${phone_field.unmaskedText}"))
     }
 
-    login_button.onClick {
+    login_button.setOnClickListener {
       phone_field.error = null
       password_field.error = null
       val phone = "+98${phone_field.unmaskedText}"
@@ -60,19 +59,19 @@ class LoginActivity : BaseActivity() {
 
       if (phone.length <= 3) {
         phone_field.error = getText(R.string.error_field_required)
-        return@onClick
+        return@setOnClickListener
       }
       if (!isPhoneValid(phone)) {
         phone_field.error = getText(R.string.error_invalid_phone)
-        return@onClick
+        return@setOnClickListener
       }
       if (password.isBlank()) {
         password_field.error = getText(R.string.error_field_required)
-        return@onClick
+        return@setOnClickListener
       }
       if (!isPasswordValid(password)) {
         password_field.error = getText(R.string.error_incorrect_password)
-        return@onClick
+        return@setOnClickListener
       }
       login(phone, password)
     }

@@ -19,7 +19,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.CoroutineExceptionHandler
 import java.lang.ref.WeakReference
 
-class DashboardViewModel : BaseViewModel() {
+class DashboardNavigationViewModel : BaseViewModel() {
   val user: LiveData<LocalLogin> = AccountManager.observable.toLiveData()
   val title = user.map { if (it.isNotEmpty) it.title else "Unknown User" }
   val subtitle = user.map { if (it.isNotEmpty) "${it.role.key}: ${it.phone}" else "Unknow" }
