@@ -19,11 +19,12 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
 internal class RequestDetailViewModel : BaseViewModel() {
+  val isOnline: LiveData<Boolean> = DataManager.isOnline.toLiveData()
   val account = AccountManager.observable.toLiveData()
-  val dataMode = DataManager.modeObservable.toLiveData()
+
   val request: LiveData<LocalRequest> = MutableLiveData()
-  val isEditable = dataMode.map { mode -> mode == DataManager.Mode.Online }
-  val isBrokerEditable = zip(account, dataMode).map { (account, mode) -> account.isAdmin && mode == DataManager.Mode.Online }
+  val isEditable = isOnline.map { isOnline -> isOnline }
+  val isBrokerEditable = zip(account, isOnline).map { (account, isOnline) -> account.isAdmin && isOnline }
 
   var listener: RequestDetailListener? = null
   private var disposable: Disposable? = null
@@ -52,7 +53,7 @@ internal class RequestDetailViewModel : BaseViewModel() {
 
   fun removeBroker(brokerId: ID) {
     if (brokerId.isEmpty) return
-    if (dataMode.value != DataManager.Mode.Online) return
+    if (isOnline.value != true) return
     if (AccountManager.user.isNotAdmin) return
 
     request as MutableLiveData
@@ -71,7 +72,7 @@ internal class RequestDetailViewModel : BaseViewModel() {
   }
 
   fun addBroker() {
-    if (dataMode.value != DataManager.Mode.Online) return
+    if (isOnline.value != true) return
     if (AccountManager.user.isNotAdmin) return
 
     request as MutableLiveData

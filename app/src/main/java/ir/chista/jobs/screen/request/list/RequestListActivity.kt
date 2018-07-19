@@ -1,7 +1,6 @@
 package ir.chista.jobs.screen.request.list
 
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.app.NavUtils
@@ -21,7 +20,7 @@ import ir.chista.jobs.screen.request.detail.RequestDetailListener
 import ir.chista.jobs.screen.request.edit.RequestEditActivity
 import ir.chista.jobs.screen.request.edit.RequestEditFragment
 import ir.chista.jobs.screen.request.edit.RequestEditListener
-import ir.chista.util.ViewModels.getViewModel
+import ir.chista.util.ViewModels.viewModel
 import ir.chista.util.context
 import ir.chista.util.launchActivity
 import kotlinx.android.synthetic.main.activity_request_list_holder.*
@@ -31,13 +30,16 @@ import kotlinx.android.synthetic.main.item_request_list.view.*
 import ir.chista.util.LiveDatas.observe
 import ir.chista.util.activity
 import ir.chista.util.bundle
-import android.support.v4.view.GravityCompat
 import android.view.Gravity
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
+import ir.chista.jobs.data.AccountManager
 
 
 class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestEditListener {
   private val picasso = Picasso.get()!!
   private var twoPane: Boolean = false
+  private var navigationLocked: Boolean = false
   private lateinit var viewModel: RequestListViewModel
 
   private val adapter = RequestAdapter()
@@ -45,7 +47,7 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    viewModel = getViewModel { RequestListViewModel() }
+    viewModel = viewModel { RequestListViewModel() }
     viewModel.init()
 
     setContentView(R.layout.activity_request_list_holder)
@@ -108,6 +110,38 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
       swipeRefreshLayout.isRefreshing = isRefreshing
       Toast.makeText(activity, "isRefreshing:$isRefreshing", Toast.LENGTH_SHORT).show()
     }
+
+    if (savedInstanceState == null)
+      mayShowTap()
+  }
+
+  private fun mayShowTap() {
+    if (AccountManager.Taps.requestListDone)
+      return
+    val taps = mutableListOf<TapTarget>()
+
+    if (fab != null)
+      taps += TapTarget.forView(fab, getString(R.string.tap_requestList_fab_title), getString(R.string.tap_requestList_fab_des)).transparentTarget(true).cancelable(false)
+    taps += TapTarget.forView(recyclerView, getString(R.string.tap_requestList_title), getString(R.string.tap_requestList_des)).transparentTarget(true).cancelable(false)
+
+    navigationLocked = true
+    TapTargetSequence(this).targets(taps)
+      .listener(object : TapTargetSequence.Listener {
+        override fun onSequenceCanceled(lastTarget: TapTarget?) {
+          navigationLocked = false
+          Snackbar.make(recyclerView, "I'll back again!", Snackbar.LENGTH_SHORT).show()
+        }
+
+        override fun onSequenceFinish() {
+          navigationLocked = false
+          AccountManager.Taps.requestListDone = true
+        }
+
+        override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) = Unit // hmmm!
+      })
+      .continueOnCancel(true)
+      .start()
+
   }
 
   private fun showRequestDetail(request: Request) {
@@ -164,6 +198,8 @@ class RequestListActivity : AppCompatActivity(), RequestDetailListener, RequestE
   }
 
   override fun onBackPressed() {
+    if (navigationLocked)
+      return
     editing = false
     super.onBackPressed()
   }

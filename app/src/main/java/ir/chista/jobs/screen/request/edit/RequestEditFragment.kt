@@ -16,7 +16,7 @@ import ir.chista.jobs.util.BaseFragment
 import ir.chista.util.LiveDatas.observe
 import ir.chista.util.TextWatchers
 import ir.chista.util.Texts.hideKeyboard
-import ir.chista.util.ViewModels.getViewModel
+import ir.chista.util.ViewModels.viewModel
 import kotlinx.android.synthetic.main.fragment_request_edit.view.*
 
 class RequestEditFragment : BaseFragment() {
@@ -45,7 +45,7 @@ class RequestEditFragment : BaseFragment() {
 
   override fun onAttach(context: Context?) {
     super.onAttach(context)
-    viewModel = getViewModel { RequestEditViewModel() }
+    viewModel = viewModel { RequestEditViewModel() }
     viewModel.listener = context as? RequestEditListener
     fabDetail = activity?.findViewById(R.id.fabDetail)
   }

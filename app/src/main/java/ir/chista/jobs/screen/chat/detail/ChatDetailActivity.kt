@@ -2,7 +2,6 @@ package ir.chista.jobs.screen.chat.detail
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -13,13 +12,9 @@ import com.squareup.picasso.Target
 import ir.chista.jobs.R
 import ir.chista.jobs.data.model.*
 import ir.chista.jobs.screen.chat.list.ChatListActivity
-import ir.chista.util.ViewModels.getViewModel
+import ir.chista.util.ViewModels.viewModel
 import ir.chista.util.LiveDatas.observe
-import ir.chista.util.PicassoCircleTransform
-import ir.chista.util.Texts.getRelativeTime
-import ir.chista.util.activity
 import ir.chista.util.bundle
-import ir.chista.util.context
 import kotlinx.android.synthetic.main.activity_chat_detail.*
 import java.lang.Exception
 
@@ -42,7 +37,7 @@ class ChatDetailActivity : AppCompatActivity(), ChatDetailListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    viewModel = getViewModel { ChatDetailViewModel() }
+    viewModel = viewModel { ChatDetailViewModel() }
     setContentView(R.layout.activity_chat_detail)
 
     setSupportActionBar(toolbar)

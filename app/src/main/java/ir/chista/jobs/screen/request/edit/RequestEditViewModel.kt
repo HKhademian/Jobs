@@ -21,7 +21,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
 internal class RequestEditViewModel : BaseViewModel() {
-  val dataMode = DataManager.modeObservable.toLiveData()
+  val isOnline: LiveData<Boolean> = DataManager.isOnline.toLiveData()
   val request: LiveData<LocalRequest> = MutableLiveData()
   val type: LiveData<RequestType> = MutableLiveData()
   val job: LiveData<Job> = MutableLiveData()
@@ -30,11 +30,11 @@ internal class RequestEditViewModel : BaseViewModel() {
   val showWaiting: LiveData<Event<Boolean>> = MutableLiveData()
   val isSubmiting: LiveData<Boolean> = MutableLiveData()
 
-  val isSavable: LiveData<Boolean> = zip(dataMode, zip(job, detail, skills, isSubmiting).map { (job_detail, skills_isSubmiting) ->
+  val isSavable: LiveData<Boolean> = zip(isOnline, zip(job, detail, skills, isSubmiting).map { (job_detail, skills_isSubmiting) ->
     val (job, detail) = job_detail
     val (skills, isSubmiting) = skills_isSubmiting
     job.isNotEmpty and detail.isNotEmpty && skills.isNotEmpty() && skills.count() <= 5 && !isSubmiting
-  }).map { (mode, isSavable) -> isSavable && mode == DataManager.Mode.Online }
+  }).map { (isOnline, isSavable) -> isSavable && isOnline }
 
 
   private var jobSelectDialog: AlertDialog? = null

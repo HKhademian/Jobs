@@ -14,7 +14,8 @@ interface AccountService {
 
   @FormUrlEncoded
   @POST("/account/register")
-  fun register(@Field("phone") phone: String): Call<LoginData>
+  fun register(@Field("phone") phone: String,
+               @Field("title") title: String): Call<LoginData>
 
   @POST("/account/update")
   fun refresh(@Header("refreshToken") refreshToken: String): Call<LoginData>

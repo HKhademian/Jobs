@@ -136,4 +136,24 @@
   <string name="menu_navigation_about">About</string>
   <string name="menu_navigation_action">Actions</string>
   <string name="menu_navigation">Navigation</string>
+  <string name="prompt_user_title">Your Name</string>
+  <string name="error_invalid_title">Please choose a title</string>
+  <string name="tap_avatar_title">This is your avatar</string>
+  <string name="tap_avatar_des">you can\'t change it in mock server, so accept it</string>
+  <string name="tap_title_title">this is your profile public name (title)</string>
+  <string name="tap_title_des">you can edit it later, I\'ll show you how later</string>
+  <string name="tap_subtitle_title">this is your profile public stutus</string>
+  <string name="tap_subtitle_des">in mock server its your phone number include your role in this Slavery system!</string>
+  <string name="tap_edit_title">edit your profiles title</string>
+  <string name="tap_edit_des">here, by taping this tiny button you can get ride of your previous title</string>
+  <string name="tap_logout_title">Run away from system</string>
+  <string name="tap_logout_des">OK, if you want, you can logout from this classified system</string>
+  <string name="tap_dashboard_bottom_title">Bottom Navigation Bar</string>
+  <string name="tap_dashboard_bottom_des">you can explore in this app by this tiny buttons also swipe left/right is supported ;)</string>
+  <string name="tap_dashboard_drawer_title">Open side navigation menu again</string>
+  <string name="tap_dashboard_drawer_des">you can open that side menu by taping on this tiny icon or swipe left to right at leftest! corner of screen :o</string>
+  <string name="tap_requestList_fab_title">Add new Worker/Employer Request</string>
+  <string name="tap_requestList_fab_des">you can post new job request by taping it. (remember to save :) )</string>
+  <string name="tap_requestList_title">Request lists related to you</string>
+  <string name="tap_requestList_des">here is list of all requests that related to you (owner, broker, or if you are admin: all :O )</string>
 </resources>

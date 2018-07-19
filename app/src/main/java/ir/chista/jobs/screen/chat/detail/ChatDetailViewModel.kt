@@ -14,15 +14,15 @@ import ir.chista.util.Observables.toLiveData
 import kotlinx.coroutines.experimental.*
 
 internal class ChatDetailViewModel : BaseViewModel() {
-  val dataMode: LiveData<DataManager.Mode> = DataManager.modeObservable.toLiveData()
+  val isOnline: LiveData<Boolean> = DataManager.isOnline.toLiveData()
 
   val contact: LiveData<LocalUser> = MutableLiveData()
   val chats: LiveData<List<LocalChat>> = MutableLiveData()
   val messageField: LiveData<String> = MutableLiveData()
   val isSending: LiveData<Boolean> = MutableLiveData()
-  val sendEnabled = LiveDatas.zip(messageField, isSending, dataMode)
-    .map { (message, isSending, dataMode) ->
-      message.isNotBlank() and !isSending and (dataMode == DataManager.Mode.Online)
+  val sendEnabled = LiveDatas.zip(messageField, isSending, isOnline)
+    .map { (message, isSending, isOnline) ->
+      message.isNotBlank() and !isSending and isOnline
     }
 
   var listener: ChatDetailListener? = null
@@ -42,7 +42,7 @@ internal class ChatDetailViewModel : BaseViewModel() {
         },
         Repository.Chats.listsByContact(contactId).subscribe {
           chats.postValue(it ?: emptyList())
-          if (dataMode.value == DataManager.Mode.Online)
+          if (isOnline.value == true)
             markAsSeen()
         }
       )

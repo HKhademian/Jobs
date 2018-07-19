@@ -8,6 +8,12 @@ object LiveDatas {
   fun <T, R> LiveData<T>.map(mapper: (T) -> R): LiveData<R> =
     Transformations.map(this, mapper)
 
+//  fun <A, B, R> LiveData<Pair<A, B>>.map(mapper: (A, B) -> R): LiveData<R> =
+//    Transformations.map(this) { (a, b) -> mapper(a, b) }
+//
+//  fun <A, B, C, R> LiveData<Triple<A, B, C>>.map(mapper: (A, B, C) -> R): LiveData<R> =
+//    Transformations.map(this) { (a, b, c) -> mapper(a, b, c) }
+
   fun <T> LiveData<T>.mapSuccess(): LiveData<Result<T>> =
     map(Result.Companion::success)
 

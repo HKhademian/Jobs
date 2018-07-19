@@ -16,7 +16,7 @@ import ir.chista.jobs.data.model.*
 import ir.chista.jobs.screen.chat.detail.ChatDetailActivity
 import ir.chista.jobs.screen.chat.detail.ChatDetailFragment
 import ir.chista.util.Collections.consume
-import ir.chista.util.ViewModels.getViewModel
+import ir.chista.util.ViewModels.viewModel
 import ir.chista.util.LiveDatas.observe
 import ir.chista.util.context
 import ir.chista.util.Texts.getRelativeTime
@@ -36,7 +36,7 @@ class ChatListActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    viewModel = getViewModel { ChatListViewModel() }
+    viewModel = viewModel { ChatListViewModel() }
 
     setContentView(R.layout.activity_chat_list_holder)
 

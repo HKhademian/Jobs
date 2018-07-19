@@ -218,9 +218,14 @@ dependencies {
    * https://github.com/InflationX/Calligraphy
    * https://github.com/InflationX/ViewPump
    */
-
   //  implementation 'io.github.inflationx:calligraphy3:3.0.0'
   //  implementation 'io.github.inflationx:viewpump:1.0.0'
+
+  /**
+   * TapTargetView
+   * https://github.com/KeepSafe/TapTargetView
+   */
+  implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
 }
 
 kotlin {

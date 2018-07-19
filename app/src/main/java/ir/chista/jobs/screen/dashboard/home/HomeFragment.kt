@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import ir.chista.jobs.R
 import ir.chista.jobs.util.BaseFragment
-import ir.chista.util.ViewModels.getViewModel
+import ir.chista.util.ViewModels.viewModel
 import ir.chista.util.LiveDatas.observe
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
@@ -16,7 +16,7 @@ class HomeFragment : BaseFragment() {
 
   override fun onAttach(context: Context?) {
     super.onAttach(context)
-    viewModel = getViewModel { HomeViewModel() }
+    viewModel = viewModel { HomeViewModel() }
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

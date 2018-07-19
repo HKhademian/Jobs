@@ -15,7 +15,7 @@ import ir.chista.jobs.R
 import ir.chista.jobs.util.BaseFragment
 import ir.chista.util.LiveDatas.observe
 import ir.chista.util.TextWatchers.TextWatcher
-import ir.chista.util.ViewModels.getViewModel
+import ir.chista.util.ViewModels.viewModel
 import android.content.ClipData
 import android.content.Context
 import android.view.animation.AnimationUtils
@@ -39,7 +39,7 @@ class ChatDetailFragment : BaseFragment() {
 
   override fun onAttach(context: Context?) {
     super.onAttach(context)
-    viewModel = getViewModel { ChatDetailViewModel() }
+    viewModel = viewModel { ChatDetailViewModel() }
     viewModel.listener = context as? ChatDetailListener
     viewModel.init(arguments?.getString(ARG_ID) ?: emptyID)
   }
@@ -108,9 +108,14 @@ class ChatDetailFragment : BaseFragment() {
       }
     }
 
-    viewModel.isSending.observe(this, false) { isSending ->
+    viewModel.isSending.observe(this) { isSending ->
       rootView.chat_form.visibility = if (isSending) View.INVISIBLE else View.VISIBLE
       rootView.wait_form.visibility = if (isSending) View.VISIBLE else View.INVISIBLE
+    }
+
+    viewModel.isOnline.observe(this) { isOnline ->
+      rootView.chat_bar.visibility = if (isOnline) View.VISIBLE else View.GONE
+      rootView.sendAction.visibility = if (isOnline) View.VISIBLE else View.GONE
     }
 
     return rootView

@@ -35,25 +35,24 @@ object AccountMockService : AccountService {
     return Calls.response(user.toData())
   }
 
-  override fun register(phone: String): Call<LoginData> {
+  override fun register(phone: String, title: String): Call<LoginData> {
     MockApiStorage.fakeWait()
 
     if (phone.isEmpty() || !isPhoneValid(phone))
       return Calls.failure(IOException("Phone format is not currect!"))
 
-    //val last = phone.takeLast(1)
-    //if (last == "0" || last == "1")
-    // return Calls.failure(IOException("cannot create admin/broker usersList from App"))
+    if (phone.isEmpty() || !isPhoneValid(phone))
+      return Calls.failure(IOException("Phone format is not currect!"))
 
     val user = MockApiStorage.users.items.find { it.phone == phone }
 
     if (user != null)
       return Calls.failure(IOException("User with this phone founds!"))
 
-    val userId = UUID.randomUUID().toString()
+    val userId = generateID
     val loginData = LoginMock(
       id = userId,
-      title = "User $phone",
+      title = title ?: "User $phone",
       phone = phone,
       roleStr = UserRole.User.key,
       accessToken = "$userId.$generateID",

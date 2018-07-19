@@ -15,6 +15,7 @@ internal object DataManager {
   private val modeSubject = ObservableData(init = Mode.Offline)
   val mode get() = modeSubject.data
   val modeObservable = modeSubject.observable
+  val isOnline = modeObservable.map{ it == DataManager.Mode.Online }
 
   internal val jobs = ObservableMutableList<LocalJob>()
   internal val skills = ObservableMutableList<LocalSkill>()

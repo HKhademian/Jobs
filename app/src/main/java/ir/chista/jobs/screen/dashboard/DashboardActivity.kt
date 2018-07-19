@@ -26,12 +26,20 @@ import ir.chista.util.context
 import ir.chista.util.launchActivity
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import android.support.v4.view.ViewPager
+import com.getkeepsafe.taptargetview.TapTargetView
+import android.graphics.drawable.Drawable
+import android.graphics.Typeface
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
+import ir.chista.jobs.data.AccountManager
 
 
 class DashboardActivity : BaseActivity(),
   BottomNavigationView.OnNavigationItemSelectedListener,
   NavigationView.OnNavigationItemSelectedListener,
   DashboardNavigationListener {
+
+  private var navigationLocked: Boolean = false
 
   private lateinit var viewPagerAdapter: ViewPagerAdapter
   private val viewPagerListener = object : ViewPager.OnPageChangeListener {
@@ -103,6 +111,7 @@ class DashboardActivity : BaseActivity(),
   }
 
   override fun onBackPressed() {
+    if (navigationLocked) return
     when {
       drawer_layout.isDrawerOpen(Gravity.START) -> drawer_layout.closeDrawer(Gravity.START)
 
@@ -112,6 +121,36 @@ class DashboardActivity : BaseActivity(),
 
       else -> onNavigationExit()
     }
+  }
+
+  override fun onNavigationTapDone() {
+    if (AccountManager.Taps.dashboardDone)
+      return
+    drawer_layout.closeDrawer(Gravity.START)
+    navigationLocked = true
+    TapTargetSequence(this).targets(
+      TapTarget.forToolbarNavigationIcon(toolbar, getString(R.string.tap_dashboard_drawer_title), getString(R.string.tap_dashboard_drawer_des)).transparentTarget(true).cancelable(false),
+      TapTarget.forView(bottomNavigation, getString(R.string.tap_dashboard_bottom_title), getString(R.string.tap_dashboard_bottom_des)).transparentTarget(true).cancelable(false)
+    )
+      .listener(object : TapTargetSequence.Listener {
+        override fun onSequenceCanceled(lastTarget: TapTarget?) {
+          navigationLocked=false
+          Snackbar.make(bottomNavigation, "I'll back again!", Snackbar.LENGTH_SHORT).show()
+        }
+
+        override fun onSequenceFinish() {
+          navigationLocked=false
+          AccountManager.Taps.dashboardDone = true
+        }
+
+        override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) = Unit // hmmm!
+      })
+      .continueOnCancel(true)
+      .start()
+  }
+
+  override fun onNavigationLock(lock: Boolean) {
+    navigationLocked = lock
   }
 
   override fun onNavigationClose() {
@@ -132,6 +171,7 @@ class DashboardActivity : BaseActivity(),
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     onNavigationClose()
 
+    @Suppress("WhenWithOnlyElse")
     return when (item.itemId) {
 
     //ViewModel implemented

@@ -20,6 +20,12 @@ object AccountManager {
     override var accessToken = ""
   }
 
+  object Taps : KotprefModel() {
+    var navigationDone by booleanPref(false)
+    var dashboardDone by booleanPref(false)
+    var requestListDone by booleanPref(false)
+  }
+
   val user = object : LocalLogin by Storage {}
   private val subject = BehaviorSubject.create<LocalLogin>()
   val observable = subject.hide()
@@ -72,8 +78,8 @@ object AccountManager {
     // if (loadData) DataManager.loadOnlineUserData(context)
   }
 
-  suspend fun register(phone: String) {
-    val login = ApiManager.accounts.register(phone).await()
+  suspend fun register(phone: String, title: String) {
+    val login = ApiManager.accounts.register(phone, title).await()
     save(login)
     // if (loadData) DataManager.loadOnlineUserData(context)
   }

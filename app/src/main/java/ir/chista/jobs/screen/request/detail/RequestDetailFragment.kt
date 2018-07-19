@@ -16,7 +16,7 @@ import ir.chista.jobs.R
 import ir.chista.jobs.data.model.*
 import ir.chista.jobs.util.BaseFragment
 import ir.chista.util.LiveDatas.observe
-import ir.chista.util.ViewModels.getViewModel
+import ir.chista.util.ViewModels.viewModel
 
 import kotlinx.android.synthetic.main.activity_request_list_holder.toolbar as listToolbar
 import kotlinx.android.synthetic.main.activity_request_detail.toolbar as toolbar
@@ -53,7 +53,7 @@ class RequestDetailFragment : BaseFragment() {
 
   override fun onAttach(context: Context?) {
     super.onAttach(context)
-    viewModel = getViewModel { RequestDetailViewModel() }
+    viewModel = viewModel { RequestDetailViewModel() }
     viewModel.listener = context as? RequestDetailListener
     fabDetail = activity?.findViewById(R.id.fabDetail)
   }
