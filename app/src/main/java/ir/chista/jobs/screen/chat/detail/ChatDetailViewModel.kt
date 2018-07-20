@@ -42,7 +42,7 @@ internal class ChatDetailViewModel : BaseViewModel() {
         },
         Repository.Chats.listsByContact(contactId).subscribe {
           chats.postValue(it ?: emptyList())
-          if (isOnline.value == true)
+          //if (isOnline.value == true)
             markAsSeen()
         }
       )

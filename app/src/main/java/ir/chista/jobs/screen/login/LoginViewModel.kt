@@ -65,6 +65,7 @@ class LoginViewModel : BaseViewModel() {
 
       postActivityTask { activity ->
         activity.launchActivity<LoadingActivity>()
+        activity.finish()
       }
 
       loginJob = null

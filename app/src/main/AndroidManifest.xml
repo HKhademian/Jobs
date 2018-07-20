@@ -29,12 +29,15 @@
     android:theme="@style/AppTheme.NoActionBar">
     <activity
       android:name=".screen.splash.SplashActivity"
-      android:launchMode="singleTop">
+      android:launchMode="singleTask">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+    <activity
+      android:name=".screen.loading.LoadingActivity"
+      android:launchMode="singleTask"/>
     <activity
       android:name=".screen.register.RegisterActivity"
       android:launchMode="singleTask"/>
@@ -42,15 +45,12 @@
       android:name=".screen.login.LoginActivity"
       android:launchMode="singleTask"/>
     <activity
-      android:name=".screen.loading.LoadingActivity"
-      android:launchMode="singleTask"/>
-    <activity
       android:name=".screen.dashboard.DashboardActivity"
       android:launchMode="singleTask"/>
     <activity
       android:name=".screen.chat.list.ChatListActivity"
       android:label="@string/title_chats"
-      android:launchMode="singleInstance"
+      android:launchMode="singleTask"
       android:parentActivityName=".screen.dashboard.DashboardActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
@@ -59,7 +59,7 @@
     <activity
       android:name=".screen.chat.detail.ChatDetailActivity"
       android:label="@string/title_chat_detail"
-      android:launchMode="singleInstance"
+      android:launchMode="singleTask"
       android:parentActivityName=".screen.chat.list.ChatListActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
@@ -68,7 +68,7 @@
     <activity
       android:name=".screen.request.list.RequestListActivity"
       android:label="@string/title_request_list"
-      android:launchMode="singleInstance"
+      android:launchMode="singleTask"
       android:parentActivityName=".screen.dashboard.DashboardActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
@@ -77,7 +77,7 @@
     <activity
       android:name=".screen.request.detail.RequestDetailActivity"
       android:label="@string/title_request_detail"
-      android:launchMode="singleInstance"
+      android:launchMode="singleTask"
       android:parentActivityName=".screen.request.list.RequestListActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
@@ -86,7 +86,7 @@
     <activity
       android:name=".screen.request.edit.RequestEditActivity"
       android:label="@string/title_request_edit"
-      android:launchMode="singleInstance"
+      android:launchMode="singleTask"
       android:parentActivityName=".screen.request.list.RequestListActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"

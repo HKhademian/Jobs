@@ -63,7 +63,11 @@ class RegisterViewModel : BaseViewModel() {
       isSending.postValue(false)
 
       postActivityTask { activity ->
-        activity.launchActivity<LoadingActivity>()
+        //activity.launchActivity<LoadingActivity>()
+        activity.launchActivity<LoginActivity>(extras = *arrayOf(
+          LoginActivity.EXTRA_PHONE to phone
+        ))
+        activity.finish()
       }
 
       registerJob = null

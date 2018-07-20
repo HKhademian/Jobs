@@ -33,14 +33,14 @@ class SplashActivity : BaseActivity() {
     super.onStop()
   }
 
+  override fun onBackPressed() {
+  }
+
   private fun launch() {
     handler.removeCallbacks(launcher)
 
     if (isFinishing)
       return
-
-    launchActivity<LoadingActivity>()
-
 
     if (AccountManager.user.isLoggedIn)
       launchActivity<LoadingActivity>()

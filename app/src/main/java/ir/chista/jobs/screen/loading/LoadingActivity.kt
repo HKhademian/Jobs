@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.widget.Toast
 import ir.chista.jobs.App
 import ir.chista.jobs.R
+import ir.chista.jobs.data.AccountManager
 import ir.chista.jobs.data.DataManager
 import ir.chista.jobs.data.Repository.initRepository
+import ir.chista.jobs.data.model.isEmpty
 import ir.chista.jobs.dialog.LoadingErrorDialog
 import ir.chista.jobs.util.BaseActivity
 import ir.chista.jobs.screen.dashboard.DashboardActivity
@@ -24,7 +26,13 @@ class LoadingActivity : BaseActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_loading)
 
+//    if (AccountManager.user.isEmpty)
+      //finish()
+
     loadServer()
+  }
+
+  override fun onBackPressed() {
   }
 
   private fun loadServer(retries: Int = 0) {
